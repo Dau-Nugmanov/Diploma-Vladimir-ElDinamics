@@ -1,0 +1,185 @@
+<html>
+
+<head>
+<title>SGraph Description</title>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="S.P.Pod'yachev">
+</head>
+
+<body BGCOLOR="#FFFFFF" background="white.gif">
+
+<h2 align="left"><img height="1" width="1" src="http://counter.list.ru/counter?id=15599" alt> <!--LIST100 COUNTER--> SGraph ver 2.4</h2>
+
+<p><a HREF="#Introduction">Introduction</a> <br>
+<a HREF="#License">License</a> <br>
+<a HREF="#Disclaimer">Disclaimer</a> <br>
+<a HREF="#Files">Files</a> <br>
+<a HREF="#Install components">Install components</a> <br>
+<a HREF="#Start">How to start</a> <br>
+<a HREF="#Contact me">Contact me</a> </p>
+
+<p><a HREF="history.htm">History</a>&nbsp; <a href="notes.htm">Notes</a></p>
+
+<h3><a NAME="Introduction"></a><b>Introduction</b></h3>
+
+<p>This is a set of 32 bit Delphi components and classes for 2D plot. It is relatively
+simple. It is more gauge then presentation element. The main features are: 
+
+<ul>
+  <li>Two horizontal and two vertical axis.</li>
+  <li>Auto minimum and maximum of the axis.</li>
+  <li>Swap of Min and Max axis positions. </li>
+  <li>MoveMinMax method to provide smooth scrolling of axis ticks.</li>
+  <li>Panning and Zoom by mouse.</li>
+  <li>Buffered screen paint, can be off.</li>
+  <li>Copy to clipboard as DIB or as Metafile.</li>
+  <li>Custom Data Series.</li>
+  <li>DrawPlot method to replicate plot image </li>
+  <li>OnDrawField OnDrawEnd events</li>
+</ul>
+
+<p>The main component is <B>Tsp_XYPlot</B> derived from the TCustomControl. It has embedded four axis of class <A HREF="notes.htm#Axis limits"><B>Tsp_Axis</B></A> which constitute field for the data presentation. Data are presented on plot by object of class which must be derived from <B>Tsp_DataSeries</B>=class(TComponent).<BR> 
+<img src="plot_img.gif" alt="plot_img.gif (3965 bytes)" WIDTH="211" HEIGHT="210"><br>
+Tsp_XYPlot and Tsp_Axis provide base plot functionality like auto scale, zoom and pan and
+so on. The Data Series interact with a Tsp_XYPlot and implements data drawing and provide internal data storage or connection with external data. An example of these components is <B>Tsp_XYLine</B> which keep data as XY pairs in the dynamic array and paints lines between data points and/or points markers. There are also <B>Tsp_SpectrLines</B> and <A HREF="edseries.htm"><B>Tsp_ndsXYLine</B></A> in the SGraph. How to write your own series see in <a href="notes.htm#Data series">notes</a>.<BR>
+Plot also can has and controls components inherited from Tsp_PlotMarker.
+<A HREF="notes.htm#Plot markers">Plot marker</A> draws something on the plot using axis coordinate system. An example of these components are <B>Tsp_LineMarker</B> and <B>Tsp_ImageMarker.</B></p>
+
+
+<h3><a NAME="License"></a>License </h3>
+
+<p>The component files are <b>freeware</b>. You may copy those files as long as you <b>COPY
+ALL OF THEM</b>. You cannot distribute source of main units in modified form, except unit
+for your data series. <br>
+Copyright © 1998-2001, Sergei P. Pod'yachev.</p>
+
+<h3><a NAME="Disclaimer"></a>Disclaimer </h3>
+
+<p>This software and the accompanying files are provided &quot;<b>As Is</b>&quot; and
+without any warranties as to performance of merchantability or any other warranties
+whether expressed or implied. The Author cannot and does not guarantee that any functions
+contained in the Software will be error free. The author is not liable for any damages
+resulting from the use and misuse of the component. </p>
+
+<h3><a NAME="Files"></a>Files </h3>
+
+<p><u>Root directory </u>contans SGraph <a name="source files">source files</a><br>
+<b>sgr_misc.pas </b>&nbsp; Auxiliary unit, used by sgr_def.dcu. <br>
+<b>sgr_scale.pas&nbsp; </b>Auxiliary unit, there is implementation of the plot axis
+ancestor. <br>
+<b>sgr_def.pas </b>&nbsp;&nbsp;&nbsp; Main unit. There are Tsp_xyPlot, Tsp_Axis,
+Tsp_DataSeries and Tsp_PlotMarker.<br>
+<b>sgr_data.pas</b>&nbsp;&nbsp; Data series for Tsp_xyPlot derived from Tsp_DataSeries. <br>
+<b>sgr_eds.pas</b>&nbsp;&nbsp;&nbsp;&nbsp; <A HREF="edseries.htm">Additional</A> data series for Tsp_xyPlot.<font color="#800000"><sup>v.2.4</sup></font><br>
+<b>sgr_mark.pas</b>&nbsp; Plot markers for Tsp_xyPlot derived from Tsp_PlotMarker. <font color="#800000"><sup>v.2.3</sup></font><br>
+<b>sgr_reg.pas</b>&nbsp;&nbsp;&nbsp;&nbsp; Registers components, used to install
+components. <br>
+<b>sgr_reg.dcr</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Resource file with components&nbsp;
+icons. <br>
+<b>sgr.dpk </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Packet source,
+can be used to install components ( Delphi 3 ). <br>
+<b>sgr4.dpk </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Packet source, can be
+used to install components ( Delphi 4). <br>
+<b>sgr5.dpk </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Packet source, can be
+used to install components ( Delphi 5). <br>
+<b>sgr.res </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Need to
+compile sgr.dpk file.<br>
+</p>
+
+<p><u>subdirectory</u> <b>\doc </b>contains SGraph documentation <br>
+here this file your read, I also encourage you to read <a href="notes.htm">notes</a>.</p>
+
+<p><u>subdirectory</u> <b>\help </b>contains help files:<br>
+<b>sgr_def.hlp</b>&nbsp;&nbsp;&nbsp;Components help file <br>
+<b>sgr_def.cnt</b>&nbsp;&nbsp;&nbsp;Help context file<br>
+<b>sgr_defi.cnt</b>&nbsp; Help context file to <a href="#Include CNT">make link</a> from
+Delphi3.cnt file to SGraph help.<br>
+<b>sgr_def.toc</b>&nbsp;&nbsp;&nbsp;Help context file to include in the master table (Delphi 5)<br></p>
+
+<p><u>subdirectory</u> <b>demo</b> contains files of demo program. </p>
+
+<p><a href="sgraph_demo.gif"><img src="sgraph_demo_sml.gif" alt="sgraph_demo.gif (9308 bytes)" WIDTH="100" HEIGHT="60"></a></p>
+
+<p><font color="#800000">I recommend to see demo program, there are some extensions of
+SGraph (<a href="notes.htm#Print">print</a>, legend).</font></p>
+
+<h3><a NAME="Install components"></a>Install components </h3>
+
+<h4>Extract files. </h4>
+
+<p>You have to use unzip program which preserve long file name or you must correct names
+manually if they was cut. Place to one directory all SGraph <a href="#source files">source
+files</a>. If you want place components on other then &quot;Sample&quot; tab, then edit
+sgr_reg.pas.</p>
+
+<h4>Delphi 2 </h4>
+
+<p>Run Delphi. Click Install Component menu item. Do not forget that Delphi must find
+directory where you place component files (see Search Path). Press Add button and open <b>sgr_reg.pas</b>
+</p>
+
+<h4>Delphi 3</h4>
+
+<p>You can install components by Install Component menu item and <b>sgr_reg.pas </b>file.
+You also can use <strong>sgr.dpk</strong> packet file. In this case, click Open menu item
+and select <b>sgr.dpk</b>, then press Compile button in packet editor, when packet will be
+compiled press Install button. If Delphi did know components directory, add it to Library
+Path on the Library Page of the Environment Options dialog. </p>
+
+<h4>Delphi 4 (Delphi 5)</h4>
+
+<p>You can install components by Install Component menu item and add <b>sgr_reg.pas </b>file. You also can use <b>sgr4.dpk (sgr5.dpk)</b> packet file. In this case, click Open menu item and select <b>sgr4.dpk (sgr5.dpk)</b>, then press Compile button in packet editor, when packet will be compiled press Install button. If Delphi did know components directory, add it to Library Path</p>
+
+<h4>Install Help files</h4>
+
+<p>To install help file for Delphi 3 
+
+<ul>
+  <li>Copy <b>sgr_def.hlp </b>and <b>sgr_def.cnt </b>to your Delphi <b>\HELP</b> directory.</li>
+  <li>Edit the DELPHI3.CNT file and add the following line to the Index section<br>
+    <tt><font COLOR="#660000">:Index SGraph Reference=sgr_def.hlp</font></tt></li>
+  <li>Edit the DELPHI3.CFG file and add<br>
+    <tt><font COLOR="#660000">:Link sgr_def.hlp</font></tt></li>
+  <li>Delete the hidden DELPHI3.GID file.</li>
+</ul>
+
+<p><a name="Include CNT">I also recommend</a> to add to the Include section<font color="#800000"> </font>of the DELPHI3.CNT file this line <br>
+<tt><font color="#800000">:Include sgr_defi.cnt</font></tt> <br>
+<p>
+For Delphi 5 use Customize... menu item in the Help menu to add help for SGraph. For this case there is special content file sgr_def.toc. </p>
+
+<p>After installation I recommend to compile demo program to check components<font SIZE="-1">.</font> It also demonstrates some possibilities of SGraph and contains some
+extensions like print dialog. </p>
+
+<h3><a NAME="Start"></a>How to start</h3>
+
+<p>Place the plot component and data series component on the form, set <tt>Plot</tt> property of data series to link it with plot. Play with visual properties of plot and series. While select properties press &lt;F1&gt; key to see help file topic. Please <U>set true-type font</U> to <tt>Font</tt> property of plot if you want have vertical axis captions. There is also some <a href="notes.htm">notes</a> of SGraph using.</p>
+
+<h3><a NAME="Contact me"></a>Contact me </h3>
+
+<p>I'm glad about any kind of serious feedback! <br>
+If there are will be new components version,&nbsp; they will be uploaded to <a href="http://www.torry.ru">Torry's Delphi Pages</a> and&nbsp; <a HREF="http://sunsite.icm.edu.pl/delphi/">Delphi Super Page</a>. There is also my WWW <a HREF="http://pod0.chat.ru">homepage</a>&nbsp; where also you can find latest
+versions of sgraph. If you have any suggestions especially about the bug mentioned - send
+me e-mail. </p>
+
+<h3><a NAME="Aknowledgements"></a>Aknowledgements </h3>
+
+<p>I wish to thank to Peter Kravtsov for comprehensive advise to add DataTime format of
+ticks label and Mauro J. Cavalcanti for the useful discussions and suggestions. A would
+like to thank to all who wrote me good words about SGraph. </p>
+
+<p>My best wishes. </p>
+
+<p>Sergei P. Pod'yachev. Novosibirsk, Russia. <br>
+e-mail :&nbsp; <a HREF="mailto:pod0@mail.ru">pod0@mail.ru</a>. <br>
+WWW: &nbsp;&nbsp;<a HREF="http://pod0.chat.ru">pod0.chat.ru</a>  <br>
+<a HREF="http://www.iae.nsk.su/~lab12/pod"><FONT SIZE="2" COLOR="">www.iae.nsk.su/~lab12/pod</FONT></a> </p>
+
+
+<!--sp Second counter part - Logo part -->
+<!--List100 LOGO-->
+<a target="_top" href="http://counter.list.ru/jump?from=15599">
+
+<p align="center"><img src="http://counter.list.ru/counter?id=15599&amp;t=6&amp;l=1" border="0" height="70" width="88" alt="List100"></a> <!--List100 LOGO--> </p>
+</body>
+</html>

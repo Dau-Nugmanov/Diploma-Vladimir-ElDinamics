@@ -1,0 +1,23 @@
+:BASE SGR_DEF.hlp
+:TITLE SGraph Help
+1 SGraph 2.3
+2 Overview
+3 Introduction=Contents
+3 License and disclaimer=License_and_disclaimer
+2 Components
+3 Tsp_XYPlot=class_Tsp_XYPlot
+3 Tsp_DataSeries=class_Tsp_DataSeries
+3 Tsp_XYLine=class_Tsp_XYLine
+3 Tsp_ndsXYLine=class_Tsp_ndsXYLine
+3 Tsp_SpectrLines=class_Tsp_SpectrLines
+3 Tsp_PlotMarker=class_Tsp_PlotMarker
+3 Tsp_LineMarker=class_Tsp_LineMarker
+3 Tsp_ImageMarker=class_Tsp_ImageMarker
+2 Units
+3 sgr_scale.pas=unit_sgr_scale
+3 sgr_def.pas=unit_sgr_def
+3 sgr_data.pas=unit_sgr_data
+3 sgr_eds.pas=unit_sgr_eds
+3 sgr_mark.pas=unit_sgr_mark
+:INCLUDE DELPHI4.CFG
+

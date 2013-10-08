@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>SGraphNewDataSeries</TITLE>
+<META content="text/html; charset=iso-8859-1" http-equiv=Content-Type>
+<META content="S.P.Pod'yachev" name=AUTHOR>
+<META content="MSHTML 5.00.2919.6307" name=GENERATOR></HEAD>
+<BODY background=white.gif>
+
+<!--sp Counter consit of two parts, no Java scripts--><!--sp First counter part - count part -->
+<!--LIST100 COUNTER-->
+<H3>
+<IMG alt="" height=1 src="http://counter.list.ru/counter?id=15599" width=1>
+<!--LIST100 COUNTER-->
+Additional series for <a HREF="sgraph.htm">SGraph</a>. 
+</H3>
+
+
+<P>For my own use I wrote series which get data from external data storage and draw it. I  was going to develop this series, unfortunately I still have not time and it works. Because of I received request for series like this I decide to publish current version. 
+There are 2 class:&nbsp;<BR>
+<B>Tsp_DrawPoints</B>=class(Tsp_DataSeries) and <BR>
+<B>Tsp_ndsXYLine</B>=class(Tsp_DrawPoints). <BR>
+Tsp_DrawPoints can be used to derive new series, it
+contains all draw primitives and main functionality, from this one you can 
+derive new series with arbitrary data storage engine. Tsp_ndsXYLine source 
+is example how to do this. Tsp_ndsXYLine itself permits you
+keep data separately from series in your own variables (or may be files) and
+draw it through callback functions (events) interface. </P>
+
+<H4>How it works?</H4>
+
+<P>Tsp_ndsXYLine in sense of drawing is same to Tsp_XYLine &nbsp; (see
+sgr_def.hlp for draw properties of Tsp_XYLine). But
+Tsp_ndsXYLine has not internal data storage, it uses callback functions
+(events) to receive date for drawing. There are several events</P>
+<P>TspGetXYCountEvent=procedure(DS:Tsp_ndsXYLine) of object;<BR>
+TspGetXYEvent=procedure(DS:Tsp_ndsXYLine; idx:integer) of object;<BR>
+TspGetMinMaxEvent=function(DS:Tsp_ndsXYLine; var
+V:double):boolean of object;</P>
+<P>and they published in Tsp_ndsXYLine as next properties</P>
+<P>published<BR>property OnGetXYCount: TspGetXYCountEvent read
+FOnGetXYCount write FOnGetXYCount;<BR>property OnGetXY:
+TspGetXYEvent read fOnGetXY write fOnGetXY;<BR>
+property OnGetXMin: TspGetMinMaxEvent read fOnGetXMin write fOnGetXMin;<BR>
+property OnGetXMax: TspGetMinMaxEvent read fOnGetXMax write fOnGetXMax;<BR>
+property OnGetYMin: TspGetMinMaxEvent read fOnGetYMin write fOnGetYMin;<BR>
+property OnGetYMax: TspGetMinMaxEvent read fOnGetYMax write fOnGetYMax;<BR>
+end;<BR>
+You write handlers for this events where inform series about data. Number of 
+points and current point value are set in handlers as values for public series 
+fields Count and XV,YV. </P>
+<P>Here simple demo program eds_demo is included. In this program we place data
+in array Data[0..maxi-1,xi..yi] and write handlers which connect series with
+this data storage. When series begin to draw data it call OnGetXYCount where we
+define how many times it will call for the data points</P>
+<PRE>procedure TForm1.sp_ndsXYLine1GetXYCount(DS: Tsp_ndsXYLine);
+begin
+ DS.Count:=maxi;
+end;</PRE>
+<P>Then series call <B>Count</B> times this handler </P>
+<PRE>procedure TForm1.sp_ndsXYLine1GetXY(DS: Tsp_ndsXYLine; idx: Integer);
+begin
+DS.XV:=Data[idx,xi];
+DS.YV:=Data[idx,yi];
+end;</PRE>
+<P>to receive data. If series has marker and lines it call this twice for every
+points. idx are changed from 0 to Count-1 and
+indicate current point number. </P>
+<P>When series begin to draw or when plot is making autoscaling and ask series
+for limits, series need information about max and min of data values. For that
+it calls handlers like this one (see more in help file for the function
+GetXMax)</P>
+<PRE>function TForm1.sp_ndsXYLine1GetXMax(DS: Tsp_ndsXYLine;
+var V: Double): Boolean;
+begin
+Result:=True; //True because we have info about Max of X data
+V:=MaxX;
+end;</PRE>
+<P>For information about series and plot see sgr_def.hlp file. </P>
+
+
+<p>Sergei P. Pod'yachev. Novosibirsk, Russia. <br>
+WWW: &nbsp;&nbsp;<a HREF="http://pod0.chat.ru">pod0.chat.ru</a>  <br>
+<a HREF="http://www.iae.nsk.su/~lab12/pod"><FONT SIZE="2" COLOR="">www.iae.nsk.su/~lab12/pod</FONT></a> </p>
+
+<!--sp Second counter part - Logo part --><!--List100 LOGO-->
+<P align=center><A href="http://counter.list.ru/jump?from=15599"
+target=_top><IMG alt=List100 border=0 height=70
+src="http://counter.list.ru/counter?id=15599&amp;t=6&amp;l=1" width=88></A><!--List100 LOGO--> 
+</P>
+</BODY></HTML>
