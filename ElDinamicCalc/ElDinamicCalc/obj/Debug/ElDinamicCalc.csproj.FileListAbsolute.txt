@@ -1,0 +1,8 @@
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.exe.config
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.exe
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.pdb
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csprojResolveAssemblyReference.cache
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.Properties.Resources.resources
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csproj.GenerateResource.Cache
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.exe
+G:\Nugmanov\Библиотеки\Документы\GitHub\Diploma\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.pdb
