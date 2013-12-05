@@ -1,0 +1,15 @@
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\bin\Debug\Test.exe.config
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\bin\Debug\Test.exe
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\bin\Debug\Test.pdb
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\bin\Debug\ElDinamicCalc.exe
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\bin\Debug\ElDinamicCalc.pdb
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\MainWindow.baml
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\MainWindow.g.cs
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\App.g.cs
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test_MarkupCompile.cache
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.g.resources
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.Properties.Resources.resources
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.csproj.GenerateResource.Cache
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.exe
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\Test\obj\Debug\Test.pdb

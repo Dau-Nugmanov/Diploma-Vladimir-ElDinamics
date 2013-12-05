@@ -1,0 +1,45 @@
+[DSP upload]
+File Name=sgraph24.zip
+Replace File=sgraph23.zip
+File Status=Freeware
+Full Source Included=Y
+Delphi 1.0x=N
+Delphi 2.0x=Y
+Delphi 3.0x=Y
+Delphi 4.0x=Y
+Delphi 5.0x=Y
+C++ Builder 1.0x=N
+C++ Builder 3.0x=Y
+C++ Builder 4.0x=
+Version=2.40_100201
+count=4
+1=XYPlot & data series componets for 2D plot. Custom series, flicker
+2=free,  scroll and  zoom by mouse. There are 4 axis with ticks, label and
+3=caption. Special features for quick graphing of data flow. Help file and
+4=demo are included.
+Note=
+Additional info=HTML file ( extension htm )
+Category=Visible Components
+Platform=
+Group=Component/Code
+
+[Versions available]
+Delphi 1.0x=
+Delphi 2.0x=
+Delphi 3.0x=
+Delphi 4.0x=
+C++ Builder 1.0x=
+C++ Builder 3.0x=
+C++ Builder 4.0x=
+
+[DSP Support]
+DSP Support=Y
+
+[Uploader_1]
+Author name=Sergei P. Pod'yachev
+Contact=Sergei P. Pod'yachev
+Author E-mail=pod0@mail.ru
+Author URL=http://pod0.chat.ru
+count=0
+Author Section=Visible Unclassified
+UpdateDSP=N

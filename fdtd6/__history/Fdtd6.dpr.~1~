@@ -1,0 +1,44 @@
+program FDTD6;
+
+{$D-}
+
+uses
+  Forms,
+  Main6 in 'Main6.pas' {MainForm},
+  Common6 in 'Common6.pas',
+  THR6 in 'THR6.pas',
+  Proc6 in 'Proc6.pas',
+  Regions in 'Regions.pas',
+  Initial6 in 'Initial6.pas',
+  ExtMath in 'ExtMath.pas',
+  ModFUnit in 'ModFUnit.pas' {ModeForm},
+  StpFUnit in 'StpFUnit.pas' {SetupForm},
+  ASFUnit in 'ASFUnit.pas' {AutoSaveForm},
+  ExtIniF in 'ExtIniF.pas',
+  EditMess in 'EditMess.pas',
+  FFTran in 'FFTran.pas',
+  Fourie in 'Fourie.pas',
+  PhisCnst in 'PhisCnst.pas',
+  FIFUnit in 'FIFUnit.pas' {FIForm},
+  FSFUnit in 'FSFUnit.pas' {FSForm},
+  IPFUnit in 'IPFUnit.pas' {IntPropForm},
+  sgr_def in 'sgraph24\sgr_def.pas',
+  sgr_data in 'sgraph24\sgr_data.pas',
+  sgr_eds in 'sgraph24\sgr_eds.pas',
+  sgr_mark in 'sgraph24\sgr_mark.pas',
+  sgr_misc in 'sgraph24\sgr_misc.pas',
+  sgr_reg in 'sgraph24\sgr_reg.pas',
+  sgr_scale in 'sgraph24\sgr_scale.pas';
+
+{$R *.RES}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TModeForm, ModeForm);
+  Application.CreateForm(TSetupForm, SetupForm);
+  Application.CreateForm(TAutoSaveForm, AutoSaveForm);
+  Application.CreateForm(TFSForm, FSForm);
+  Application.CreateForm(TIntPropForm, IntPropForm);
+  Application.Run;
+end.
