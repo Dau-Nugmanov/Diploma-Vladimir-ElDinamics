@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -363,14 +364,12 @@ namespace ElDinamicCalc
 
     }
 
-
-
     public class RegionList
     {
         public static ExtArr EpsField { get; set; }
         public static ExtArr Eps2Field { get; set; }
         public static TBoundsType BoundsType { get; set; }
-        public static TField2[] FieldList { get; set; }
+        public static List<TField2> FieldList { get; set; }
 
         public static int SizeOfX, SizeOfY;
         public static double DelX, DelY, DelT;
@@ -420,7 +419,7 @@ namespace ElDinamicCalc
                             Regions.Add(region);
                         }
                     }
-                    SetSetEpsField();
+                    SetEpsField();
 
 
                     newCount = reader.ReadByte();
@@ -480,7 +479,19 @@ namespace ElDinamicCalc
             return true;
         }
 
-        private void SetSetEpsField()
+	    static RegionList()
+	    {
+		    FieldList = new List<TField2>();
+		    SizeOfX = 201;
+		    SizeOfY = 101;
+		    DelX = 1e-6;
+		    DelY = 1e-6;
+		    DelT = DelX/PhisCnst.C*0.2;
+		    Eps = 1;
+		    SetEpsField();
+	    }
+
+	    private static void SetEpsField()
         {
             EpsField = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, 0, 0);
             Eps2Field = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, 0, 0);

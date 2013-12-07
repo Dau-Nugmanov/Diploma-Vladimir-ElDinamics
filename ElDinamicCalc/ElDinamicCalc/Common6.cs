@@ -24,7 +24,13 @@ namespace ElDinamicCalc
 		public static double DelX, DelY, DelT, DtDivDx, DtDivDy, ScaleCoef;
 		public static int SizeX, SizeY, Tn, BoundWidth;
 		public static TModeType ModeType;
+		
+		public static ExtArr Ex,Ey,Ez,Dx,Dy,Dz,Hx,Hy,Hz,Bx,By,Bz,ExN,EyN,EzN,DxN,DyN,DzN,HxN,HyN,HzN,BxN,ByN,BzN;
+		public static ExtArr WaveF;
 
+
+		public static ExtArr Exy,Exz,Eyx,Eyz,Ezx,Ezy,Hxy,Hxz,Hyx,Hyz,Hzx,Hzy,ExyN,ExzN,EyxN,EyzN,EzxN,EzyN,HxyN,HxzN,HyxN,HyzN,HzxN,HzyN;
+		
 		public static ExtArr SigmaXCoeffs, SigmaYCoeffs, SigmaZCoeffs,
 		  SigmaXSCoeffs, SigmaYSCoeffs, SigmaZSCoeffs,
 		  OneDivSigmaX, OneDivSigmaY, OneDivSigmaXS, OneDivSigmaYS;
@@ -141,6 +147,8 @@ namespace ElDinamicCalc
 
 		public static TInitialWave InitialWave { get; set; }
 
+		public static List<TInitialStyle> InitialStyleSet = new List<TInitialStyle>{TInitialStyle.isFromMedium, TInitialStyle.isManual};
+
 		public static double Ly { get; set; }
 
 		public static double Lx { get; set; }
@@ -158,6 +166,7 @@ namespace ElDinamicCalc
 		public static double SigmaY { get; set; }
 
 		public static double SigmaX { get; set; }
+		public static bool IntEnable { get; set; }
 
 		public static double ColorByValue(TFieldType FieldType, double Value)
 		{

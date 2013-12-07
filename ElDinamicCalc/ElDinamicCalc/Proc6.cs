@@ -8,10 +8,6 @@ namespace ElDinamicCalc
 {
 	public class Proc6
 	{
-		private ExtArr Ex,Ey,Ez,Dx,Dy,Dz,Hx,Hy,Hz,Bx,By,Bz,ExN,EyN,EzN,DxN,DyN,DzN,HxN,HyN,HzN,BxN,ByN,BzN;
-
-		private ExtArr Exy,Exz,Eyx,Eyz,Ezx,Ezy,Hxy,Hxz,Hyx,Hyz,Hzx,Hzy,ExyN,ExzN,EyxN,EyzN,EzxN,EzyN,HxyN,HxzN,HyxN,HyzN,HzxN,HzyN;
-
 		private int SizeX = Common6.SizeX0;
 		private int SizeY = Common6.SizeX0;
 		private int BoundWidth = Common6.BoundWidth0;
@@ -27,82 +23,86 @@ namespace ElDinamicCalc
 		public Proc6()
 		{
 			CreateFields();
+			if (RegionList.BoundsType == TBoundsType.btAbsorb)
+				SetSigmaCoeffs();
+			if (Common6.IntEnable)
+				SetIntMode();
 		}
 
 		public void CreateFields()
 		{
-			Ez = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			EzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Ex = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			ExN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Ey = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			EyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Dz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			DzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Dx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			DxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Dy = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			DyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Bz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			BzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Bx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			BxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			By = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			ByN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Hz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			HzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Hx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			HxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			Hy = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
-			HyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Ez = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.EzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Ex = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.ExN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Ey = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.EyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Dz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.DzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Dx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.DxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Dy = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.DyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Bz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.BzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Bx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.BxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.By = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.ByN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Hz = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.HzN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Hx = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.HxN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.Hy = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
+			Common6.HyN = new ExtArr(SizeX + 2, SizeY + 2, 0, 0, 0, 0, -1, -1);
 
-			Exy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Exy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Exz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Exz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Eyx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Eyx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Eyz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Eyz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Ezx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Ezx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Ezy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Ezy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hxy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hxy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hxz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hxz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hyx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hyx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hyz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hyz = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hzx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hzx = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			Hzy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.Hzy = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			ExyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.ExyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			ExzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.ExzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			EyxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.EyxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			EyzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.EyzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			EzxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.EzxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			EzyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.EzyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HxyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HxyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HxzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HxzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HyxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HyxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HyzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HyzN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HzxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HzxN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
-			HzyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
+			Common6.HzyN = new ExtArr(SizeX + 2 * BoundWidth, SizeY + 2 * BoundWidth, BoundWidth, BoundWidth, SizeX, SizeY, -BoundWidth,
 				-BoundWidth);
 		}
 
@@ -121,44 +121,44 @@ namespace ElDinamicCalc
 		public double GetEx(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Ex[i, j];
-			return Exy[i, j] + Exz[i, j];
+				return Common6.Ex[i, j];
+			return Common6.Exy[i, j] + Common6.Exz[i, j];
 		}
 
 		public double GetEy(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Ey[i, j];
-			return Eyx[i, j] + Eyz[i, j];
+				return Common6.Ey[i, j];
+			return Common6.Eyx[i, j] + Common6.Eyz[i, j];
 		}
 
 		public double GetEz(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Ez[i, j];
-			return Ezx[i, j] + Ezy[i, j];
+				return Common6.Ez[i, j];
+			return Common6.Ezx[i, j] + Common6.Ezy[i, j];
 		}
 
 
 		public double GetHx(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Hx[i, j];
-			return Hxy[i, j] + Hxz[i, j];
+				return Common6.Hx[i, j];
+			return Common6.Hxy[i, j] + Common6.Hxz[i, j];
 		}
 
 		public double GetHy(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Hy[i, j];
-			return Hyx[i, j] + Hyz[i, j];
+				return Common6.Hy[i, j];
+			return Common6.Hyx[i, j] + Common6.Hyz[i, j];
 		}
 
 		public double GetHz(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
-				return Hz[i, j];
-			return Hzx[i, j] + Hzy[i, j];
+				return Common6.Hz[i, j];
+			return Common6.Hzx[i, j] + Common6.Hzy[i, j];
 		}
 
 		//следующие 6 функций возращают значения параметров Sigma в точке
@@ -207,13 +207,13 @@ namespace ElDinamicCalc
 		public void ElectrTE(int i, int j)
 		{
 			var Eps = RegionList.EpsField[i, j] * PhisCnst.Eps0 + RegionList.Eps2Field[i, j]
-					  * PhisCnst.Eps0 * Math.Sqrt(Ez[i, j] / PhisCnst.Ez0);
-			DzN[i, j] = Dz[i, j] + Common6.DtDivDx * (Hy[i + 1, j] - Hy[i - 1, j])
-						- Common6.DtDivDy * (Hx[i, j + 1] - Hx[i, j - 1]);
+					  * PhisCnst.Eps0 * Math.Sqrt(Common6.Ez[i, j] / PhisCnst.Ez0);
+			Common6.DzN[i, j] = Common6.Dz[i, j] + Common6.DtDivDx * (Common6.Hy[i + 1, j] - Common6.Hy[i - 1, j])
+						- Common6.DtDivDy * (Common6.Hx[i, j + 1] - Common6.Hx[i, j - 1]);
 			if (Eps != 0)
-				EzN[i, j] = DzN[i, j] / Eps;
+				Common6.EzN[i, j] = Common6.DzN[i, j] / Eps;
 			else
-				EzN[i, j] = 0;
+				Common6.EzN[i, j] = 0;
 		}
 
 	    public void ElectrTM(int i, int j)
@@ -222,10 +222,10 @@ namespace ElDinamicCalc
 
 		public void MagnTE(int i, int j)
 		{
-			BxN[i, j] = Bx[i, j] - Common6.DtDivDy * (Ez[i, j + 1] - Ez[i, j - 1]);
-			ByN[i, j] = By[i, j] + Common6.DtDivDx * (Ez[i + 1, j] - Ez[i - 1, j]);
-			HxN[i, j] = BxN[i, j] / PhisCnst.Mu0;
-			HyN[i, j] = ByN[i, j] / PhisCnst.Mu0;
+			Common6.BxN[i, j] = Common6.Bx[i, j] - Common6.DtDivDy * (Common6.Ez[i, j + 1] - Common6.Ez[i, j - 1]);
+			Common6.ByN[i, j] = Common6.By[i, j] + Common6.DtDivDx * (Common6.Ez[i + 1, j] - Common6.Ez[i - 1, j]);
+			Common6.HxN[i, j] = Common6.BxN[i, j] / PhisCnst.Mu0;
+			Common6.HyN[i, j] = Common6.ByN[i, j] / PhisCnst.Mu0;
 		}
 
         public void MagnTM(int i, int j)
@@ -238,31 +238,31 @@ namespace ElDinamicCalc
 			for (int i = 0; i < SizeX; i++)
 			{
 				//верхняя стенка
-				Ez[i, 0] = 0;
-				Dz[i, 0] = 0;
-				Ez[i, -1] = -Ez[i, 1];
-				Dz[i, -1] = -Dz[i, 1];
+				Common6.Ez[i, 0] = 0;
+				Common6.Dz[i, 0] = 0;
+				Common6.Ez[i, -1] = -Common6.Ez[i, 1];
+				Common6.Dz[i, -1] = -Common6.Dz[i, 1];
 
 				//нижняя стенка
-				Ez[i, SizeY - 1] = 0;
-				Dz[i, SizeY - 1] = 0;
-				Ez[i, SizeY] = -Ez[i, SizeY - 2];
-				Dz[i, SizeY] = -Dz[i, SizeY - 2];
+				Common6.Ez[i, SizeY - 1] = 0;
+				Common6.Dz[i, SizeY - 1] = 0;
+				Common6.Ez[i, SizeY] = -Common6.Ez[i, SizeY - 2];
+				Common6.Dz[i, SizeY] = -Common6.Dz[i, SizeY - 2];
 			}
 
 			for (int j = 0; j < SizeY; j++)
 			{
 				//левая стенка
-				Ez[0, j] = 0;
-				Dz[0, j] = 0;
-				Ez[-1, j] = -Ez[1, j];
-				Dz[-1, j] = -Dz[1, j];
+				Common6.Ez[0, j] = 0;
+				Common6.Dz[0, j] = 0;
+				Common6.Ez[-1, j] = -Common6.Ez[1, j];
+				Common6.Dz[-1, j] = -Common6.Dz[1, j];
 
 				//правая стенка
-				Ez[SizeX - 1, j] = 0;
-				Dz[SizeX - 1, j] = 0;
-				Ez[SizeX, j] = -Ez[SizeX - 2, j];
-				Dz[SizeX, j] = -Dz[SizeX - 2, j];
+				Common6.Ez[SizeX - 1, j] = 0;
+				Common6.Dz[SizeX - 1, j] = 0;
+				Common6.Ez[SizeX, j] = -Common6.Ez[SizeX - 2, j];
+				Common6.Dz[SizeX, j] = -Common6.Dz[SizeX - 2, j];
 			}
 		}
 
@@ -276,26 +276,26 @@ namespace ElDinamicCalc
 						switch (Common6.ModeType)
 						{
 							case TModeType.mtTE:
-								EzxN[i, j] = Ezx[i, j] * Common6.SigmaXCoeffs[i, j]
+								Common6.EzxN[i, j] = Common6.Ezx[i, j] * Common6.SigmaXCoeffs[i, j]
 											 + Common6.OneDivSigmaX[i, j] * (GetHy(i + 1, j) - GetHy(i - 1, j))
 											 * (1 - Common6.SigmaXCoeffs[i, j]);
-								EzyN[i, j] = Ezy[i, j] * Common6.SigmaXCoeffs[i, j] - Common6.OneDivSigmaY[i, j]
+								Common6.EzyN[i, j] = Common6.Ezy[i, j] * Common6.SigmaXCoeffs[i, j] - Common6.OneDivSigmaY[i, j]
 											 * (GetHx(i, j + 1) - GetHx(i, j - 1)) * (1 - Common6.SigmaYCoeffs[i, j]);
 								break;
 
 							case TModeType.mtTM:
-								ExyN[i, j] = Exy[i, j] * Math.Log(-GetSigmaY(i, j)
+								Common6.ExyN[i, j] = Common6.Exy[i, j] * Math.Log(-GetSigmaY(i, j)
 																* Common6.DelT / PhisCnst.Eps0)
 											 + 1 / Common6.DelY / GetSigmaY(i, j) * (GetHz(i, j + 1)
 																			   - GetHz(i, j - 1)) * (1 - Math.Log(-GetSigmaY(i, j)
 																												* Common6.DelT / PhisCnst.Eps0));
-								ExzN[i, j] = Exz[i, j] * Math.Log(-GetSigmaZ(0, 0)
+								Common6.ExzN[i, j] = Common6.Exz[i, j] * Math.Log(-GetSigmaZ(0, 0)
 																* Common6.DelT / PhisCnst.Eps0);
-								EyxN[i, j] = Eyx[i, j] * Math.Log(-GetSigmaX(i, j)
+								Common6.EyxN[i, j] = Common6.Eyx[i, j] * Math.Log(-GetSigmaX(i, j)
 																* Common6.DelT / PhisCnst.Eps0) - 1 / Common6.DelX
 											 / GetSigmaX(i, j) * (GetHz(i + 1, j) - GetHz(i - 1, j))
 											 * (1 - Math.Log(-GetSigmaX(i, j) * Common6.DelT / PhisCnst.Eps0));
-								EyzN[i, j] = Eyz[i, j] * Math.Log(-GetSigmaZ(0, 0) * Common6.DelT / PhisCnst.Eps0);
+								Common6.EyzN[i, j] = Common6.Eyz[i, j] * Math.Log(-GetSigmaZ(0, 0) * Common6.DelT / PhisCnst.Eps0);
 								break;
 						}
 					}
@@ -313,24 +313,24 @@ namespace ElDinamicCalc
 						switch (Common6.ModeType)
 						{
 							case TModeType.mtTE:
-								HxyN[i, j] = Hxy[i, j] * Common6.SigmaYSCoeffs[i, j]
+								Common6.HxyN[i, j] = Common6.Hxy[i, j] * Common6.SigmaYSCoeffs[i, j]
 											 - Common6.OneDivSigmaYS[i, j]
 											 * (GetEz(i, j + 1) - GetEz(i, j - 1))
 											 * (1 - Common6.SigmaYSCoeffs[i, j]);
-								HxzN[i, j] = Hxz[i, j] * Common6.SigmaZSCoeffs[i, j];
-								HyxN[i, j] = Hyx[i, j] * Common6.SigmaXSCoeffs[i, j]
+								Common6.HxzN[i, j] = Common6.Hxz[i, j] * Common6.SigmaZSCoeffs[i, j];
+								Common6.HyxN[i, j] = Common6.Hyx[i, j] * Common6.SigmaXSCoeffs[i, j]
 											 + Common6.OneDivSigmaXS[i, j]
 											 * (GetEz(i + 1, j) - GetEz(i - 1, j))
 											 * (1 - Common6.SigmaXSCoeffs[i, j]);
-								HyzN[i, j] = Hyz[i, j] * Common6.SigmaZSCoeffs[i, j];
+								Common6.HyzN[i, j] = Common6.Hyz[i, j] * Common6.SigmaZSCoeffs[i, j];
 								break;
 
 							case TModeType.mtTM:
-								HzxN[i, j] = Hzx[i, j] * Math.Log(-GetSigmaXS(i, j)
+								Common6.HzxN[i, j] = Common6.Hzx[i, j] * Math.Log(-GetSigmaXS(i, j)
 									* Common6.DelT / PhisCnst.Mu0) - 1 / Common6.DelX / GetSigmaXS(i, j)
 									* (GetEy(i + 1, j) - GetEy(i - 1, j))
 									* (1 - Math.Log(-GetSigmaXS(i, j) * Common6.DelT / PhisCnst.Mu0));
-								HzyN[i, j] = Hzy[i, j] * Math.Log(-GetSigmaYS(i, j) * Common6.DelT
+								Common6.HzyN[i, j] = Common6.Hzy[i, j] * Math.Log(-GetSigmaYS(i, j) * Common6.DelT
 									/ PhisCnst.Mu0) + 1 / Common6.DelY / GetSigmaYS(i, j)
 									* (GetEx(i, j + 1) - GetEx(i, j - 1))
 									* (1 - Math.Log(-GetSigmaYS(i, j) * Common6.DelT / PhisCnst.Mu0));
@@ -351,21 +351,21 @@ namespace ElDinamicCalc
 
 				for (int i = -1; i <= SizeX; i++)
 				{
-					Ex[i, -1] = GetEx(i, -1);
-					Ey[i, -1] = GetEy(i, -1);
-					Ez[i, -1] = GetEz(i, -1);
-					Ex[i, Common6.SizeY] = GetEx(i, Common6.SizeY);
-					Ey[i, Common6.SizeY] = GetEy(i, Common6.SizeY);
-					Ez[i, Common6.SizeY] = GetEz(i, Common6.SizeY);
+					Common6.Ex[i, -1] = GetEx(i, -1);
+					Common6.Ey[i, -1] = GetEy(i, -1);
+					Common6.Ez[i, -1] = GetEz(i, -1);
+					Common6.Ex[i, Common6.SizeY] = GetEx(i, Common6.SizeY);
+					Common6.Ey[i, Common6.SizeY] = GetEy(i, Common6.SizeY);
+					Common6.Ez[i, Common6.SizeY] = GetEz(i, Common6.SizeY);
 				}
 				for (int j = -1; j <= SizeY; j++)
 				{
-					Ex[-1, j] = GetEx(-1, j);
-					Ey[-1, j] = GetEy(-1, j);
-					Ez[-1, j] = GetEz(-1, j);
-					Ex[SizeX, j] = GetEx(SizeX, j);
-					Ey[SizeX, j] = GetEy(SizeX, j);
-					Ez[SizeX, j] = GetEz(SizeX, j);
+					Common6.Ex[-1, j] = GetEx(-1, j);
+					Common6.Ey[-1, j] = GetEy(-1, j);
+					Common6.Ez[-1, j] = GetEz(-1, j);
+					Common6.Ex[SizeX, j] = GetEx(SizeX, j);
+					Common6.Ey[SizeX, j] = GetEy(SizeX, j);
+					Common6.Ez[SizeX, j] = GetEz(SizeX, j);
 				}
 			}
 			else
@@ -373,22 +373,22 @@ namespace ElDinamicCalc
 				AbsMagn();
 				for (int i = -1; i <= SizeX; i++)
 				{
-					Hx[i, -1] = GetHx(i, -1);
-					Hy[i, -1] = GetHy(i, -1);
-					Hz[i, -1] = GetHz(i, -1);
-					Hx[i, SizeY] = GetHx(i, SizeY);
-					Hy[i, SizeY] = GetHy(i, SizeY);
-					Hz[i, SizeY] = GetHz(i, SizeY);
+					Common6.Hx[i, -1] = GetHx(i, -1);
+					Common6.Hy[i, -1] = GetHy(i, -1);
+					Common6.Hz[i, -1] = GetHz(i, -1);
+					Common6.Hx[i, SizeY] = GetHx(i, SizeY);
+					Common6.Hy[i, SizeY] = GetHy(i, SizeY);
+					Common6.Hz[i, SizeY] = GetHz(i, SizeY);
 				}
 
 				for (int j = -1; j <= SizeY; j++)
 				{
-					Hx[-1, j] = GetHx(-1, j);
-					Hy[-1, j] = GetHy(-1, j);
-					Hz[-1, j] = GetHz(-1, j);
-					Hx[SizeX, j] = GetHx(SizeX, j);
-					Hy[SizeX, j] = GetHy(SizeX, j);
-					Hz[SizeX, j] = GetHz(SizeX, j);
+					Common6.Hx[-1, j] = GetHx(-1, j);
+					Common6.Hy[-1, j] = GetHy(-1, j);
+					Common6.Hz[-1, j] = GetHz(-1, j);
+					Common6.Hx[SizeX, j] = GetHx(SizeX, j);
+					Common6.Hy[SizeX, j] = GetHy(SizeX, j);
+					Common6.Hz[SizeX, j] = GetHz(SizeX, j);
 				}
 			}
 		}
@@ -412,33 +412,33 @@ namespace ElDinamicCalc
 			//значениями с учетом перешагивания во времени
 			if ((Common6.Tn + 2) % 2 == 0)
 			{
-				SwapFields(Ex, ExN);
-				SwapFields(Ey, EyN);
-				SwapFields(Ez, EzN);
-				SwapFields(Dx, DxN);
-				SwapFields(Dy, DyN);
-				SwapFields(Dz, DzN);
-				SwapFields(Exy, ExyN);
-				SwapFields(Exz, ExzN);
-				SwapFields(Eyx, EyxN);
-				SwapFields(Eyz, EyzN);
-				SwapFields(Ezx, EzxN);
-				SwapFields(Ezy, EzyN);
+				SwapFields(Common6.Ex, Common6.ExN);
+				SwapFields(Common6.Ey, Common6.EyN);
+				SwapFields(Common6.Ez, Common6.EzN);
+				SwapFields(Common6.Dx, Common6.DxN);
+				SwapFields(Common6.Dy, Common6.DyN);
+				SwapFields(Common6.Dz, Common6.DzN);
+				SwapFields(Common6.Exy, Common6.ExyN);
+				SwapFields(Common6.Exz, Common6.ExzN);
+				SwapFields(Common6.Eyx, Common6.EyxN);
+				SwapFields(Common6.Eyz, Common6.EyzN);
+				SwapFields(Common6.Ezx, Common6.EzxN);
+				SwapFields(Common6.Ezy, Common6.EzyN);
 			}
 			else
 			{
-				SwapFields(Hx, HxN);
-				SwapFields(Hy, HyN);
-				SwapFields(Hz, HzN);
-				SwapFields(Bx, BxN);
-				SwapFields(By, ByN);
-				SwapFields(Bz, BzN);
-				SwapFields(Hxy, HxyN);
-				SwapFields(Hxz, HxzN);
-				SwapFields(Hyx, HyxN);
-				SwapFields(Hyz, HyzN);
-				SwapFields(Hzx, HzxN);
-				SwapFields(Hzy, HzyN);
+				SwapFields(Common6.Hx, Common6.HxN);
+				SwapFields(Common6.Hy, Common6.HyN);
+				SwapFields(Common6.Hz, Common6.HzN);
+				SwapFields(Common6.Bx, Common6.BxN);
+				SwapFields(Common6.By, Common6.ByN);
+				SwapFields(Common6.Bz, Common6.BzN);
+				SwapFields(Common6.Hxy, Common6.HxyN);
+				SwapFields(Common6.Hxz, Common6.HxzN);
+				SwapFields(Common6.Hyx, Common6.HyxN);
+				SwapFields(Common6.Hyz, Common6.HyzN);
+				SwapFields(Common6.Hzx, Common6.HzxN);
+				SwapFields(Common6.Hzy, Common6.HzyN);
 			}
 		}
 
@@ -551,8 +551,8 @@ namespace ElDinamicCalc
 	        {
 	            if ((Common6.IntX + j + 2)%2 == 0)
 	            {
-	                Int1 = Int1 + Ez[Common6.IntX, j] * Common6.IntFModeEz[0, j];
-                    Int2 = Int2 + (Hy[Common6.IntX, j - 1] + Hy[Common6.IntX, j + 1]) * Common6.IntFModeEz[0, j];
+					Int1 = Int1 + Common6.Ez[Common6.IntX, j] * Common6.IntFModeEz[0, j];
+					Int2 = Int2 + (Common6.Hy[Common6.IntX, j - 1] + Common6.Hy[Common6.IntX, j + 1]) * Common6.IntFModeEz[0, j];
 	            }
 	        }
 	        return (One*Int1*Coef + Int2*0.5); //{* DelY};
