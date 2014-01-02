@@ -259,5 +259,10 @@ namespace ElDinamicCalc
 
             return true;
         }
+
+	    public static decimal Sqrt(decimal value)
+	    {
+		    return (decimal) Math.Sqrt((double) value);
+	    }
     }
 }

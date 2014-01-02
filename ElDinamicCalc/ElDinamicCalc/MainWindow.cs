@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Schema;
@@ -38,7 +39,7 @@ namespace ElDinamicCalc
 				list.LoadFromFile(
 					@"F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\Manenkov.mdm");
 
-				TThr tr = new TThr();
+				TThr tr = new TThr(Draw);
 				SetInitialWave();
 				Common6.SizeX = RegionList.SizeOfX;
 				Common6.SizeY = RegionList.SizeOfY;
@@ -84,17 +85,20 @@ namespace ElDinamicCalc
 						ColorArray[i] = bitmap.GetPixel(i, 0);
 				}
 
-				Common6.WaveF = Common6.Ez;
+
 
 
 				while (Common6.Tn < 10000)
 				{
+					Thread.Sleep(100);
 					tr.Execute();
-
-					drawPanel.Update();
-					drawPanel.Invalidate();
 					
 
+					//if (Common6.Tn%2 == 0)
+					//{
+					//	drawPanel.Update();
+					//	drawPanel.Invalidate();
+					//}
 				}
 			}
 			catch (Exception ex)
@@ -103,51 +107,64 @@ namespace ElDinamicCalc
 			}
 		}
 
+		private void Exec()
+		{
+			
+		}
+
 		private void Draw()
 		{
+			
 			if (WaveBitmap != null)
 			{
 				var width = WaveBitmap.Width;
 				var height = WaveBitmap.Height;
-
-				var sourceData = WaveBitmap.LockBits(new Rectangle(new System.Drawing.Point(0, 0), WaveBitmap.Size),
-								 ImageLockMode.ReadOnly,
-								 WaveBitmap.PixelFormat);
-
-				var sourceStride = sourceData.Stride;
-
-				var sourceScan0 = sourceData.Scan0;
-
-				var sourcePixelSize = sourceStride / width;
-
-				int bytes = Math.Abs(sourceStride) * height;
-				byte[] rgbValues = new byte[bytes];
-
-				// Copy the RGB values into the array.
-				System.Runtime.InteropServices.Marshal.Copy(sourceScan0, rgbValues, 0, bytes);
-
 				for (var y = 0; y < height; y++)
 				{
 					for (var x = 0; x < width; x++)
 					{
 						Color c = ColorByValue(TFieldType.ftHType, Common6.WaveF[x, y]);
-						rgbValues[y * sourceStride + x * sourcePixelSize + 1] = c.R;
-						rgbValues[y * sourceStride + x * sourcePixelSize + 2] = c.G;
-						rgbValues[y * sourceStride + x * sourcePixelSize + 3] = c.B;
+						WaveBitmap.SetPixel(x, y, c);
+
 					}
 				}
-
-				// Set every third value to 255. A 24bpp bitmap will look red.   
-				for (int counter = 2; counter < rgbValues.Length; counter += 3)
-					rgbValues[counter] = 255;
-
-				// Copy the RGB values back to the bitmap
-				System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, sourceScan0, bytes);
-
-				// Unlock the bits.
-				WaveBitmap.UnlockBits(sourceData);
-
 				graph.DrawImage(WaveBitmap, new Point(0, 0));
+			
+
+				//var sourceData = WaveBitmap.LockBits(new Rectangle(new System.Drawing.Point(0, 0), WaveBitmap.Size),
+				//				 ImageLockMode.ReadWrite,
+				//				 WaveBitmap.PixelFormat);
+
+				//var sourceStride = sourceData.Stride;
+
+				//var sourceScan0 = sourceData.Scan0;
+
+				//var sourcePixelSize = sourceStride / width;
+
+				//int bytes = Math.Abs(sourceStride) * height;
+				//byte[] rgbValues = new byte[bytes];
+
+				//// Copy the RGB values into the array.
+				//System.Runtime.InteropServices.Marshal.Copy(sourceScan0, rgbValues, 0, bytes);
+
+				//for (var y = 0; y < height; y++)
+				//{
+				//	for (var x = 0; x < width; x++)
+				//	{
+				//		Color c = ColorByValue(TFieldType.ftHType, Common6.WaveF[x, y]);
+				//		rgbValues[y * sourceStride + x * sourcePixelSize+ 1] = 115;//c.R;
+				//		rgbValues[y * sourceStride + x * sourcePixelSize + 2] = 115;//c.G;
+				//		rgbValues[y * sourceStride + x * sourcePixelSize + 3] = 115;//c.B;
+				//	}
+				//}
+
+				//// Copy the RGB values back to the bitmap
+				//System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, sourceScan0, bytes);
+
+				//// Unlock the bits.
+				//WaveBitmap.UnlockBits(sourceData);
+
+				//graph.DrawImage(WaveBitmap, new Point(0, 0));
 			}
 			
 			
@@ -166,8 +183,8 @@ namespace ElDinamicCalc
 			{
 				return Color.White;
 			}
-
-			return ColorArray[(int)Math.Round(255*(Math.Abs(value) - min)/(max - min))];
+			var c = ColorArray[(int)Math.Round(255*(Math.Abs(value) - min)/(max - min))];
+			return c;
 		}
 
 		private double GetMaxValue(TFieldType fieldType)

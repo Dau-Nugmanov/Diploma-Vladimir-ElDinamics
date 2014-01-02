@@ -171,7 +171,6 @@ var
 var
   PrFile: Text;
 {$ENDIF}
-TestFile: Text;
 
 implementation
 
@@ -180,8 +179,6 @@ begin
   AssignFile(PrFile, 'Process.txt');
   Rewrite(PrFile);
 {$ENDIF}
-AssignFile(TestFile, 'd:\Test.txt');
-  Rewrite(TestFile);
 //начальная установка параметров
   EditorPath := MainPath + 'Editor\';
 

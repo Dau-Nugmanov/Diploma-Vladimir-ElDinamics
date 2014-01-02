@@ -11,7 +11,6 @@ F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamic
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.pdb
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.exe
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.pdb
-F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csprojResolveAssemblyReference.cache
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.Properties.Resources.resources
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csproj.GenerateResource.Cache
 C:\Users\Искан\Desktop\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\bin\Debug\ElDinamicCalc.exe.config
@@ -21,3 +20,4 @@ C:\Users\Искан\Desktop\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicC
 C:\Users\Искан\Desktop\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.Properties.Resources.resources
 C:\Users\Искан\Desktop\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csproj.GenerateResource.Cache
 F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.MainWindow.resources
+F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\obj\Debug\ElDinamicCalc.csprojResolveAssemblyReference.cache
