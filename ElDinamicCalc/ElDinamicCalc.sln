@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElDinamicCalc", "ElDinamicCalc\ElDinamicCalc.csproj", "{DA2F4D10-DE8A-451F-9EF3-484261FA56D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{6C51D5A4-A291-4C10-9923-7C1117727A8C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingWithShapeElements", "G:\Nugmanov\Библиотеки\Рабочий стол\cs\DrawingWithShapeElements.csproj", "{D7E510D2-9BA8-49A8-9237-762344A8216B}"
 EndProject
 Global
@@ -27,16 +25,6 @@ Global
 		{DA2F4D10-DE8A-451F-9EF3-484261FA56D2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DA2F4D10-DE8A-451F-9EF3-484261FA56D2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DA2F4D10-DE8A-451F-9EF3-484261FA56D2}.Release|x86.ActiveCfg = Release|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6C51D5A4-A291-4C10-9923-7C1117727A8C}.Release|x86.ActiveCfg = Release|Any CPU
 		{D7E510D2-9BA8-49A8-9237-762344A8216B}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{D7E510D2-9BA8-49A8-9237-762344A8216B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{D7E510D2-9BA8-49A8-9237-762344A8216B}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -50,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

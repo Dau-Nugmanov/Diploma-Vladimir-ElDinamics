@@ -15,21 +15,21 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ez[i, j] = PhisCnst.Ez0*
-						                   Math.Sin(Math.PI*Common6.HalfPX*(i - Common6.InitialX1)/(Common6.InitialX2 - Common6.InitialX1))
+						Common6.Ez[i, j] = (decimal)PhisCnst.Ez0*
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPY*(j - Common6.InitialY1)/(Common6.InitialY2 - Common6.InitialY1));
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
 						Common6.Dz[i, j] =
-							Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+							Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hy[i, j] = PhisCnst.Hz0
+						Common6.Hy[i, j] = (decimal)PhisCnst.Hz0
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPX*(i - Common6.InitialX1)/(Common6.InitialX2 - Common6.InitialX1))
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPY*(j - Common6.InitialY1)/(Common6.InitialY2 - Common6.InitialY1));
-						Common6.By[i, j] = Common6.Hy[i, j]*PhisCnst.Mu0;
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
+						Common6.By[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
 					}
 				}
 		}
@@ -41,19 +41,19 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ey[i, j] = PhisCnst.Ez0
+						Common6.Ey[i, j] = (decimal)PhisCnst.Ez0
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPX*(i - Common6.InitialX1)/(Common6.InitialX2 - Common6.InitialX1))
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-						                   Math.Cos(Math.PI*Common6.HalfPY*(j - Common6.InitialY1)/(Common6.InitialY2 - Common6.InitialY1));
-						Common6.Dy[i, j] = Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+										   (decimal)Math.Cos(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
+						Common6.Dy[i, j] = Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hz[i, j] = PhisCnst.Hz0
-          *Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
-          *Math.Cos(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
-        Common6.Bz[i, j]=Common6.Hy[i, j] * PhisCnst.Mu0;
+						Common6.Hz[i, j] = (decimal)PhisCnst.Hz0
+		  * (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+		  * (decimal)Math.Cos(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
+						Common6.Bz[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
 					}
 				}
 		}
@@ -65,25 +65,25 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ez[i, j] = PhisCnst.Ez0
+						Common6.Ez[i, j] = (decimal)PhisCnst.Ez0
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPX*(i - Common6.InitialX1)/(Common6.InitialX2 - Common6.InitialX1))
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPY*(j - Common6.InitialY1)/(Common6.InitialY2 - Common6.InitialY1))
-						                   *Math.Exp(-Math.Pow(Common6.ExpX*(i - (Common6.InitialX1 + Common6.InitialX2)/2), 2)
+										  (decimal)Math.Sin(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1))
+										   * (decimal)Math.Exp(-Math.Pow(Common6.ExpX * (i - (Common6.InitialX1 + Common6.InitialX2) / 2), 2)
 						                             - Math.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
-						Common6.Dz[i, j] = Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+						Common6.Dz[i, j] = Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hy[i, j] = PhisCnst.Hz0
+						Common6.Hy[i, j] = (decimal)PhisCnst.Hz0
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPX*(i - Common6.InitialX1)/(Common6.InitialX2 - Common6.InitialX1))
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-						                   Math.Sin(Math.PI*Common6.HalfPY*(j - Common6.InitialY1)/(Common6.InitialY2 - Common6.InitialY1))
-						                   *Math.Exp(-Math.Pow(Common6.ExpX*(i - (Common6.InitialX1 + Common6.InitialX2)/2), 2)
+										   (decimal)Math.Sin(Math.PI * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1))
+										   * (decimal)Math.Exp(-Math.Pow(Common6.ExpX * (i - (Common6.InitialX1 + Common6.InitialX2) / 2), 2)
 						                             - Math.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
-						Common6.By[i, j] = Common6.Hy[i, j]*PhisCnst.Mu0;
+						Common6.By[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
 					}
 				}
 		}

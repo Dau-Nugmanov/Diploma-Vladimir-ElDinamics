@@ -44,6 +44,8 @@ namespace ElDinamicCalc
 
 		public static double BettaX, BettaY;
 
+		public static Queue<ExtArr> DrawQueue = new Queue<ExtArr>(); 
+
 		static Common6()
 		{
 			BoundWidth = BoundWidth0;

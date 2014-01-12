@@ -9,18 +9,13 @@ interface
 {$D+}
 
 uses
-  Common6, Regions, PhisCnst, Graphics,ColorUnit;
+  Common6, Regions, PhisCnst;
 
 procedure PlaneWaveTE;
 procedure PlaneWaveTM;
 procedure GaussTE;
 procedure GaussTM;
 procedure WaveFromRegionList;
-
-procedure TestDraw;
-function ColorByValue(FieldType: TFieldType; Value: Extended): TColor;
-function Tag(FieldType: TFieldType): Byte;
-function GetMaxValue(FieldType: TFieldType): Single;
 
 implementation
 
@@ -119,68 +114,6 @@ begin
     FieldList[i].FillHx(Hx);
     FieldList[i].FillHy(Hy);
     FieldList[i].FillHz(Hz);
-  end;
-end;
-
-procedure TestDraw;
-type
-  TIntArray = array[0..32767] of Integer;
-  PIntArray = ^TIntArray;
-var
-  i, j: Integer;
-  Line: PIntArray;
-  FieldValue: Single;
-begin
- for j := 0 to SizeY - 1 do
-    begin
-      Line := WaveBitmap.ScanLine[j];
-      for i := 0 to SizeX - 1 do
-        if (i + j + 2) mod 2 = Tag(WaveF.FieldType) then
-          Line[i] := ColorByValue(WaveF.FieldType, WaveF.Field^[i, j]);
-    end;
-end;
-
-function ColorByValue(FieldType: TFieldType;
-  Value: Extended): TColor;
-var
-  Max, Min: Extended;
-begin
-//возвращает цвет по значению поля
-//нужно для прорисовки рисунка поля
-  Max := BlackValue * GetMaxValue(FieldType);
-  Min := WhiteValue * GetMaxValue(FieldType);
-  if Abs(Value) >= Max then
-  begin
-    Result := clBlack;
-    Exit;
-  end;
-  if Abs(Value) <= Min then
-  begin
-    Result := clWhite;
-    Exit;
-  end;
-  Result := ColorArray[Round(255 * (Abs(Value) - Min) / (Max - Min))];
-end;
-
-function Tag(FieldType: TFieldType): Byte;
-begin
-//возрашает 0 если компонента является электрической
-//и 1 - если магнитной
-//нужно для выполнения перешагивания
-  Result := 0;
-  if (FieldType = ftBType) or (FieldType = ftHType) then
-    Result := 1;
-end;
-
-function GetMaxValue(FieldType: TFieldType): Single;
-begin
-//возвращает максимальное начальное значение компоненты
-  Result := 0.1;
-  case FieldType of
-    ftEType : Result := Ez0;
-    ftDType : Result := Ez0 * Eps0 * RegionList.Eps;
-    ftHType : Result := Hz0;
-    ftBType : Result := Hz0 * Mu0;
   end;
 end;
 

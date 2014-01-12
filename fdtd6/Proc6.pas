@@ -325,6 +325,11 @@ procedure ElectrTE(i, j: Integer);
 var
   Eps: Extended;
 begin
+if i = 50 then
+begin
+  Eps := RegionList.EpsField[i, j] * Eps0
+    + RegionList.Eps2Field[i, j] * Eps0 * Sqr(Ez[i, j] / Ez0);
+end;
 //расчет электрических компонент
   Eps := RegionList.EpsField[i, j] * Eps0
     + RegionList.Eps2Field[i, j] * Eps0 * Sqr(Ez[i, j] / Ez0);

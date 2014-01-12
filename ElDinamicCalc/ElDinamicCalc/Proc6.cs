@@ -107,7 +107,7 @@ namespace ElDinamicCalc
 		}
 
 		//меняет местами указатели на две компоненты поля
-		public void SwapFields(ExtArr field1, ExtArr field2)
+		public void SwapFields(ref ExtArr field1, ref ExtArr field2)
 		{
 			var temp = field2;
 			field2 = field1;
@@ -118,21 +118,21 @@ namespace ElDinamicCalc
 		//само значение, если точка внутри системы
 		//иначе - сумма значений расщепленных компонент
 
-		public double GetEx(int i, int j)
+		public decimal GetEx(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Ex[i, j];
 			return Common6.Exy[i, j] + Common6.Exz[i, j];
 		}
 
-		public double GetEy(int i, int j)
+		public decimal GetEy(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Ey[i, j];
 			return Common6.Eyx[i, j] + Common6.Eyz[i, j];
 		}
 
-		public double GetEz(int i, int j)
+		public decimal GetEz(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Ez[i, j];
@@ -140,21 +140,21 @@ namespace ElDinamicCalc
 		}
 
 
-		public double GetHx(int i, int j)
+		public decimal GetHx(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Hx[i, j];
 			return Common6.Hxy[i, j] + Common6.Hxz[i, j];
 		}
 
-		public double GetHy(int i, int j)
+		public decimal GetHy(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Hy[i, j];
 			return Common6.Hyx[i, j] + Common6.Hyz[i, j];
 		}
 
-		public double GetHz(int i, int j)
+		public decimal GetHz(int i, int j)
 		{
 			if ((i >= 0) && (i < SizeX) && (j >= 0) && (j < SizeY))
 				return Common6.Hz[i, j];
@@ -164,52 +164,52 @@ namespace ElDinamicCalc
 		//следующие 6 функций возращают значения параметров Sigma в точке
 		//учитывается расстояние до границы ситемы
 
-		public double GetSigmaX(int i, int j)
+		public decimal GetSigmaX(int i, int j)
 		{
 
 			if (i < 0)
-				return SigmaX * ExtMath.Degree(CoefG, -i + 1);
+				return (decimal)SigmaX * ExtMath.Degree(CoefG, -i + 1);
 			if (i >= SizeX)
-				return SigmaX * ExtMath.Degree(CoefG, i - SizeX);
-			return SigmaX;
+				return (decimal)SigmaX * ExtMath.Degree(CoefG, i - SizeX);
+			return (decimal)SigmaX;
 		}
 
-		public double GetSigmaY(int i, int j)
+		public decimal GetSigmaY(int i, int j)
 		{
 			if (j < 0)
-				return SigmaY * ExtMath.Degree(CoefG, -j + 1);
+				return (decimal)SigmaY * ExtMath.Degree(CoefG, -j + 1);
 			if (j >= SizeY)
-				return SigmaY * ExtMath.Degree(CoefG, j - SizeY);
-			return SigmaY;
+				return (decimal)SigmaY * ExtMath.Degree(CoefG, j - SizeY);
+			return (decimal)SigmaY;
 		}
 
-		public double GetSigmaZ(int i, int j)
+		public decimal GetSigmaZ(int i, int j)
 		{
 			return 0;
 		}
 
-		public double GetSigmaXS(int i, int j)
+		public decimal GetSigmaXS(int i, int j)
 		{
-			return GetSigmaX(i, j) * PhisCnst.MuDivEps;
+			return GetSigmaX(i, j) * (decimal)PhisCnst.MuDivEps;
 		}
 
-		public double GetSigmaYS(int i, int j)
+		public decimal GetSigmaYS(int i, int j)
 		{
-			return GetSigmaY(i, j) * PhisCnst.MuDivEps;
+			return GetSigmaY(i, j) * (decimal)PhisCnst.MuDivEps;
 		}
 
-		public double GetSigmaZS(int i, int j)
+		public decimal GetSigmaZS(int i, int j)
 		{
-			return GetSigmaZ(i, j) * PhisCnst.MuDivEps;
+			return GetSigmaZ(i, j) * (decimal)PhisCnst.MuDivEps;
 		}
 
 
 		public void ElectrTE(int i, int j)
 		{
-			var Eps = RegionList.EpsField[i, j] * PhisCnst.Eps0 + RegionList.Eps2Field[i, j]
-					  * PhisCnst.Eps0 * Math.Sqrt(Common6.Ez[i, j] / PhisCnst.Ez0);
-			Common6.DzN[i, j] = Common6.Dz[i, j] + Common6.DtDivDx * (Common6.Hy[i + 1, j] - Common6.Hy[i - 1, j])
-						- Common6.DtDivDy * (Common6.Hx[i, j + 1] - Common6.Hx[i, j - 1]);
+			var Eps = RegionList.EpsField[i, j] * (decimal)PhisCnst.Eps0 + RegionList.Eps2Field[i, j]
+					  * (decimal)PhisCnst.Eps0 * ExtMath.Sqrt(Common6.Ez[i, j] / (decimal)PhisCnst.Ez0);
+			Common6.DzN[i, j] = Common6.Dz[i, j] + (decimal)Common6.DtDivDx * (Common6.Hy[i + 1, j] - Common6.Hy[i - 1, j])
+						- (decimal)Common6.DtDivDy * (Common6.Hx[i, j + 1] - Common6.Hx[i, j - 1]);
 			if (Eps != 0)
 				Common6.EzN[i, j] = Common6.DzN[i, j] / Eps;
 			else
@@ -222,10 +222,10 @@ namespace ElDinamicCalc
 
 		public void MagnTE(int i, int j)
 		{
-			Common6.BxN[i, j] = Common6.Bx[i, j] - Common6.DtDivDy * (Common6.Ez[i, j + 1] - Common6.Ez[i, j - 1]);
-			Common6.ByN[i, j] = Common6.By[i, j] + Common6.DtDivDx * (Common6.Ez[i + 1, j] - Common6.Ez[i - 1, j]);
-			Common6.HxN[i, j] = Common6.BxN[i, j] / PhisCnst.Mu0;
-			Common6.HyN[i, j] = Common6.ByN[i, j] / PhisCnst.Mu0;
+			Common6.BxN[i, j] = Common6.Bx[i, j] - (decimal)Common6.DtDivDy * (Common6.Ez[i, j + 1] - Common6.Ez[i, j - 1]);
+			Common6.ByN[i, j] = Common6.By[i, j] + (decimal)Common6.DtDivDx * (Common6.Ez[i + 1, j] - Common6.Ez[i - 1, j]);
+			Common6.HxN[i, j] = Common6.BxN[i, j] / (decimal)PhisCnst.Mu0;
+			Common6.HyN[i, j] = Common6.ByN[i, j] / (decimal)PhisCnst.Mu0;
 		}
 
         public void MagnTM(int i, int j)
@@ -284,18 +284,18 @@ namespace ElDinamicCalc
 								break;
 
 							case TModeType.mtTM:
-								Common6.ExyN[i, j] = Common6.Exy[i, j] * Math.Log(-GetSigmaY(i, j)
-																* Common6.DelT / PhisCnst.Eps0)
-											 + 1 / Common6.DelY / GetSigmaY(i, j) * (GetHz(i, j + 1)
-																			   - GetHz(i, j - 1)) * (1 - Math.Log(-GetSigmaY(i, j)
-																												* Common6.DelT / PhisCnst.Eps0));
-								Common6.ExzN[i, j] = Common6.Exz[i, j] * Math.Log(-GetSigmaZ(0, 0)
-																* Common6.DelT / PhisCnst.Eps0);
-								Common6.EyxN[i, j] = Common6.Eyx[i, j] * Math.Log(-GetSigmaX(i, j)
-																* Common6.DelT / PhisCnst.Eps0) - 1 / Common6.DelX
+								Common6.ExyN[i, j] = Common6.Exy[i, j] * ExtMath.Log(-GetSigmaY(i, j)
+																* (decimal)Common6.DelT / (decimal)PhisCnst.Eps0)
+											 + 1 / (decimal)Common6.DelY / GetSigmaY(i, j) * (GetHz(i, j + 1)
+																			   - GetHz(i, j - 1)) * (1 - ExtMath.Log(-GetSigmaY(i, j)
+																												* (decimal)Common6.DelT / (decimal)PhisCnst.Eps0));
+								Common6.ExzN[i, j] = Common6.Exz[i, j] * ExtMath.Log(-GetSigmaZ(0, 0)
+																* (decimal)Common6.DelT / (decimal)PhisCnst.Eps0);
+								Common6.EyxN[i, j] = Common6.Eyx[i, j] * ExtMath.Log(-GetSigmaX(i, j)
+																* (decimal)Common6.DelT / (decimal)PhisCnst.Eps0) - 1 / (decimal)Common6.DelX
 											 / GetSigmaX(i, j) * (GetHz(i + 1, j) - GetHz(i - 1, j))
-											 * (1 - Math.Log(-GetSigmaX(i, j) * Common6.DelT / PhisCnst.Eps0));
-								Common6.EyzN[i, j] = Common6.Eyz[i, j] * Math.Log(-GetSigmaZ(0, 0) * Common6.DelT / PhisCnst.Eps0);
+											 * (1 - ExtMath.Log(-GetSigmaX(i, j) * (decimal)Common6.DelT / (decimal)PhisCnst.Eps0));
+								Common6.EyzN[i, j] = Common6.Eyz[i, j] * ExtMath.Log(-GetSigmaZ(0, 0) * (decimal)Common6.DelT / (decimal)PhisCnst.Eps0);
 								break;
 						}
 					}
@@ -326,14 +326,14 @@ namespace ElDinamicCalc
 								break;
 
 							case TModeType.mtTM:
-								Common6.HzxN[i, j] = Common6.Hzx[i, j] * Math.Log(-GetSigmaXS(i, j)
-									* Common6.DelT / PhisCnst.Mu0) - 1 / Common6.DelX / GetSigmaXS(i, j)
+								Common6.HzxN[i, j] = Common6.Hzx[i, j] * ExtMath.Log(-GetSigmaXS(i, j)
+									* (decimal)Common6.DelT / (decimal)PhisCnst.Mu0) - 1 / (decimal)Common6.DelX / GetSigmaXS(i, j)
 									* (GetEy(i + 1, j) - GetEy(i - 1, j))
-									* (1 - Math.Log(-GetSigmaXS(i, j) * Common6.DelT / PhisCnst.Mu0));
-								Common6.HzyN[i, j] = Common6.Hzy[i, j] * Math.Log(-GetSigmaYS(i, j) * Common6.DelT
-									/ PhisCnst.Mu0) + 1 / Common6.DelY / GetSigmaYS(i, j)
+									* (1 - ExtMath.Log(-GetSigmaXS(i, j) * (decimal)Common6.DelT / (decimal)PhisCnst.Mu0));
+								Common6.HzyN[i, j] = Common6.Hzy[i, j] * ExtMath.Log(-GetSigmaYS(i, j) * (decimal)Common6.DelT
+									/ (decimal)PhisCnst.Mu0) + 1 / (decimal)Common6.DelY / GetSigmaYS(i, j)
 									* (GetEx(i, j + 1) - GetEx(i, j - 1))
-									* (1 - Math.Log(-GetSigmaYS(i, j) * Common6.DelT / PhisCnst.Mu0));
+									* (1 - ExtMath.Log(-GetSigmaYS(i, j) * (decimal)Common6.DelT / (decimal)PhisCnst.Mu0));
 								break;
 						}
 					}
@@ -412,33 +412,33 @@ namespace ElDinamicCalc
 			//значениями с учетом перешагивания во времени
 			if ((Common6.Tn + 2) % 2 == 0)
 			{
-				SwapFields(Common6.Ex, Common6.ExN);
-				SwapFields(Common6.Ey, Common6.EyN);
-				SwapFields(Common6.Ez, Common6.EzN);
-				SwapFields(Common6.Dx, Common6.DxN);
-				SwapFields(Common6.Dy, Common6.DyN);
-				SwapFields(Common6.Dz, Common6.DzN);
-				SwapFields(Common6.Exy, Common6.ExyN);
-				SwapFields(Common6.Exz, Common6.ExzN);
-				SwapFields(Common6.Eyx, Common6.EyxN);
-				SwapFields(Common6.Eyz, Common6.EyzN);
-				SwapFields(Common6.Ezx, Common6.EzxN);
-				SwapFields(Common6.Ezy, Common6.EzyN);
+				SwapFields(ref Common6.Ex, ref Common6.ExN);
+				SwapFields(ref Common6.Ey, ref Common6.EyN);
+				SwapFields(ref Common6.Ez, ref Common6.EzN);
+				SwapFields(ref Common6.Dx, ref Common6.DxN);
+				SwapFields(ref Common6.Dy, ref Common6.DyN);
+				SwapFields(ref Common6.Dz, ref Common6.DzN);
+				SwapFields(ref Common6.Exy, ref Common6.ExyN);
+				SwapFields(ref Common6.Exz, ref Common6.ExzN);
+				SwapFields(ref Common6.Eyx, ref Common6.EyxN);
+				SwapFields(ref Common6.Eyz, ref Common6.EyzN);
+				SwapFields(ref Common6.Ezx, ref Common6.EzxN);
+				SwapFields(ref Common6.Ezy, ref Common6.EzyN);
 			}
 			else
 			{
-				SwapFields(Common6.Hx, Common6.HxN);
-				SwapFields(Common6.Hy, Common6.HyN);
-				SwapFields(Common6.Hz, Common6.HzN);
-				SwapFields(Common6.Bx, Common6.BxN);
-				SwapFields(Common6.By, Common6.ByN);
-				SwapFields(Common6.Bz, Common6.BzN);
-				SwapFields(Common6.Hxy, Common6.HxyN);
-				SwapFields(Common6.Hxz, Common6.HxzN);
-				SwapFields(Common6.Hyx, Common6.HyxN);
-				SwapFields(Common6.Hyz, Common6.HyzN);
-				SwapFields(Common6.Hzx, Common6.HzxN);
-				SwapFields(Common6.Hzy, Common6.HzyN);
+				SwapFields(ref Common6.Hx, ref Common6.HxN);
+				SwapFields(ref Common6.Hy, ref Common6.HyN);
+				SwapFields(ref Common6.Hz, ref Common6.HzN);
+				SwapFields(ref Common6.Bx, ref Common6.BxN);
+				SwapFields(ref Common6.By, ref Common6.ByN);
+				SwapFields(ref Common6.Bz, ref Common6.BzN);
+				SwapFields(ref Common6.Hxy, ref Common6.HxyN);
+				SwapFields(ref Common6.Hxz, ref Common6.HxzN);
+				SwapFields(ref Common6.Hyx, ref Common6.HyxN);
+				SwapFields(ref Common6.Hyz, ref Common6.HyzN);
+				SwapFields(ref Common6.Hzx, ref Common6.HzxN);
+				SwapFields(ref Common6.Hzy, ref Common6.HzyN);
 			}
 		}
 
@@ -483,18 +483,18 @@ namespace ElDinamicCalc
 				{
 					if ((i < 0) || (i >= SizeX) || (j < 0) || (j >= SizeY))
 					{
-						Common6.SigmaXCoeffs[i, j] = Math.Log(-GetSigmaX(i, j) / PhisCnst.Eps0 
-							* Common6.DelT);
-						Common6.SigmaYCoeffs[i, j] = Math.Log(-GetSigmaY(i, j)  / PhisCnst.Eps0 
-							* Common6.DelT);
-						Common6.SigmaXSCoeffs[i, j] = Math.Log(-GetSigmaXS(i, j) / PhisCnst.Mu0 
-							* Common6.DelT);
-						Common6.SigmaYSCoeffs[i, j] = Math.Log(-GetSigmaYS(i, j) / PhisCnst.Mu0 
-							*Common6.DelT);
-						Common6.OneDivSigmaX[i, j] = 1 / Common6.DelX / GetSigmaX(i, j);
-						Common6.OneDivSigmaY[i, j] = 1 / Common6.DelY / GetSigmaY(i, j);
-						Common6.OneDivSigmaXS[i, j] = 1 / Common6.DelX / GetSigmaXS(i, j);
-						Common6.OneDivSigmaYS[i, j] = 1 / Common6.DelY / GetSigmaYS(i, j);
+						Common6.SigmaXCoeffs[i, j] = ExtMath.Log(-GetSigmaX(i, j) / (decimal)PhisCnst.Eps0
+							* (decimal)Common6.DelT);
+						Common6.SigmaYCoeffs[i, j] = ExtMath.Log(-GetSigmaY(i, j) / (decimal)PhisCnst.Eps0
+							* (decimal)Common6.DelT);
+						Common6.SigmaXSCoeffs[i, j] = ExtMath.Log(-GetSigmaXS(i, j) / (decimal)PhisCnst.Mu0
+							* (decimal)Common6.DelT);
+						Common6.SigmaYSCoeffs[i, j] = ExtMath.Log(-GetSigmaYS(i, j) / (decimal)PhisCnst.Mu0
+							* (decimal)Common6.DelT);
+						Common6.OneDivSigmaX[i, j] = 1 / (decimal)Common6.DelX / GetSigmaX(i, j);
+						Common6.OneDivSigmaY[i, j] = 1 / (decimal)Common6.DelY / GetSigmaY(i, j);
+						Common6.OneDivSigmaXS[i, j] = 1 / (decimal)Common6.DelX / GetSigmaXS(i, j);
+						Common6.OneDivSigmaYS[i, j] = 1 / (decimal)Common6.DelY / GetSigmaYS(i, j);
 					}
 				}
 		}
@@ -535,17 +535,17 @@ namespace ElDinamicCalc
           Common6.BettaY = RegionList.FieldList[Number].BettaY;
 		}
 
-	    public double CalcIntegral(bool Forw)
+	    public decimal CalcIntegral(bool Forw)
 	    {
 	        int j, One;
-	        double Int1, Int2, Coef;
+	        decimal Int1, Int2, Coef;
 	        One = 0;
             Int1 = 0;
 	        Int2 = 0;
 
             //todo: Разобраться с Ord
             //One = Ord(Forw) * 2 - 1;
-            Coef = Common6.BettaY / Common6.BettaX / PhisCnst.Z0;
+			Coef = (decimal)Common6.BettaY / (decimal)Common6.BettaX / (decimal)PhisCnst.Z0;
 
 	        for (j = 1; j < SizeY - 2; j++)
 	        {
@@ -555,7 +555,7 @@ namespace ElDinamicCalc
 					Int2 = Int2 + (Common6.Hy[Common6.IntX, j - 1] + Common6.Hy[Common6.IntX, j + 1]) * Common6.IntFModeEz[0, j];
 	            }
 	        }
-	        return (One*Int1*Coef + Int2*0.5); //{* DelY};
+	        return (One*Int1*Coef + Int2*0.5m); //{* DelY};
 	    }
 
 	    public void AddValues()

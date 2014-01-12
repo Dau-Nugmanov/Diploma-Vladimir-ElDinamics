@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ElDinamicCalc
 {
-    public class ExtArr
+    public class ExtArr : ICloneable
     {
         //        {Модуль описывает двумерный динамический массив (TExtArray)
         //типа AValuesType размера ASizeX на ASizeY с вырезом размера
@@ -32,8 +32,7 @@ namespace ElDinamicCalc
         //(SizeX*SizeY-IdleX*IdleY)*SizeOf(ValueType)}
 
         public int SizeX, SizeY, ShiftX, ShiftY, IdleX, IdleY, StartX, StartY;
-        private byte SizeOfElement;
-        private double[] FValues;
+        private decimal[] FValues;
 
         public ExtArr(int aSizeX, int aSizeY, int aShiftX, int aShiftY, int aIdleX, int aIdleY, int aStartX, int aStartY)
         {
@@ -90,7 +89,7 @@ namespace ElDinamicCalc
             }
 
 			var Length = SizeX * SizeY - IdleX * IdleY;
-	        FValues = new double[Length];
+			FValues = new decimal[Length];
         }
 
         public int GetIndex(int x, int y)
@@ -123,7 +122,7 @@ namespace ElDinamicCalc
             return -1;
         }
 
-        public double this[int x, int y]
+		public decimal this[int x, int y]
         {
             get
             {
@@ -139,5 +138,12 @@ namespace ElDinamicCalc
                 }
             }
         }
+
+	    public object Clone()
+	    {
+		    var res = new ExtArr(SizeX, SizeY, ShiftX, ShiftY, IdleX, IdleY, StartX, StartY);
+			FValues.CopyTo(res.FValues, 0);
+		    return res;
+	    }
     }
 }

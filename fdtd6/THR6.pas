@@ -12,7 +12,7 @@ OnCalculate - событие при прохождении очередного шага, используется
 interface
 
 uses
-  Classes, SysUtils, Common6, Proc6, Math;
+  Classes, SysUtils, Common6, Proc6, Math,ExtArr;
 
 type
   TThr = class(TThread)
@@ -38,12 +38,7 @@ procedure TThr.Execute;
 var
   i, j: Integer;
   DrawCount: Byte;
-oldDzN : single;
-oldEzN : single;
-oldBxN : single;
-oldByN : single;
-oldHxN : single;
-oldHyN : single;
+  oldDzN, oldEzN, oldBxN, oldByN, oldHxN, oldHyN: TExtArray;
 
 newDzN : single;
 newEzN : single;
@@ -57,12 +52,18 @@ begin
   DrawCount := 0;
   DrawRecord.ReadyToDraw := True;
 
-oldDzN := 0;
-oldEzN := 0;
-oldBxN := 0;
-oldByN := 0;
-oldHxN := 0;
-oldHyN := 0;
+oldDzN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
+oldEzN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
+oldBxN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
+oldByN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
+oldHxN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
+oldHyN := TExtArray.Create(vtExtended, SizeX + 2, SizeY + 2, 0, 0, 0,
+    0, -1, -1);
 
 newDzN := 0;
 newEzN := 0;
@@ -91,38 +92,38 @@ newHyN := 0;
             mtTM : MagnTM(i, j);
           end;
 
-newDzN := RoundTo(DzN[i, j], -20);
-newEzN := RoundTo(EzN[i, j], -20);
-newBxN := RoundTo(BxN[i, j], -20);
-newByN := RoundTo(ByN[i, j], -20);
-newHxN := RoundTo(HxN[i, j], -20);
-newHyN := RoundTo(HyN[i, j], -20);
+newDzN := RoundTo(DzN[i, j], -15);
+newEzN := RoundTo(EzN[i, j], -15);
+newBxN := RoundTo(BxN[i, j], -15);
+newByN := RoundTo(ByN[i, j], -15);
+newHxN := RoundTo(HxN[i, j], -15);
+newHyN := RoundTo(HyN[i, j], -15);
 
-if newDzN <> oldDzN then
-Writeln(TestFile, 'DzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newDzN));
+if newDzN <> oldDzN[i, j] then
+Writeln(TestFile, 'DzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newDzN));
 
-if newEzN <> oldEzN then
-Writeln(TestFile, 'EzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newEzN));
+if newEzN <> oldEzN[i, j] then
+Writeln(TestFile, 'EzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newEzN));
 
-if newBxN <> oldBxN then
-Writeln(TestFile, 'BxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newBxN));
+if newBxN <> oldBxN[i, j] then
+Writeln(TestFile, 'BxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newBxN));
 
-if newByN <> oldByN then
-Writeln(TestFile, 'ByN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newByN));
+if newByN <> oldByN[i, j] then
+Writeln(TestFile, 'ByN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newByN));
 
-if newHxN <> oldHxN then
-Writeln(TestFile, 'HxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newHxN));
+if newHxN <> oldHxN[i, j] then
+Writeln(TestFile, 'HxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newHxN));
 
-if newHyN <> oldHyN then
-Writeln(TestFile, 'HyN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newHyN));
+if newHyN <> oldHyN[i, j] then
+Writeln(TestFile, 'HyN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newHyN));
 
 
-oldDzN := newDzN;
-oldEzN := newEzN;
-oldBxN := newBxN;
-oldByN := newByN;
-oldHxN := newHxN;
-oldHyN := newHyN;
+oldDzN[i, j] := newDzN;
+oldEzN[i, j] := newEzN;
+oldBxN[i, j] := newBxN;
+oldByN[i, j] := newByN;
+oldHxN[i, j] := newHxN;
+oldHyN[i, j] := newHyN;
 
       end;
 

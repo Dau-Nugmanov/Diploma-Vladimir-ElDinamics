@@ -35,7 +35,7 @@ namespace Test
 				list.LoadFromFile(
 					@"F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\Manenkov.mdm");
 
-				TThr tr = new TThr(null);
+				TThr tr = new TThr();
 				while (Common6.Tn < 10000)
 				{
 					tr.Execute();

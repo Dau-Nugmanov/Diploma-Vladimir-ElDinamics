@@ -91,30 +91,30 @@ newHyN := 0;
             mtTM : MagnTM(i, j);
           end;
 
-newDzN := RoundTo(DzN[i, j], -15);
-newEzN := RoundTo(EzN[i, j], -15);
-newBxN := RoundTo(BxN[i, j], -15);
-newByN := RoundTo(ByN[i, j], -15);
-newHxN := RoundTo(HxN[i, j], -15);
-newHyN := RoundTo(HyN[i, j], -15);
+newDzN := RoundTo(DzN[i, j], -20);
+newEzN := RoundTo(EzN[i, j], -20);
+newBxN := RoundTo(BxN[i, j], -20);
+newByN := RoundTo(ByN[i, j], -20);
+newHxN := RoundTo(HxN[i, j], -20);
+newHyN := RoundTo(HyN[i, j], -20);
 
 if newDzN <> oldDzN then
-Writeln(TestFile, 'DzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newDzN));
+Writeln(TestFile, 'DzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newDzN));
 
 if newEzN <> oldEzN then
-Writeln(TestFile, 'EzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newEzN));
+Writeln(TestFile, 'EzN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newEzN));
 
 if newBxN <> oldBxN then
-Writeln(TestFile, 'BxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newBxN));
+Writeln(TestFile, 'BxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newBxN));
 
 if newByN <> oldByN then
-Writeln(TestFile, 'ByN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newByN));
+Writeln(TestFile, 'ByN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newByN));
 
 if newHxN <> oldHxN then
-Writeln(TestFile, 'HxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newHxN));
+Writeln(TestFile, 'HxN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newHxN));
 
 if newHyN <> oldHyN then
-Writeln(TestFile, 'HyN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.###############', newHyN));
+Writeln(TestFile, 'HyN['+IntToStr(i)+ ', ' + IntToStr(j) + '] = ' + FormatFloat('0.####################', newHyN));
 
 
 oldDzN := newDzN;

@@ -90,14 +90,14 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
-UnitOutputDir=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
-PackageDLLOutputDir=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
-PackageDCPOutputDir=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
-SearchPath=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+OutputDir=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+UnitOutputDir=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+PackageDLLOutputDir=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+PackageDCPOutputDir=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+SearchPath=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
 Packages=VCL40;VCLX40;VCLDB40;VCLDBX40;VCLSMP40;QRPT40;TEEUI40;TEEDB40;TEE40;DSS40;ibevnt40;VCLMID40;NMFAST40;INETDB40;INET40;RXCTL4;RXDB4;Ownpack
 Conditionals=
-DebugSourceDirs=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+DebugSourceDirs=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
 UsePackages=0
 [Parameters]
 RunParams=
@@ -135,23 +135,29 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
 [HistoryLists\hlUnitOutputDirectory]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
 [HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
 [HistoryLists\hlBPLOutput]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
 [HistoryLists\hlDCPOutput]
-Count=1
-Item0=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out
+Count=2
+Item0=F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\fdtd6\Out
+Item1=F:\Users\Nugmanov\Dropbox\Диплом Владимир\fdtd6\Out

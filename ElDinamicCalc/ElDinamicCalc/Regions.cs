@@ -364,7 +364,7 @@ namespace ElDinamicCalc
 
     }
 
-    public class RegionList
+    public static class RegionList
     {
         public static ExtArr EpsField { get; set; }
         public static ExtArr Eps2Field { get; set; }
@@ -384,7 +384,7 @@ namespace ElDinamicCalc
 
         public static int FileCode = 13031979;
 
-        public bool LoadFromFile(string FileName)
+        public static bool LoadFromFile(string FileName)
         {
             try
             {
@@ -499,13 +499,13 @@ namespace ElDinamicCalc
             for (int i = 0; i < SizeOfX; i++)
                 for (int j = 0; j < SizeOfY; j++)
                 {
-                    EpsField[i, j] = Eps;
+					EpsField[i, j] = (decimal)Eps;
                     for (int k = 0; k < Regions.Count; k++)
                     {
                         if (Regions[k].Figure.Belong(i, j))
                         {
-                            EpsField[i, j] = Regions[k].Eps;
-                            Eps2Field[i, j] = Regions[k].Eps2;
+							EpsField[i, j] = (decimal)Regions[k].Eps;
+							Eps2Field[i, j] = (decimal)Regions[k].Eps2;
                             break;
                         }
                     }
@@ -613,7 +613,7 @@ namespace ElDinamicCalc
 				    Rect = RegionList.Regions[RectNum];
 				    DelY = RegionList.DelY;
 				    Eps = Rect.Eps;
-				    EpsA = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
+				    EpsA = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
 					    Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
 
 				    Sym = (EpsA == EpsB);
@@ -677,7 +677,7 @@ namespace ElDinamicCalc
 
         public double Bell(int i)
         {
-            return Math.Sqrt(Math.Sin(Math.PI * (i - StartX) / SizeOfX));
+			return Math.Sqrt(Math.Sin(Math.PI * (i - StartX) / SizeOfX));
         }
 
         public void CalculateParams()
@@ -689,19 +689,19 @@ namespace ElDinamicCalc
             Odd = (ModeNum + 2) % 2 == 1;
             One = Convert.ToInt32(Odd) * 2 - 1;  //+-1
 
-            EpsA = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
+            EpsA = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
                 Rect.Figure.CoordY - 1];
-            EpsB = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
+			EpsB = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
                 Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
 
             Sym = EpsA == EpsB;
 
              //CoefA = Size;
-             // CoefP1 = Math.Sqrt(K) * (Eps - EpsA);
+             // CoefP1 = ExtMath.Sqrt(K) * (Eps - EpsA);
              // CoefP2 = 1;
-             // CoefR1 = Math.Sqrt(K) * (Eps - EpsB);
+             // CoefR1 = ExtMath.Sqrt(K) * (Eps - EpsB);
              // CoefR2 = 1;
-             // Coef1 = Math.Sqrt(K) * (Eps - EpsA);
+             // Coef1 = ExtMath.Sqrt(K) * (Eps - EpsA);
              // Coef2 = 1;
 
 
