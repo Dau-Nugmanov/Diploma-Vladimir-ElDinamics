@@ -11,8 +11,6 @@ namespace ElDinamicCalc
 	public class TThr
 	{
 		private static Proc6 proc = new Proc6();
-		public event EventHandler Draw;
-
 		private void DoWork(object state)
 		{
 			DateTime t1 = DateTime.Now;
@@ -22,7 +20,7 @@ namespace ElDinamicCalc
 				{
 					DateTime t2 = DateTime.Now;
 				}
-				
+
 
 				//using (TextWriter writer = new StreamWriter(@"d:\test2.txt", true))
 				//{
@@ -40,7 +38,7 @@ namespace ElDinamicCalc
 				//	decimal newHxN;
 				//	decimal newHyN;
 
-				//	writer.WriteLine("Tn=" + Common6.Tn);
+					//writer.WriteLine("Tn=" + Common6.Tn);
 					for (int i = 0; i < Common6.SizeX; i++)
 						for (int j = 0; j < Common6.SizeY; j++)
 						{
@@ -71,48 +69,45 @@ namespace ElDinamicCalc
 
 							}
 
-						//	newDzN = Math.Round(Common6.DzN[i, j], 15);
-						//	newEzN = Math.Round(Common6.EzN[i, j], 15);
-						//	newBxN = Math.Round(Common6.BxN[i, j], 15);
-						//	newByN = Math.Round(Common6.ByN[i, j], 15);
-						//	newHxN = Math.Round(Common6.HxN[i, j], 15);
-						//	newHyN = Math.Round(Common6.HyN[i, j], 15);
+							//newDzN = Math.Round(Common6.DzN[i, j], 15);
+							//newEzN = Math.Round(Common6.EzN[i, j], 15);
+							//newBxN = Math.Round(Common6.BxN[i, j], 15);
+							//newByN = Math.Round(Common6.ByN[i, j], 15);
+							//newHxN = Math.Round(Common6.HxN[i, j], 15);
+							//newHyN = Math.Round(Common6.HyN[i, j], 15);
 
-						//	if (newDzN != oldDzN[i, j])
-						//		writer.WriteLine("DzN[" + i + ", " + j + "] = " + newDzN.ToString("0.####################"));
+							//if (newDzN != oldDzN[i, j])
+							//	writer.WriteLine("DzN[" + i + ", " + j + "] = " + newDzN.ToString("0.####################"));
 
-						//	if (newEzN != oldEzN[i, j])
-						//		writer.WriteLine("EzN[" + i + ", " + j + "] = " + newEzN.ToString("0.####################"));
+							//if (newEzN != oldEzN[i, j])
+							//	writer.WriteLine("EzN[" + i + ", " + j + "] = " + newEzN.ToString("0.####################"));
 
-						//	if (newBxN != oldBxN[i, j])
-						//		writer.WriteLine("BxN[" + i + ", " + j + "] = " + newBxN.ToString("0.####################"));
+							//if (newBxN != oldBxN[i, j])
+							//	writer.WriteLine("BxN[" + i + ", " + j + "] = " + newBxN.ToString("0.####################"));
 
-						//	if (newByN != oldByN[i, j])
-						//		writer.WriteLine("ByN[" + i + ", " + j + "] = " + newByN.ToString("0.####################"));
+							//if (newByN != oldByN[i, j])
+							//	writer.WriteLine("ByN[" + i + ", " + j + "] = " + newByN.ToString("0.####################"));
 
-						//	if (newHxN != oldHxN[i, j])
-						//		writer.WriteLine("HxN[" + i + ", " + j + "] = " + newHxN.ToString("0.####################"));
+							//if (newHxN != oldHxN[i, j])
+							//	writer.WriteLine("HxN[" + i + ", " + j + "] = " + newHxN.ToString("0.####################"));
 
-						//	if (newHyN != oldHyN[i, j])
-						//		writer.WriteLine("HyN[" + i + ", " + j + "] = " + newHyN.ToString("0.####################"));
+							//if (newHyN != oldHyN[i, j])
+							//	writer.WriteLine("HyN[" + i + ", " + j + "] = " + newHyN.ToString("0.####################"));
 
-						//	writer.Flush();
+							//writer.Flush();
 
-						//	oldDzN[i, j] = newDzN;
-						//	oldEzN[i, j] = newEzN;
-						//	oldBxN[i, j] = newBxN;
-						//	oldByN[i, j] = newByN;
-						//	oldHxN[i, j] = newHxN;
-						//	oldHyN[i, j] = newHyN;
-						//}
+							//oldDzN[i, j] = newDzN;
+							//oldEzN[i, j] = newEzN;
+							//oldBxN[i, j] = newBxN;
+							//oldByN[i, j] = newByN;
+							//oldHxN[i, j] = newHxN;
+							//oldHyN[i, j] = newHyN;
+						}
 					proc.Next();
 					Common6.Tn++;
 					Common6.WaveF = Common6.Ez;
 					Common6.DrawQueue.Enqueue(Common6.WaveF.Clone() as ExtArr);
-					var temp = Draw;
-					if (temp != null)
-						temp(this, null);
-				}
+				//}
 			}
 		}
 

@@ -28,9 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.button1 = new System.Windows.Forms.Button();
 			this.drawPanel = new System.Windows.Forms.Panel();
 			this.tbStep = new System.Windows.Forms.TextBox();
+			this.timerDraw = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// button1
@@ -58,6 +60,12 @@
 			this.tbStep.Size = new System.Drawing.Size(100, 20);
 			this.tbStep.TabIndex = 2;
 			// 
+			// timerDraw
+			// 
+			this.timerDraw.Enabled = true;
+			this.timerDraw.Interval = 10;
+			this.timerDraw.Tick += new System.EventHandler(this.timerDraw_Tick);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -78,5 +86,6 @@
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Panel drawPanel;
 		private System.Windows.Forms.TextBox tbStep;
+		private System.Windows.Forms.Timer timerDraw;
 	}
 }

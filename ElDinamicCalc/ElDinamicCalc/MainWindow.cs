@@ -55,8 +55,6 @@ namespace ElDinamicCalc
 				@"F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\Manenkov.mdm");
 
 
-			tr.Draw += DrawTest;
-
 			SetInitialWave();
 			Common6.SizeX = RegionList.SizeOfX;
 			Common6.SizeY = RegionList.SizeOfY;
@@ -111,27 +109,6 @@ namespace ElDinamicCalc
 			//	drawPanel.Invalidate();
 			//}
 
-		}
-
-		private void DrawTest(object sender, EventArgs e)
-		{
-			if (WaveBitmap == null) return;
-
-			var width = WaveBitmap.Width;
-			var height = WaveBitmap.Height;
-			if (Common6.DrawQueue.Count == 0) return;
-
-			var temp = Common6.DrawQueue.Dequeue();
-			if (temp == null) return;
-
-			for (var y = 0; y < height; y++)
-			{
-				for (var x = 0; x < width; x++)
-				{
-					WaveBitmap.SetPixel(x, y, ColorByValue(TFieldType.ftEType, (double)temp[x, y]));
-				}
-			}
-			graph.DrawImage(WaveBitmap, new Point(0, 0));
 		}
 
 		//private void Draw()
@@ -248,7 +225,29 @@ namespace ElDinamicCalc
 		private void drawPanel_Paint(object sender, PaintEventArgs e)
 		{
 			tbStep.Text = Common6.Tn.ToString();
-			//Draw();
+		}
+
+		private void timerDraw_Tick(object sender, EventArgs e)
+		{
+			if (WaveBitmap == null) return;
+
+			var width = WaveBitmap.Width;
+			var height = WaveBitmap.Height;
+			if (Common6.DrawQueue.Count == 0) return;
+
+			var temp = Common6.DrawQueue.Dequeue();
+			if (temp == null) return;
+			//graph.Clear(Color.White);
+			for (var y = 0; y < height; y++)
+			{
+				for (var x = 0; x < width; x++)
+				{
+					if ((x + y + 2) % 2 == 0)
+						WaveBitmap.SetPixel(x, y, ColorByValue(TFieldType.ftEType, (double)temp[x, y]));
+				}
+			}
+			graph.DrawImage(WaveBitmap, new Point(0, 0));
+			tbStep.Text = (Convert.ToInt32(tbStep.Text) + 1).ToString();
 		}
 	}
 }
