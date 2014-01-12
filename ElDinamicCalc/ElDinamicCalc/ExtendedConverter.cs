@@ -5,14 +5,14 @@ namespace ElDinamicCalc
 {
     public static class ExtendedConverter
     {
-        public static double ReadExtended(this BinaryReader reader)
+        public static decimal ReadExtended(this BinaryReader reader)
         {
             var tempBytes = new byte[10];
             reader.Read(tempBytes, 0, 10);
-            return ToDouble(tempBytes, 0);
+			return (decimal)ToDouble(tempBytes, 0);
         }
 
-        //converts the next 10 bytes of Value starting at StartIndex into a double
+        //converts the next 10 bytes of Value starting at StartIndex into a decimal
         public static double ToDouble(byte[] Value, int StartIndex)
         {
             if (Value == null)
@@ -54,7 +54,7 @@ namespace ElDinamicCalc
             //translate e
             e -= (0x3FFF - 0x3FF);
 
-            if (e >= 0x7FF) //outside the range of a double
+            if (e >= 0x7FF) //outside the range of a decimal
                 throw new OverflowException();
             else if (e < -51) //too small to translate into subnormal
                 return 0;
@@ -73,7 +73,7 @@ namespace ElDinamicCalc
             return System.BitConverter.ToDouble(newBytes, 0);
         }
 
-        //converts Value into a long double byte array of length 10
+        //converts Value into a long decimal byte array of length 10
         public static byte[] GetBytes(double Value)
         {
             byte[] oldBytes = System.BitConverter.GetBytes(Value);

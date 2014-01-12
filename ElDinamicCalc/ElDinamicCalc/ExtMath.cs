@@ -23,31 +23,33 @@ namespace ElDinamicCalc
     /// </summary>
     public class ExtMath
     {
-        public const double LeftLimit = 0.0;
-        public const double RightLimit = 0.0;
-        public const double Big=1e100;
+        public const decimal LeftLimit = 0.0m;
+        public const decimal RightLimit = 0.0m;
+        public const decimal Big=decimal.MaxValue;
 
-        public Func<double, double> TCustomFunction;
-        public Func<double, double, double> TCustomFunction2D;
-        public Func<double, double, double, double> TCustomFunction3D;
+	    public const decimal Pi = (decimal) Math.PI;
 
-        public static decimal Degree(double x, double a)
+        public Func<decimal, decimal> TCustomFunction;
+        public Func<decimal, decimal, decimal> TCustomFunction2D;
+        public Func<decimal, decimal, decimal, decimal> TCustomFunction3D;
+
+        public static decimal Degree(decimal x, decimal a)
         {
-			return (decimal)Math.Pow(x, a);
+			return (decimal)Math.Pow((double)x, (double)a);
         }
 
 
-        public static double Log(double x)
+		public static decimal Log(decimal x)
         {
-            return Math.Log10(x);
+            return (decimal)Math.Log10((double)x);
         }
 
-        public static int GetPeriod(Func<double, double> Funct, double X0,
-            double Eps, int Idle, int MaxPeriod)
+        public static int GetPeriod(Func<decimal, decimal> Funct, decimal X0,
+            decimal Eps, int Idle, int MaxPeriod)
         {
 
-            double X;
-            double XSt;
+            decimal X;
+            decimal XSt;
             
             if (Idle < 0 || MaxPeriod < 1)
             {
@@ -78,11 +80,11 @@ namespace ElDinamicCalc
             return 0;
         }
 
-        public static int GetPeriod2D(Func<double, double, double> FunctX, Func<double, double, double> FunctY,
-            double X0, double Y0, double Eps, int Idle, int MaxPeriod)
+        public static int GetPeriod2D(Func<decimal, decimal, decimal> FunctX, Func<decimal, decimal, decimal> FunctY,
+            decimal X0, decimal Y0, decimal Eps, int Idle, int MaxPeriod)
         {
 
-            double X, Y, XSt, YSt, XT;
+            decimal X, Y, XSt, YSt, XT;
             
             if (Idle < 0 || MaxPeriod < 1)
             {
@@ -113,7 +115,7 @@ namespace ElDinamicCalc
                 {
                     return 0;
                 }
-                if (Math.Sqrt(Math.Pow(X - XSt, 2) + Math.Pow(Y - YSt, 2)) <= Eps)
+                if (Sqrt(Pow(X - XSt, 2) + Pow(Y - YSt, 2)) <= Eps)
                 {
                     return i;
                 }
@@ -121,8 +123,13 @@ namespace ElDinamicCalc
             return 0;
         }
 
-        public static bool FindRoot(Func<double, double> Funct, double Left,
-            double Right, double Root, double Precision, int MaxCount)
+		public static decimal Pow(decimal x, decimal y)
+	    {
+		    return (decimal)Math.Pow((double) x, (double) y);
+	    }
+
+	    public static bool FindRoot(Func<decimal, decimal> Funct, decimal Left,
+            decimal Right, decimal Root, decimal Precision, int MaxCount)
         {
             do
             {
@@ -152,12 +159,12 @@ namespace ElDinamicCalc
                 ref Root);
         }
 
-        private static bool FindRootR(Func<double, double> Funct,
-            ref double Left, ref double Right, ref int MaxCount,
-            ref double Precision, ref double Root)
+        private static bool FindRootR(Func<decimal, decimal> Funct,
+            ref decimal Left, ref decimal Right, ref int MaxCount,
+            ref decimal Precision, ref decimal Root)
         {
-            double Mid;
-            double FLeft, FRight, FMid;
+            decimal Mid;
+            decimal FLeft, FRight, FMid;
 
             FLeft = Funct(Left);
             FRight = Funct(Right);
@@ -180,11 +187,11 @@ namespace ElDinamicCalc
             return false;
         }
 
-		public static bool Newton(Func<double, double> Funct,
-            double NearRoot, double Root, double Precision, int MaxCount)
+		public static bool Newton(Func<decimal, decimal> Funct,
+            decimal NearRoot, decimal Root, decimal Precision, int MaxCount)
         {
-            double Dy = 0;
-			double NextRoot = 0;
+            decimal Dy = 0;
+			decimal NextRoot = 0;
             int Count = 0;
 	        Root = NearRoot;
 
@@ -281,9 +288,26 @@ namespace ElDinamicCalc
 			return current;
 		}
 
-		public static decimal Log(decimal value)
+	    public static decimal Sin(decimal a)
 	    {
-		    return (decimal) Math.Log((double) value);
+		    return (decimal)Math.Sin((double) a);
 	    }
+
+		public static decimal Cos(decimal a)
+		{
+			return (decimal)Math.Cos((double)a);
+		}
+
+		public static decimal Exp(decimal a)
+		{
+			return (decimal)Math.Exp((double)a);
+		}
+
+		public static decimal Tan(decimal a)
+		{
+			return (decimal)Math.Tan((double)a);
+		}
+		
+		
     }
 }

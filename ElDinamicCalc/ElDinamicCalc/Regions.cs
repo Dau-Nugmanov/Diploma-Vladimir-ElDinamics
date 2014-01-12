@@ -123,20 +123,20 @@ namespace ElDinamicCalc
     //  MatterType - вещество (вакуум, диэлектрик или металл)}
     public class TRegion
     {
-        private double FEps;
-        private double FEps2;
+        private decimal FEps;
+        private decimal FEps2;
 
         public TFigure Figure;
         public TMatterType MatterType;
 
 
-        public double Eps
+        public decimal Eps
         {
             get;
             set;
         }
 
-        public double Eps2
+        public decimal Eps2
         {
             get;
             set;
@@ -164,8 +164,8 @@ namespace ElDinamicCalc
             try
             {
                 MatterType = (TMatterType)reader.ReadByte();
-                Eps = reader.ReadExtended();
-                Eps2 = reader.ReadExtended();
+                Eps = (decimal)reader.ReadExtended();
+				Eps2 = (decimal)reader.ReadExtended();
                 var Shape = (TContourShape)reader.ReadByte();
                 Figure = CreateFigure(Shape);
                 Figure.CoordX = reader.ReadInt32();
@@ -276,8 +276,8 @@ namespace ElDinamicCalc
         public int StartY { get; set; }
         public int HalfX { get; set; }
         public int HalfY { get; set; }
-        public double BettaX { get; set; }
-        public double BettaY { get; set; }
+        public decimal BettaX { get; set; }
+        public decimal BettaY { get; set; }
 
         public void SetField(int ASizeX, int ASizeY, int AStartX, int AStartY, int AHalfX, int AHalfY)
         {
@@ -287,8 +287,8 @@ namespace ElDinamicCalc
             StartY = AStartY;
             HalfX = AHalfX;
             HalfY = AHalfY;
-            BettaX = Math.PI / SizeOfX * HalfX / RegionList.DelX;
-            BettaY = Math.PI / SizeOfY * HalfY / RegionList.DelY;
+            BettaX = ExtMath.Pi / SizeOfX * HalfX / RegionList.DelX;
+            BettaY = ExtMath.Pi / SizeOfY * HalfY / RegionList.DelY;
         }
 
         public abstract void FillEx(ExtArr Ex);
@@ -329,8 +329,8 @@ namespace ElDinamicCalc
                 StartY = reader.ReadInt32();
                 HalfX = reader.ReadInt32();
                 HalfY = reader.ReadInt32();
-                BettaX = reader.ReadExtended();
-                BettaY = reader.ReadExtended();
+				BettaX = (decimal)reader.ReadExtended();
+				BettaY = (decimal)reader.ReadExtended();
             }
             catch (Exception e)
             {
@@ -372,11 +372,11 @@ namespace ElDinamicCalc
         public static List<TField2> FieldList { get; set; }
 
         public static int SizeOfX, SizeOfY;
-        public static double DelX, DelY, DelT;
-        public static double Eps;
+        public static decimal DelX, DelY, DelT;
+        public static decimal Eps;
         public static int BoundsWidth;
-        public static double Sigma;
-        public static double CoefG;
+        public static decimal Sigma;
+        public static decimal CoefG;
         public static string Describ;
 
         public static List<TRegion> Regions = new List<TRegion>();
@@ -484,9 +484,9 @@ namespace ElDinamicCalc
 		    FieldList = new List<TField2>();
 		    SizeOfX = 201;
 		    SizeOfY = 101;
-		    DelX = 1e-6;
-		    DelY = 1e-6;
-		    DelT = DelX/PhisCnst.C*0.2;
+		    DelX = 1e-6m;
+		    DelY = 1e-6m;
+		    DelT = DelX/PhisCnst.C*0.2m;
 		    Eps = 1;
 		    SetEpsField();
 	    }
@@ -613,12 +613,12 @@ namespace ElDinamicCalc
 				    Rect = RegionList.Regions[RectNum];
 				    DelY = RegionList.DelY;
 				    Eps = Rect.Eps;
-				    EpsA = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
+				    EpsA = (decimal)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
 					    Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
 
 				    Sym = (EpsA == EpsB);
 				    Size = Rect.Figure.Param2*DelY/2;
-				    Betta = Math.Sqrt(Eps*Math.Pow(K, 2) - Math.Pow(Q, 2));
+				    Betta = ExtMath.Sqrt(Eps*ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
 				    ZeroPoint = Rect.Figure.CoordY + Rect.Figure.Param2/2;
 				    Odd = (ModeNum + 2)%2 == 1;
 				    One = Convert.ToInt32(Odd)*2 - 1; //+-1
@@ -637,31 +637,31 @@ namespace ElDinamicCalc
 
         public int ModeNum { get; set; }
 
-        public double B { get; set; }
+        public decimal B { get; set; }
 
-        public double A { get; set; }
+        public decimal A { get; set; }
 
-        public double R { get; set; }
+        public decimal R { get; set; }
 
-        public double P { get; set; }
+        public decimal P { get; set; }
 
-        public double Q { get; set; }
+        public decimal Q { get; set; }
 
-        public double Betta { get; set; }
+        public decimal Betta { get; set; }
 
-        public double K { get; set; }
+        public decimal K { get; set; }
 
-        public double Size { get; set; }
+        public decimal Size { get; set; }
 
         public int HalfY { get; set; }
 
-        public double Eps { get; set; }
+        public decimal Eps { get; set; }
 
-        public double EpsA { get; set; }
+        public decimal EpsA { get; set; }
 
-        public double EpsB { get; set; }
+        public decimal EpsB { get; set; }
 
-        public double DelY { get; set; }
+        public decimal DelY { get; set; }
 
         public bool Odd { get; set; }
 
@@ -669,29 +669,29 @@ namespace ElDinamicCalc
 
         public int One { get; set; }
 
-        public double ZeroPoint { get; set; }
+        public decimal ZeroPoint { get; set; }
 
-        public double BettaY { get; set; }
+        public decimal BettaY { get; set; }
 
 
 
-        public double Bell(int i)
+        public decimal Bell(int i)
         {
-			return Math.Sqrt(Math.Sin(Math.PI * (i - StartX) / SizeOfX));
+			return ExtMath.Sqrt(ExtMath.Sin(ExtMath.Pi * (i - StartX) / SizeOfX));
         }
 
         public void CalculateParams()
         {
-            double LeftRoot, RightRoot, Root;
-            Func<double, double> Funct = null;
+            decimal LeftRoot, RightRoot, Root;
+            Func<decimal, decimal> Funct = null;
             LeftRoot = RightRoot = Root = 0;
 
             Odd = (ModeNum + 2) % 2 == 1;
             One = Convert.ToInt32(Odd) * 2 - 1;  //+-1
 
-            EpsA = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
+            EpsA = (decimal)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
                 Rect.Figure.CoordY - 1];
-			EpsB = (double)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
+			EpsB = (decimal)RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1 % 2,
                 Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
 
             Sym = EpsA == EpsB;
@@ -716,13 +716,13 @@ namespace ElDinamicCalc
 					Funct = Regions.FCotan;
                 }
 
-                LeftRoot = (ModeNum - 1.5)*Math.PI/Size + 0.1;
+                LeftRoot = (ModeNum - 1.5m)*ExtMath.Pi/Size + 0.1m;
                 if (LeftRoot < 0)
                 {
-                    LeftRoot = 0.1;
+                    LeftRoot = 0.1m;
                 }
 
-                RightRoot = (ModeNum - 0.5)*Math.PI/Size - 0.1;
+                RightRoot = (ModeNum - 0.5m)*ExtMath.Pi/Size - 0.1m;
                 Root = (LeftRoot + RightRoot)/2;
             }
             else
@@ -731,10 +731,10 @@ namespace ElDinamicCalc
                 FindLeftRight(ref LeftRoot, ref RightRoot, ref Root);
             }
 
-            if (!ExtMath.FindRoot(Funct, LeftRoot, RightRoot, Q, 0.1, 30000)
+            if (!ExtMath.FindRoot(Funct, LeftRoot, RightRoot, Q, 0.1m, 30000)
                 || Math.Abs(Q) < 10)
             {
-                if (!ExtMath.Newton(Funct, Root, Q, 0.0001, 30000) || Math.Abs(Q) < 10)
+                if (!ExtMath.Newton(Funct, Root, Q, 0.0001m, 30000) || Math.Abs(Q) < 10)
                 {
                     throw  new Exception("Невозможно задать моду с такими параметрами");
                 }
@@ -744,13 +744,13 @@ namespace ElDinamicCalc
 	        {
 		        if (Odd)
 		        {
-			        P = -Q*Math.Tan(Q*Size);
+			        P = -Q*ExtMath.Tan(Q*Size);
 			        A = PhisCnst.Ez0;
 			        B = 0;
 		        }
 		        else
 		        {
-			        P = -Q*(1/Math.Tan(Q*Size));
+			        P = -Q*(1/ExtMath.Tan(Q*Size));
 			        A = 0;
 			        B = PhisCnst.Ez0;
 		        }
@@ -761,10 +761,10 @@ namespace ElDinamicCalc
 				P = Regions.SelfModeP(Q);
 				R = Regions.SelfModeR(Q);
 
-		        if (Q + P*Math.Tan(Q*Size) != 0)
+		        if (Q + P*ExtMath.Tan(Q*Size) != 0)
 		        {
-			        A = PhisCnst.Ez0/((P - Q*Math.Tan(Q*Size))
-			                          /(Q + P*Math.Tan(Q*Size)) + 1);
+			        A = PhisCnst.Ez0/((P - Q*ExtMath.Tan(Q*Size))
+			                          /(Q + P*ExtMath.Tan(Q*Size)) + 1);
 		        }
 		        else
 		        {
@@ -772,40 +772,40 @@ namespace ElDinamicCalc
 		        }
 		        B = PhisCnst.Eps0 - A;
 	        }
-			Betta = Math.Sqrt(Eps * Math.Pow(K, 2) - Math.Pow(Q, 2));
-			SizeOfX = (int)Math.Round(HalfX / Betta * Math.PI / RegionList.DelX);
+			Betta = ExtMath.Sqrt(Eps * ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
+			SizeOfX = (int)Math.Round(HalfX / Betta * ExtMath.Pi / RegionList.DelX);
         }
 
-        public void FindLeftRight(ref double leftRoot, ref double rightRoot, 
-            ref double root)
+        public void FindLeftRight(ref decimal leftRoot, ref decimal rightRoot, 
+            ref decimal root)
         {
-            leftRoot = (ModeNum - 1.5) * Math.PI / 2 / Size + 0.1;
+            leftRoot = (ModeNum - 1.5m) * ExtMath.Pi / 2 / Size + 0.1m;
             if (leftRoot < 0)
             {
-                leftRoot = 0.1;
+                leftRoot = 0.1m;
             }
-            rightRoot = (ModeNum - 0.5) * Math.PI / 2 / Size - 0.1;
+            rightRoot = (ModeNum - 0.5m) * ExtMath.Pi / 2 / Size - 0.1m;
 
-            var assim = K * Math.Sqrt((Eps - EpsA) * (Eps - EpsB) / (2 * Eps - EpsA - EpsB));
+            var assim = K * ExtMath.Sqrt((Eps - EpsA) * (Eps - EpsB) / (2 * Eps - EpsA - EpsB));
 
             if (assim > leftRoot && assim < rightRoot)
             {
-                if (Math.Tan(2 * Size * assim) < 0)
+                if (ExtMath.Tan(2 * Size * assim) < 0)
                 {
-                    rightRoot = assim - 0.1;
+                    rightRoot = assim - 0.1m;
                 }
                 else
                 {
-                    leftRoot = assim + 0.1;
+                    leftRoot = assim + 0.1m;
                 }
             }
-            if (rightRoot > Math.Sqrt(Eps - EpsA) * K)
+            if (rightRoot > ExtMath.Sqrt(Eps - EpsA) * K)
             {
-                rightRoot = Math.Sqrt(Eps - EpsA) * K - 0.1;
+                rightRoot = ExtMath.Sqrt(Eps - EpsA) * K - 0.1m;
             }
-            if (rightRoot > Math.Sqrt(Eps - EpsB) * K)
+            if (rightRoot > ExtMath.Sqrt(Eps - EpsB) * K)
             {
-                rightRoot = Math.Sqrt(Eps - EpsB) * K - 0.1;
+                rightRoot = ExtMath.Sqrt(Eps - EpsB) * K - 0.1m;
             }
 
             root = (leftRoot + rightRoot) / 2;
@@ -895,9 +895,9 @@ namespace ElDinamicCalc
             return res;
         }
 
-        public double ExpY { get; set; }
+        public decimal ExpY { get; set; }
 
-        public double ExpX { get; set; }
+        public decimal ExpX { get; set; }
 
         public override void FillEx(ExtArr Ex)
         {
@@ -1060,7 +1060,7 @@ namespace ElDinamicCalc
 
 	public class Regions
 	{
-		public static double CoefA,
+		public static decimal CoefA,
 			Coef1,
 			Coef2,
 			CoefR1,
@@ -1068,30 +1068,30 @@ namespace ElDinamicCalc
 			CoefP1,
 			CoefP2;
 
-		public static double FTan(double X)
+		public static decimal FTan(decimal X)
 		{
-			return X * Math.Tan(CoefA * X) - Math.Sqrt(Coef1 - Coef2 * Math.Pow(X, 2));
+			return X * ExtMath.Tan(CoefA * X) - ExtMath.Sqrt(Coef1 - Coef2 * ExtMath.Pow(X, 2));
 		}
 
-		public static double FCotan(double X)
+		public static decimal FCotan(decimal X)
 		{
-			return -X * (1 / Math.Tan(CoefA * X)) - Math.Sqrt(Coef1 - Coef2 * Math.Pow(X, 2));
+			return -X * (1 / ExtMath.Tan(CoefA * X)) - ExtMath.Sqrt(Coef1 - Coef2 * ExtMath.Pow(X, 2));
 		}
 
-		public static double SelfModeR(double Q)
+		public static decimal SelfModeR(decimal Q)
 		{
-			return Math.Sqrt(CoefR1 - CoefR2 * Math.Pow(Q, 2));
+			return ExtMath.Sqrt(CoefR1 - CoefR2 * ExtMath.Pow(Q, 2));
 		}
 
-		public static double SelfModeP(double Q)
+		public static decimal SelfModeP(decimal Q)
 		{
-			return Math.Sqrt(CoefP1 - CoefP2 * Math.Pow(Q, 2));
+			return ExtMath.Sqrt(CoefP1 - CoefP2 * ExtMath.Pow(Q, 2));
 		}
 
-		public static double FSelfMode(double X)
+		public static decimal FSelfMode(decimal X)
 		{
-			return  Math.Tan(2 * X * CoefA) - X * (SelfModeP(X) + SelfModeR(X))
-				/ (Math.Pow(X, 2) - SelfModeP(X) * SelfModeR(X));
+			return  ExtMath.Tan(2 * X * CoefA) - X * (SelfModeP(X) + SelfModeR(X))
+				/ (ExtMath.Pow(X, 2) - SelfModeP(X) * SelfModeR(X));
 		}
 	}
 }

@@ -12,13 +12,13 @@ namespace ElDinamicCalc
 		private int SizeY = Common6.SizeX0;
 		private int BoundWidth = Common6.BoundWidth0;
 
-		private static double SigmaX = 2 * Math.PI * PhisCnst.Eps0 / 1000;
-		private static double SigmaY = 2 * Math.PI * PhisCnst.Eps0 / 1000;
-		private double SigmaZ = 0;
-		private double SigmaXS = SigmaX * PhisCnst.Mu0 / PhisCnst.Eps0;
-		private double SigmaYS = SigmaY * PhisCnst.Mu0 / PhisCnst.Eps0;
-		private double SigmaZS = 0;
-		private double CoefG = Common6.G;
+		private static decimal SigmaX = 2 * ExtMath.Pi * PhisCnst.Eps0 / 1000;
+		private static decimal SigmaY = 2 * ExtMath.Pi * PhisCnst.Eps0 / 1000;
+		private decimal SigmaZ = 0;
+		private decimal SigmaXS = SigmaX * PhisCnst.Mu0 / PhisCnst.Eps0;
+		private decimal SigmaYS = SigmaY * PhisCnst.Mu0 / PhisCnst.Eps0;
+		private decimal SigmaZS = 0;
+		private decimal CoefG = Common6.G;
 
 		public Proc6()
 		{

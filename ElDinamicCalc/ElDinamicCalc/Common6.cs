@@ -10,18 +10,18 @@ namespace ElDinamicCalc
 	{
 		public static readonly int SizeX0 = 201;
 		public static readonly int SizeY0 = 101;
-		public static readonly double DelX0 = 1e-6;
-		public static readonly double DelY0 = DelX0;
-		public static readonly double Lx0 = DelX0 * SizeX0;
-		public static readonly double Ly0 = DelY0 * SizeY0;
-		public static readonly double DelT0 = DelX0 / 9 / PhisCnst.C;
-		public static readonly double Ez0 = 100;
-		public static readonly double Hz0 = 100 / PhisCnst.Z0;
+		public static readonly decimal DelX0 = 1e-6m;
+		public static readonly decimal DelY0 = DelX0;
+		public static readonly decimal Lx0 = DelX0 * SizeX0;
+		public static readonly decimal Ly0 = DelY0 * SizeY0;
+		public static readonly decimal DelT0 = DelX0 / 9 / PhisCnst.C;
+		public static readonly decimal Ez0 = 100;
+		public static readonly decimal Hz0 = 100 / PhisCnst.Z0;
 		public static readonly int BoundWidth0 = 30;
-		public static readonly double G = 2;
+		public static readonly decimal G = 2;
 		public static readonly int IntX = 100;
 
-		public static double DelX, DelY, DelT, DtDivDx, DtDivDy, ScaleCoef;
+		public static decimal DelX, DelY, DelT, DtDivDx, DtDivDy, ScaleCoef;
 		public static int SizeX, SizeY, Tn, BoundWidth;
 		public static TModeType ModeType;
 		
@@ -42,15 +42,15 @@ namespace ElDinamicCalc
 		public static readonly string ValuesFile2Name = "Values2.txt";
 		public static readonly string ReportFileName = "Report.txt";
 
-		public static double BettaX, BettaY;
+		public static decimal BettaX, BettaY;
 
 		public static Queue<ExtArr> DrawQueue = new Queue<ExtArr>(); 
 
 		static Common6()
 		{
 			BoundWidth = BoundWidth0;
-			SigmaX = 2 * Math.PI * PhisCnst.Eps0 / 1000;
-			SigmaY = 2 * Math.PI * PhisCnst.Eps0 / 1000;
+			SigmaX = 2 * (decimal)ExtMath.Pi * PhisCnst.Eps0 / 1000;
+			SigmaY = 2 * (decimal)ExtMath.Pi * PhisCnst.Eps0 / 1000;
 			SigmaZ = 0;
 			SigmaXS = SigmaX * PhisCnst.Mu0 / PhisCnst.Eps0;
 			SigmaYS = SigmaY * PhisCnst.Mu0 / PhisCnst.Eps0;
@@ -73,8 +73,8 @@ namespace ElDinamicCalc
 			InitialY2 = SizeY - 1;
 			HalfPX = 4;
 			HalfPY = 1;
-			ExpX = 0.1;
-			ExpY = 0.1;
+			ExpX = 0.1m;
+			ExpY = 0.1m;
 			DrawGraphicsPoints = true;
 			//DrawRecord.ToDraw = tdEachStep;
 			//DrawRecord.ReadyToDraw = True;
@@ -87,9 +87,9 @@ namespace ElDinamicCalc
 			ToRewrite = true;
 			AutoSave = false;
 			AutoSaveTime = 1;
-			ScaleCoef = 1.0;
-			WhiteValue = 0;
-			BlackValue = 1.50;
+			ScaleCoef = 1.0m;
+			WhiteValue = 0m;
+			BlackValue = 1.50m;
 			//InitialStyleSet = [isFromMedium, isManual];
 			FourX1 = 20;
 			FourX2 = 40;
@@ -111,9 +111,9 @@ namespace ElDinamicCalc
 
 		public static int FourX1 { get; set; }
 
-		public static double BlackValue { get; set; }
+		public static decimal BlackValue { get; set; }
 
-		public static double WhiteValue { get; set; }
+		public static decimal WhiteValue { get; set; }
 
 		public static int AutoSaveTime { get; set; }
 
@@ -131,9 +131,9 @@ namespace ElDinamicCalc
 
 		public static bool DrawGraphicsPoints { get; set; }
 
-		public static double ExpY { get; set; }
+		public static decimal ExpY { get; set; }
 
-		public static double ExpX { get; set; }
+		public static decimal ExpX { get; set; }
 
 		public static int HalfPY { get; set; }
 
@@ -151,26 +151,26 @@ namespace ElDinamicCalc
 
 		public static List<TInitialStyle> InitialStyleSet = new List<TInitialStyle>{TInitialStyle.isFromMedium, TInitialStyle.isManual};
 
-		public static double Ly { get; set; }
+		public static decimal Ly { get; set; }
 
-		public static double Lx { get; set; }
+		public static decimal Lx { get; set; }
 
-		public static double CoefG { get; set; }
+		public static decimal CoefG { get; set; }
 
-		public static double SigmaZS { get; set; }
+		public static decimal SigmaZS { get; set; }
 
-		public static double SigmaYS { get; set; }
+		public static decimal SigmaYS { get; set; }
 
-		public static double SigmaXS { get; set; }
+		public static decimal SigmaXS { get; set; }
 
-		public static double SigmaZ { get; set; }
+		public static decimal SigmaZ { get; set; }
 
-		public static double SigmaY { get; set; }
+		public static decimal SigmaY { get; set; }
 
-		public static double SigmaX { get; set; }
+		public static decimal SigmaX { get; set; }
 		public static bool IntEnable { get; set; }
 
-		public static double ColorByValue(TFieldType FieldType, double Value)
+		public static decimal ColorByValue(TFieldType FieldType, decimal Value)
 		{
 			var Max = BlackValue * GetMaxValue(FieldType);
 			var Min = WhiteValue * GetMaxValue(FieldType);
@@ -185,7 +185,7 @@ namespace ElDinamicCalc
 			//return ColorArray[Math.Round(255*(Math.Abs(Value) - Min) /(Max - Min))];
 		}
 
-		private static double GetMaxValue(TFieldType FieldType)
+		private static decimal GetMaxValue(TFieldType FieldType)
 		{
 			switch (FieldType)
 			{
@@ -198,7 +198,7 @@ namespace ElDinamicCalc
 					case TFieldType.ftBType:
 						return PhisCnst.Hz0*PhisCnst.Mu0;
 				default:
-						return 0.1;
+						return 0.1m;
 			}
 			
 		}

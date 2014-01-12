@@ -58,9 +58,9 @@ namespace ElDinamicCalc
 			SetInitialWave();
 			Common6.SizeX = RegionList.SizeOfX;
 			Common6.SizeY = RegionList.SizeOfY;
-			Common6.DelX = RegionList.DelX;
-			Common6.DelY = RegionList.DelY;
-			Common6.DelT = RegionList.DelT;
+			Common6.DelX = (decimal)RegionList.DelX;
+			Common6.DelY = (decimal)RegionList.DelY;
+			Common6.DelT = (decimal)RegionList.DelT;
 			Common6.DtDivDx = Common6.DelT / Common6.DelX;
 			Common6.DtDivDy = Common6.DelT / Common6.DelY;
 
@@ -152,7 +152,7 @@ namespace ElDinamicCalc
 		//	//graph.DrawImage(WaveBitmap, new Point(0, 0));
 		//}
 
-		private Color ColorByValue(TFieldType fieldType, double value)
+		private Color ColorByValue(TFieldType fieldType, decimal value)
 		{
 			var max = Common6.BlackValue * GetMaxValue(fieldType);
 			var min = Common6.WhiteValue * GetMaxValue(fieldType);
@@ -169,7 +169,7 @@ namespace ElDinamicCalc
 			return c;
 		}
 
-		private double GetMaxValue(TFieldType fieldType)
+		private decimal GetMaxValue(TFieldType fieldType)
 		{
 			switch (fieldType)
 			{
@@ -182,7 +182,7 @@ namespace ElDinamicCalc
 				case TFieldType.ftBType:
 					return PhisCnst.Hz0 * PhisCnst.Mu0;
 			}
-			return 0.1;
+			return 0.1m;
 		}
 
 		private void SetInitialWave()
@@ -243,7 +243,7 @@ namespace ElDinamicCalc
 				for (var x = 0; x < width; x++)
 				{
 					if ((x + y + 2) % 2 == 0)
-						WaveBitmap.SetPixel(x, y, ColorByValue(TFieldType.ftEType, (double)temp[x, y]));
+						WaveBitmap.SetPixel(x, y, ColorByValue(TFieldType.ftEType, (decimal)temp[x, y]));
 				}
 			}
 			graph.DrawImage(WaveBitmap, new Point(0, 0));
