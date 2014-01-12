@@ -74,6 +74,18 @@
     <Report>
       <Path>ElDinamicCalc140112(1).vspx</Path>
     </Report>
+    <Report>
+      <Path>ElDinamicCalc140112(2).vspx</Path>
+    </Report>
+    <Report>
+      <Path>ElDinamicCalc140112(3).vspx</Path>
+    </Report>
+    <Report>
+      <Path>ElDinamicCalc140112(4).vspx</Path>
+    </Report>
+    <Report>
+      <Path>ElDinamicCalc140112(5).vspx</Path>
+    </Report>
   </Reports>
   <Launches>
     <ProjBinary>

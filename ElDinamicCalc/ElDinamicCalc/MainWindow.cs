@@ -1,47 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Schema;
 
 namespace ElDinamicCalc
 {
 	public partial class MainWindow : Form
 	{
+		private readonly TThr tr = new TThr();
+		private Color[] ColorArray;
+		private Bitmap WaveBitmap;
+		private Graphics graph;
+		private readonly decimal Max = Common6.BlackValue * GetMaxValue(TFieldType.ftEType);
+		private readonly decimal Min = Common6.WhiteValue * GetMaxValue(TFieldType.ftEType);
+
+			
+
 		public MainWindow()
 		{
 			InitializeComponent();
-
-
-
-
 		}
 
-		private Graphics graph;
-		private Bitmap WaveBitmap;
-		private Color[] ColorArray;
-		private TThr tr = new TThr();
 		private void button1_Click(object sender, EventArgs e)
 		{
 			try
 			{
-
-
 				DoWork(null);
 				//ThreadPool.QueueUserWorkItem(DoWork);
-
-
 			}
 			catch (Exception ex)
 			{
@@ -58,11 +45,11 @@ namespace ElDinamicCalc
 			SetInitialWave();
 			Common6.SizeX = RegionList.SizeOfX;
 			Common6.SizeY = RegionList.SizeOfY;
-			Common6.DelX = (decimal)RegionList.DelX;
-			Common6.DelY = (decimal)RegionList.DelY;
-			Common6.DelT = (decimal)RegionList.DelT;
-			Common6.DtDivDx = Common6.DelT / Common6.DelX;
-			Common6.DtDivDy = Common6.DelT / Common6.DelY;
+			Common6.DelX = RegionList.DelX;
+			Common6.DelY = RegionList.DelY;
+			Common6.DelT = RegionList.DelT;
+			Common6.DtDivDx = Common6.DelT/Common6.DelX;
+			Common6.DtDivDy = Common6.DelT/Common6.DelY;
 
 			Common6.BoundWidth = RegionList.BoundsWidth;
 			Common6.SigmaX = RegionList.Sigma;
@@ -79,14 +66,14 @@ namespace ElDinamicCalc
 			graph = drawPanel.CreateGraphics();
 			WaveBitmap = new Bitmap(Common6.SizeX, Common6.SizeY, graph);
 
-			LinearGradientBrush br = new LinearGradientBrush(new Point(0, 0),
-			new Point(0, 256), Color.White, Color.Black);
-			Pen p = new Pen(br);
+			var br = new LinearGradientBrush(new Point(0, 0),
+				new Point(0, 256), Color.White, Color.Black);
+			var p = new Pen(br);
 
 
-			using (Bitmap bitmap = new Bitmap(256, 1)) // 100x100 pixels
+			using (var bitmap = new Bitmap(256, 1)) // 100x100 pixels
 			using (Graphics graphics = Graphics.FromImage(bitmap))
-			using (LinearGradientBrush brush = new LinearGradientBrush(
+			using (var brush = new LinearGradientBrush(
 				new Rectangle(0, 0, 256, 1),
 				Color.White,
 				Color.Black,
@@ -101,86 +88,36 @@ namespace ElDinamicCalc
 			}
 
 			tr.Execute();
-
-
-			//if (Common6.Tn%2 == 0)
-			//{
-			//	drawPanel.Update();
-			//	drawPanel.Invalidate();
-			//}
-
 		}
 
-		//private void Draw()
-		//{
+		
 
-
-
-		//	//var sourceData = WaveBitmap.LockBits(new Rectangle(new System.Drawing.Point(0, 0), WaveBitmap.Size),
-		//	//				 ImageLockMode.ReadWrite,
-		//	//				 WaveBitmap.PixelFormat);
-
-		//	//var sourceStride = sourceData.Stride;
-
-		//	//var sourceScan0 = sourceData.Scan0;
-
-		//	//var sourcePixelSize = sourceStride / width;
-
-		//	//int bytes = Math.Abs(sourceStride) * height;
-		//	//byte[] rgbValues = new byte[bytes];
-
-		//	//// Copy the RGB values into the array.
-		//	//System.Runtime.InteropServices.Marshal.Copy(sourceScan0, rgbValues, 0, bytes);
-
-		//	//for (var y = 0; y < height; y++)
-		//	//{
-		//	//	for (var x = 0; x < width; x++)
-		//	//	{
-		//	//		Color c = ColorByValue(TFieldType.ftHType, Common6.WaveF[x, y]);
-		//	//		rgbValues[y * sourceStride + x * sourcePixelSize+ 1] = 115;//c.R;
-		//	//		rgbValues[y * sourceStride + x * sourcePixelSize + 2] = 115;//c.G;
-		//	//		rgbValues[y * sourceStride + x * sourcePixelSize + 3] = 115;//c.B;
-		//	//	}
-		//	//}
-
-		//	//// Copy the RGB values back to the bitmap
-		//	//System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, sourceScan0, bytes);
-
-		//	//// Unlock the bits.
-		//	//WaveBitmap.UnlockBits(sourceData);
-
-		//	//graph.DrawImage(WaveBitmap, new Point(0, 0));
-		//}
-
-		private Color ColorByValue(TFieldType fieldType, decimal value)
+		private Color ColorByValue(decimal value)
 		{
-			var max = Common6.BlackValue * GetMaxValue(fieldType);
-			var min = Common6.WhiteValue * GetMaxValue(fieldType);
-
-			if (Math.Abs(value) >= max)
+			var abs = Math.Abs(value);
+			if (abs >= Max)
 			{
 				return Color.Black;
 			}
-			if (Math.Abs(value) <= min)
+			if (abs <= Min)
 			{
 				return Color.White;
 			}
-			var c = ColorArray[(int)Math.Round(255 * (Math.Abs(value) - min) / (max - min))];
-			return c;
+			return ColorArray[(int)Math.Round(255 * (abs - Min) / (Max - Min))];
 		}
 
-		private decimal GetMaxValue(TFieldType fieldType)
+		private static decimal GetMaxValue(TFieldType fieldType)
 		{
 			switch (fieldType)
 			{
 				case TFieldType.ftEType:
 					return PhisCnst.Ez0;
 				case TFieldType.ftDType:
-					return PhisCnst.Ez0 * PhisCnst.Eps0 * RegionList.Eps;
+					return PhisCnst.Ez0*PhisCnst.Eps0*RegionList.Eps;
 				case TFieldType.ftHType:
 					return PhisCnst.Hz0;
 				case TFieldType.ftBType:
-					return PhisCnst.Hz0 * PhisCnst.Mu0;
+					return PhisCnst.Hz0*PhisCnst.Mu0;
 			}
 			return 0.1m;
 		}
@@ -222,13 +159,59 @@ namespace ElDinamicCalc
 			}
 		}
 
-		private void drawPanel_Paint(object sender, PaintEventArgs e)
+
+		private void Draw()
 		{
+			if (WaveBitmap == null) return;
+
+			var width = WaveBitmap.Width;
+			var height = WaveBitmap.Height;
+			if (Common6.DrawQueue.Count == 0) return;
+			var temp = Common6.DrawQueue.Dequeue();
+			if (temp == null) return;
+
+			var sourceData = WaveBitmap.LockBits(new Rectangle(new Point(0, 0), WaveBitmap.Size),
+							 ImageLockMode.ReadWrite,
+							 WaveBitmap.PixelFormat);
+
+			var sourceStride = sourceData.Stride;
+			var sourceScan0 = sourceData.Scan0;
+			var sourcePixelSize = sourceStride / width;
+			var bytes = Math.Abs(sourceStride) * height;
+			var rgbValues = new byte[bytes];
+
+			// Copy the RGB values into the array.
+			System.Runtime.InteropServices.Marshal.Copy(sourceScan0, rgbValues, 0, bytes);
+
+			for (var y = 0; y < height; y++)
+			{
+				for (var x = 0; x < width; x++)
+				{
+					var c = ColorByValue(Common6.WaveF[x, y]);
+					rgbValues[y * sourceStride + x * sourcePixelSize] = c.B;
+					rgbValues[y * sourceStride + x * sourcePixelSize + 1] = c.G;
+					rgbValues[y * sourceStride + x * sourcePixelSize + 2] = c.R;
+					rgbValues[y * sourceStride + x * sourcePixelSize + 3] = 255;
+				}
+			}
+
+			// Copy the RGB values back to the bitmap
+			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, sourceScan0, bytes);
+
+			// Unlock the bits.
+			WaveBitmap.UnlockBits(sourceData);
+
+			graph.DrawImage(WaveBitmap, new Point(0, 0));
+
 			tbStep.Text = Common6.Tn.ToString();
+			tbQueueCount.Text = Common6.DrawQueue.Count.ToString();
 		}
 
 		private void timerDraw_Tick(object sender, EventArgs e)
 		{
+			Draw();
+			return;
+			
 			if (WaveBitmap == null) return;
 
 			var width = WaveBitmap.Width;
@@ -242,12 +225,13 @@ namespace ElDinamicCalc
 			{
 				for (var x = 0; x < width; x++)
 				{
-					if ((x + y + 2) % 2 == 0)
-						WaveBitmap.SetPixel(x, y, ColorByValue(TFieldType.ftEType, (decimal)temp[x, y]));
+					//if ((x + y + 2) % 2 == 0)
+					WaveBitmap.SetPixel(x, y, ColorByValue(temp[x, y]));
 				}
 			}
 			graph.DrawImage(WaveBitmap, new Point(0, 0));
-			tbStep.Text = (Convert.ToInt32(tbStep.Text) + 1).ToString();
+			tbStep.Text = Common6.Tn.ToString();
+			tbQueueCount.Text = Common6.DrawQueue.Count.ToString();
 		}
 	}
 }

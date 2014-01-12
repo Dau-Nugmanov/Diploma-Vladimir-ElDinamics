@@ -33,6 +33,7 @@
 			this.drawPanel = new System.Windows.Forms.Panel();
 			this.tbStep = new System.Windows.Forms.TextBox();
 			this.timerDraw = new System.Windows.Forms.Timer(this.components);
+			this.tbQueueCount = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// button1
@@ -51,7 +52,6 @@
 			this.drawPanel.Name = "drawPanel";
 			this.drawPanel.Size = new System.Drawing.Size(774, 484);
 			this.drawPanel.TabIndex = 1;
-			this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
 			// 
 			// tbStep
 			// 
@@ -63,14 +63,22 @@
 			// timerDraw
 			// 
 			this.timerDraw.Enabled = true;
-			this.timerDraw.Interval = 10;
+			this.timerDraw.Interval = 1;
 			this.timerDraw.Tick += new System.EventHandler(this.timerDraw_Tick);
+			// 
+			// tbQueueCount
+			// 
+			this.tbQueueCount.Location = new System.Drawing.Point(686, 564);
+			this.tbQueueCount.Name = "tbQueueCount";
+			this.tbQueueCount.Size = new System.Drawing.Size(100, 20);
+			this.tbQueueCount.TabIndex = 3;
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(799, 767);
+			this.Controls.Add(this.tbQueueCount);
 			this.Controls.Add(this.tbStep);
 			this.Controls.Add(this.drawPanel);
 			this.Controls.Add(this.button1);
@@ -87,5 +95,6 @@
 		private System.Windows.Forms.Panel drawPanel;
 		private System.Windows.Forms.TextBox tbStep;
 		private System.Windows.Forms.Timer timerDraw;
+		private System.Windows.Forms.TextBox tbQueueCount;
 	}
 }

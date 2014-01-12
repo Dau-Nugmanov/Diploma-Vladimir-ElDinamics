@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ElDinamicCalc
+﻿namespace ElDinamicCalc
 {
 	public class Initial
 	{
@@ -15,21 +9,25 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ez[i, j] = (decimal)PhisCnst.Ez0*
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+						Common6.Ez[i, j] = PhisCnst.Ez0*
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1));
 						Common6.Dz[i, j] =
-							Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
+							Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hy[i, j] = (decimal)PhisCnst.Hz0
+						Common6.Hy[i, j] = PhisCnst.Hz0
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
-						Common6.By[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1));
+						Common6.By[i, j] = Common6.Hy[i, j]*PhisCnst.Mu0;
 					}
 				}
 		}
@@ -41,19 +39,25 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ey[i, j] = (decimal)PhisCnst.Ez0
+						Common6.Ey[i, j] = PhisCnst.Ez0
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-										  ExtMath.Cos(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
-						Common6.Dy[i, j] = Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
+						                   ExtMath.Cos(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1));
+						Common6.Dy[i, j] = Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hz[i, j] = (decimal)PhisCnst.Hz0
-		  * ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
-		  *ExtMath.Cos(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1));
-						Common6.Bz[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
+						Common6.Hz[i, j] = PhisCnst.Hz0
+						                   *
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
+						                   *
+						                   ExtMath.Cos(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1));
+						Common6.Bz[i, j] = Common6.Hy[i, j]*PhisCnst.Mu0;
 					}
 				}
 		}
@@ -65,25 +69,29 @@ namespace ElDinamicCalc
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						Common6.Ez[i, j] = (decimal)PhisCnst.Ez0
+						Common6.Ez[i, j] = PhisCnst.Ez0
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-										  ExtMath.Sin(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1))
-										   * (decimal)ExtMath.Exp(-ExtMath.Pow(Common6.ExpX * (i - (Common6.InitialX1 + Common6.InitialX2) / 2), 2)
-						                             - ExtMath.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
-						Common6.Dz[i, j] = Common6.Ez[i, j] * (decimal)PhisCnst.Eps0 * (decimal)RegionList.Eps;
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1))
+						                   *ExtMath.Exp(-ExtMath.Pow(Common6.ExpX*(i - (Common6.InitialX1 + Common6.InitialX2)/2), 2)
+						                                - ExtMath.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
+						Common6.Dz[i, j] = Common6.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						Common6.Hy[i, j] = (decimal)PhisCnst.Hz0
+						Common6.Hy[i, j] = PhisCnst.Hz0
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPX * (i - Common6.InitialX1) / (Common6.InitialX2 - Common6.InitialX1))
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPX*(i - Common6.InitialX1)/
+						                               (Common6.InitialX2 - Common6.InitialX1))
 						                   *
-										   ExtMath.Sin(ExtMath.Pi * Common6.HalfPY * (j - Common6.InitialY1) / (Common6.InitialY2 - Common6.InitialY1))
-										   * (decimal)ExtMath.Exp(-ExtMath.Pow(Common6.ExpX * (i - (Common6.InitialX1 + Common6.InitialX2) / 2), 2)
-						                             - ExtMath.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
-						Common6.By[i, j] = Common6.Hy[i, j] * (decimal)PhisCnst.Mu0;
+						                   ExtMath.Sin(ExtMath.Pi*Common6.HalfPY*(j - Common6.InitialY1)/
+						                               (Common6.InitialY2 - Common6.InitialY1))
+						                   *ExtMath.Exp(-ExtMath.Pow(Common6.ExpX*(i - (Common6.InitialX1 + Common6.InitialX2)/2), 2)
+						                                - ExtMath.Pow(Common6.ExpY*(j - (Common6.InitialY1 + Common6.InitialY2)/2), 2));
+						Common6.By[i, j] = Common6.Hy[i, j]*PhisCnst.Mu0;
 					}
 				}
 		}
@@ -110,6 +118,5 @@ namespace ElDinamicCalc
 				RegionList.FieldList[i].FillHz(Common6.Hz);
 			}
 		}
-
 	}
 }

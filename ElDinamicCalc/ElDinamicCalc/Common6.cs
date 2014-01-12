@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ElDinamicCalc
 {
@@ -12,11 +9,11 @@ namespace ElDinamicCalc
 		public static readonly int SizeY0 = 101;
 		public static readonly decimal DelX0 = 1e-6m;
 		public static readonly decimal DelY0 = DelX0;
-		public static readonly decimal Lx0 = DelX0 * SizeX0;
-		public static readonly decimal Ly0 = DelY0 * SizeY0;
-		public static readonly decimal DelT0 = DelX0 / 9 / PhisCnst.C;
+		public static readonly decimal Lx0 = DelX0*SizeX0;
+		public static readonly decimal Ly0 = DelY0*SizeY0;
+		public static readonly decimal DelT0 = DelX0/9/PhisCnst.C;
 		public static readonly decimal Ez0 = 100;
-		public static readonly decimal Hz0 = 100 / PhisCnst.Z0;
+		public static readonly decimal Hz0 = 100/PhisCnst.Z0;
 		public static readonly int BoundWidth0 = 30;
 		public static readonly decimal G = 2;
 		public static readonly int IntX = 100;
@@ -24,16 +21,70 @@ namespace ElDinamicCalc
 		public static decimal DelX, DelY, DelT, DtDivDx, DtDivDy, ScaleCoef;
 		public static int SizeX, SizeY, Tn, BoundWidth;
 		public static TModeType ModeType;
-		
-		public static ExtArr Ex,Ey,Ez,Dx,Dy,Dz,Hx,Hy,Hz,Bx,By,Bz,ExN,EyN,EzN,DxN,DyN,DzN,HxN,HyN,HzN,BxN,ByN,BzN;
+
+		public static ExtArr Ex,
+			Ey,
+			Ez,
+			Dx,
+			Dy,
+			Dz,
+			Hx,
+			Hy,
+			Hz,
+			Bx,
+			By,
+			Bz,
+			ExN,
+			EyN,
+			EzN,
+			DxN,
+			DyN,
+			DzN,
+			HxN,
+			HyN,
+			HzN,
+			BxN,
+			ByN,
+			BzN;
+
 		public static ExtArr WaveF;
 
 
-		public static ExtArr Exy,Exz,Eyx,Eyz,Ezx,Ezy,Hxy,Hxz,Hyx,Hyz,Hzx,Hzy,ExyN,ExzN,EyxN,EyzN,EzxN,EzyN,HxyN,HxzN,HyxN,HyzN,HzxN,HzyN;
-		
-		public static ExtArr SigmaXCoeffs, SigmaYCoeffs, SigmaZCoeffs,
-		  SigmaXSCoeffs, SigmaYSCoeffs, SigmaZSCoeffs,
-		  OneDivSigmaX, OneDivSigmaY, OneDivSigmaXS, OneDivSigmaYS;
+		public static ExtArr Exy,
+			Exz,
+			Eyx,
+			Eyz,
+			Ezx,
+			Ezy,
+			Hxy,
+			Hxz,
+			Hyx,
+			Hyz,
+			Hzx,
+			Hzy,
+			ExyN,
+			ExzN,
+			EyxN,
+			EyzN,
+			EzxN,
+			EzyN,
+			HxyN,
+			HxzN,
+			HyxN,
+			HyzN,
+			HzxN,
+			HzyN;
+
+		public static ExtArr SigmaXCoeffs,
+			SigmaYCoeffs,
+			SigmaZCoeffs,
+			SigmaXSCoeffs,
+			SigmaYSCoeffs,
+			SigmaZSCoeffs,
+			OneDivSigmaX,
+			OneDivSigmaY,
+			OneDivSigmaXS,
+			OneDivSigmaYS;
 
 		public static ExtArr IntFModeEz, IntFModeHy;
 		public static int SelfModeNumber;
@@ -44,16 +95,22 @@ namespace ElDinamicCalc
 
 		public static decimal BettaX, BettaY;
 
-		public static Queue<ExtArr> DrawQueue = new Queue<ExtArr>(); 
+		public static Queue<ExtArr> DrawQueue = new Queue<ExtArr>();
+
+		public static List<TInitialStyle> InitialStyleSet = new List<TInitialStyle>
+		{
+			TInitialStyle.isFromMedium,
+			TInitialStyle.isManual
+		};
 
 		static Common6()
 		{
 			BoundWidth = BoundWidth0;
-			SigmaX = 2 * (decimal)ExtMath.Pi * PhisCnst.Eps0 / 1000;
-			SigmaY = 2 * (decimal)ExtMath.Pi * PhisCnst.Eps0 / 1000;
+			SigmaX = 2*ExtMath.Pi*PhisCnst.Eps0/1000;
+			SigmaY = 2*ExtMath.Pi*PhisCnst.Eps0/1000;
 			SigmaZ = 0;
-			SigmaXS = SigmaX * PhisCnst.Mu0 / PhisCnst.Eps0;
-			SigmaYS = SigmaY * PhisCnst.Mu0 / PhisCnst.Eps0;
+			SigmaXS = SigmaX*PhisCnst.Mu0/PhisCnst.Eps0;
+			SigmaYS = SigmaY*PhisCnst.Mu0/PhisCnst.Eps0;
 			SigmaZS = 0;
 			CoefG = G;
 			SizeX = SizeX0;
@@ -63,8 +120,8 @@ namespace ElDinamicCalc
 			DelT = DelT0;
 			DelX = DelX0;
 			DelY = DelY0;
-			DtDivDx = DelT / DelX;
-			DtDivDy = DelT / DelY;
+			DtDivDx = DelT/DelX;
+			DtDivDy = DelT/DelY;
 			ModeType = TModeType.mtTE;
 			InitialWave = TInitialWave.iwSin;
 			InitialX1 = 50;
@@ -149,8 +206,6 @@ namespace ElDinamicCalc
 
 		public static TInitialWave InitialWave { get; set; }
 
-		public static List<TInitialStyle> InitialStyleSet = new List<TInitialStyle>{TInitialStyle.isFromMedium, TInitialStyle.isManual};
-
 		public static decimal Ly { get; set; }
 
 		public static decimal Lx { get; set; }
@@ -172,15 +227,15 @@ namespace ElDinamicCalc
 
 		public static decimal ColorByValue(TFieldType FieldType, decimal Value)
 		{
-			var Max = BlackValue * GetMaxValue(FieldType);
-			var Min = WhiteValue * GetMaxValue(FieldType);
+			decimal Max = BlackValue*GetMaxValue(FieldType);
+			decimal Min = WhiteValue*GetMaxValue(FieldType);
 
 			if (Math.Abs(Value) >= Max)
 				throw new NotImplementedException();
-				//return clBlack;
+			//return clBlack;
 			if (Math.Abs(Value) <= Min)
 				throw new NotImplementedException();
-				//return clWhite;
+			//return clWhite;
 			throw new NotImplementedException();
 			//return ColorArray[Math.Round(255*(Math.Abs(Value) - Min) /(Max - Min))];
 		}
@@ -189,18 +244,17 @@ namespace ElDinamicCalc
 		{
 			switch (FieldType)
 			{
-					case TFieldType.ftEType:
-						return PhisCnst.Ez0;
-					case TFieldType.ftDType:
-						return PhisCnst.Ez0*PhisCnst.Eps0*RegionList.Eps;
-					case TFieldType.ftHType:
-						return PhisCnst.Hz0;
-					case TFieldType.ftBType:
-						return PhisCnst.Hz0*PhisCnst.Mu0;
+				case TFieldType.ftEType:
+					return PhisCnst.Ez0;
+				case TFieldType.ftDType:
+					return PhisCnst.Ez0*PhisCnst.Eps0*RegionList.Eps;
+				case TFieldType.ftHType:
+					return PhisCnst.Hz0;
+				case TFieldType.ftBType:
+					return PhisCnst.Hz0*PhisCnst.Mu0;
 				default:
-						return 0.1m;
+					return 0.1m;
 			}
-			
 		}
 	}
 
@@ -220,50 +274,58 @@ namespace ElDinamicCalc
 
 	public enum TCompCoord
 	{
-		ccHoriz, ccVert
+		ccHoriz,
+		ccVert
 	}
 
 	public enum TProcessState
 	{
-		psStoped, psRuning, psPaused
+		psStoped,
+		psRuning,
+		psPaused
 	}
 
 	public enum TInitialWave
 	{
-		iwSin, iwGauss
+		iwSin,
+		iwGauss
 	}
 
 	public enum TToDraw
 	{
-		tdEachStep, tdOnStep, tdOnTime
+		tdEachStep,
+		tdOnStep,
+		tdOnTime
 	}
 
 	public enum TDrawObjects
 	{
-		doWave, doComponents, doGraphics, doFourier
+		doWave,
+		doComponents,
+		doGraphics,
+		doFourier
 	}
 
 	public enum TInitialStyle
 	{
-		isFromMedium, isManual
+		isFromMedium,
+		isManual
 	}
-
 
 
 	public class TFieldPointercs
 	{
+		public bool Enable;
 		public object Field;
 		public TFieldType FieldType;
-		public bool Enable;
 	}
 
 	public class TDrawRecord
 	{
-		public bool ReadyToDraw;
 		public List<TDrawObjects> FieldType;
-		public TToDraw ToDraw;
+		public bool ReadyToDraw;
 		public int StepCouunt;
 		public object Time;
-
+		public TToDraw ToDraw;
 	}
 }
