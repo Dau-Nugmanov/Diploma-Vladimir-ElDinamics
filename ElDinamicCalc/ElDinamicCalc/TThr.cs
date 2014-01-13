@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 
 namespace ElDinamicCalc
@@ -6,19 +7,14 @@ namespace ElDinamicCalc
 	public class TThr
 	{
 		private static readonly Proc6 proc = new Proc6();
-
+		
+		private bool isMultiThreading;
 		private void DoWork(object state)
 		{
-			DateTime t1 = DateTime.Now;
+			if (isMultiThreading) ThreadPool.QueueUserWorkItem(Init);
 			while (Common6.Tn < 10000)
 			{
-				if ((Common6.Tn + 1) %100 == 0)
-				{
-					DateTime t2 = DateTime.Now;
-					//Thread.Sleep(10000);
-				}
-
-
+				if (isMultiThreading) Thread.Sleep(90);
 				//using (TextWriter writer = new StreamWriter(@"d:\test2.txt", true))
 				//{
 				//	var oldDzN = new ExtArr(Common6.SizeX0 + 2, Common6.SizeY0 + 2, 0, 0, 0, 0, -1, -1);
@@ -106,8 +102,23 @@ namespace ElDinamicCalc
 			}
 		}
 
-		public void Execute()
+		private void Init(object state)
 		{
+			while (true)
+			{
+				var source = Enumerable.Range(1, 10000)
+				.Select(n => n * n * n);
+
+				var evenNums = source
+					.AsParallel()
+					.Select(n => Math.Pow(Math.Log10(Math.Pow(n, 2) / Math.PI), 5) / (Math.PI * Math.PI))
+					.ToArray();
+			}
+		}
+
+		public void Execute(bool isMultiThreading)
+		{
+			this.isMultiThreading = isMultiThreading;
 			ThreadPool.QueueUserWorkItem(DoWork);
 		}
 	}

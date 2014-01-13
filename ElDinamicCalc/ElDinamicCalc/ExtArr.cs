@@ -121,6 +121,7 @@ namespace ElDinamicCalc
 			if ((y - StartY < 0) || (y - StartY >= SizeY))
 				return -1;
 
+			//Если попадает в вырез
 			if ((x - StartX >= ShiftX) && (x - StartX < ShiftX + IdleX)
 			    && (y - StartY >= ShiftY) && (y - StartY < ShiftY + IdleY))
 				return -1;

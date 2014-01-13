@@ -87,7 +87,7 @@ namespace ElDinamicCalc
 					ColorArray[i] = bitmap.GetPixel(i, 0);
 			}
 
-			tr.Execute();
+			tr.Execute(rbMultiThread.Checked);
 		}
 
 		
@@ -159,7 +159,6 @@ namespace ElDinamicCalc
 			}
 		}
 
-
 		private void Draw()
 		{
 			if (WaveBitmap == null) return;
@@ -187,7 +186,7 @@ namespace ElDinamicCalc
 			{
 				for (var x = 0; x < width; x++)
 				{
-					var c = ColorByValue(Common6.WaveF[x, y]);
+					var c = ColorByValue(temp[x, y]);
 					rgbValues[y * sourceStride + x * sourcePixelSize] = c.B;
 					rgbValues[y * sourceStride + x * sourcePixelSize + 1] = c.G;
 					rgbValues[y * sourceStride + x * sourcePixelSize + 2] = c.R;
@@ -210,28 +209,6 @@ namespace ElDinamicCalc
 		private void timerDraw_Tick(object sender, EventArgs e)
 		{
 			Draw();
-			return;
-			
-			if (WaveBitmap == null) return;
-
-			var width = WaveBitmap.Width;
-			var height = WaveBitmap.Height;
-			if (Common6.DrawQueue.Count == 0) return;
-
-			var temp = Common6.DrawQueue.Dequeue();
-			if (temp == null) return;
-			//graph.Clear(Color.White);
-			for (var y = 0; y < height; y++)
-			{
-				for (var x = 0; x < width; x++)
-				{
-					//if ((x + y + 2) % 2 == 0)
-					WaveBitmap.SetPixel(x, y, ColorByValue(temp[x, y]));
-				}
-			}
-			graph.DrawImage(WaveBitmap, new Point(0, 0));
-			tbStep.Text = Common6.Tn.ToString();
-			tbQueueCount.Text = Common6.DrawQueue.Count.ToString();
 		}
 	}
 }
