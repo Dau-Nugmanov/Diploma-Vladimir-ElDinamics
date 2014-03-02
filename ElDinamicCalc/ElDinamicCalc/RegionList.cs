@@ -142,10 +142,47 @@ namespace ElDinamicCalc
 				var tempDescrib = reader.ReadChars(len);
 				Describ = Convert.ToString(tempDescrib);
 			}
-			
+			SetInitialWave();
 			return true;
 		}
 
+		private static void SetInitialWave()
+		{
+			if (FieldList.Count == 0)
+			{
+				switch (CommonParams.ModeType)
+				{
+					case ModeType.TE:
+						switch (CommonParams.InitialWave)
+						{
+							case InitialWave.Sin:
+								WaveInitializer.PlaneWaveTE();
+								break;
+							case InitialWave.Gauss:
+								WaveInitializer.GaussTE();
+								break;
+						}
+						break;
+
+					case ModeType.TM:
+						switch (CommonParams.InitialWave)
+						{
+							case InitialWave.Sin:
+								WaveInitializer.PlaneWaveTM();
+								break;
+							case InitialWave.Gauss:
+								WaveInitializer.GaussTM();
+								break;
+						}
+						break;
+				}
+			}
+			else
+			{
+				WaveInitializer.WaveFromRegionList();
+			}
+		}
+		
 		private static void SetEpsField()
 		{
 			EpsField = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, 0, 0);

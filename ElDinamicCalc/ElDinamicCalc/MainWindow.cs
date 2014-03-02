@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace ElDinamicCalc
 {
+	/// <summary>
+	/// Главная экранная форма программы
+	/// </summary>
 	public partial class MainWindow : Form
 	{
 		private MainThread _mainThread;
@@ -111,7 +114,7 @@ namespace ElDinamicCalc
 				if (!LastDrawTime.HasValue)
 					LastDrawTime = DateTime.Now.Ticks;
 				var comboBoxItem = toolStripComboBox.SelectedItem as ComboBoxItem;
-				_mainThread.Execute(comboBoxItem.WorkMode);
+				_mainThread.Start(comboBoxItem.WorkMode);
 				buttonStart.Text = "Stop";
 			}
 			_isWorking = !_isWorking;
@@ -162,22 +165,6 @@ namespace ElDinamicCalc
 				// Retrieve the app's exit code
 				var exitCode = proc.ExitCode;
 			}
-		}
-	}
-
-	class ComboBoxItem
-	{
-		public WorkMode WorkMode { get; set; }
-		public override string ToString()
-		{
-			switch (WorkMode)
-			{
-				case WorkMode.SingleThread:
-					return "Однопоточный режим";
-				case WorkMode.MultiThread:
-					return "Многопоточный режим";
-			}
-			return string.Empty;
 		}
 	}
 }

@@ -6,8 +6,26 @@ using System.Threading;
 
 namespace ElDinamicCalc
 {
+	/// <summary>
+	/// Инкапсулирует в себе поток выполняющий основные вычисления
+	/// </summary>
 	public class MainThread
 	{
+		private const int SourcePixelSize = 4;
+		private static readonly int SourceStride = CommonParams.SizeX * SourcePixelSize;
+		private static readonly int Bytes = Math.Abs(SourceStride) * CommonParams.SizeY;
+		private readonly decimal _max = CommonParams.BlackValue * GetMaxValue(FieldType.EType);
+		private readonly decimal _min = CommonParams.WhiteValue * GetMaxValue(FieldType.EType);
+		private readonly byte[] _contour = new byte[Bytes];
+		private readonly BaseAlgorithm _algorithm = new BaseAlgorithm();
+		private Color[] _colors;
+		private WorkMode _workMode;
+		private bool _isWorking;
+		
+		/// <summary>
+		/// Конструктор класса
+		/// </summary>
+		/// <param name="filePath">Путь к файлу с настройками системы</param>
 		public MainThread(string filePath)
 		{
 			RegionList.LoadFromFile(filePath);
@@ -36,6 +54,22 @@ namespace ElDinamicCalc
 			_contour = RegionList.Contour;
 
 			MakeCalc();
+		}
+		/// <summary>
+		/// Запускает поток вычислений
+		/// </summary>
+		/// <param name="workMode">Режим работы (многопоточный/однопоточный)</param>
+		public void Start(WorkMode workMode)
+		{
+			_workMode = workMode;
+			ThreadPool.QueueUserWorkItem(DoWork);
+		}
+		/// <summary>
+		/// Останавливает поток вычислений
+		/// </summary>
+		public void Stop()
+		{
+			_isWorking = false;
 		}
 
 		private void SetInitialWave()
@@ -74,10 +108,7 @@ namespace ElDinamicCalc
 				WaveInitializer.WaveFromRegionList();
 			}
 		}
-		private readonly BaseAlgorithm _algorithm = new BaseAlgorithm();
 
-		private WorkMode _workMode;
-		private bool _isWorking;
 		private void DoWork(object state)
 		{
 			_isWorking = true;
@@ -93,22 +124,13 @@ namespace ElDinamicCalc
 			_algorithm.DoStep();
 			CommonParams.DrawQueue.Enqueue(
 				new DrawInfo(GetBytes(CommonParams.SizeX, CommonParams.SizeY, CommonParams.Ez),
-				_algorithm.Step));
-			if (CommonParams.PauseStepNum != 0 && _algorithm.Step % CommonParams.PauseStepNum == 0)
+				_algorithm.StepNumber));
+			if (CommonParams.PauseStepNum != 0 && _algorithm.StepNumber % CommonParams.PauseStepNum == 0)
 			{
 				Stop();
 			}
 		}
 
-		private Color[] _colors;
-		private readonly decimal _max = CommonParams.BlackValue * GetMaxValue(FieldType.EType);
-		private readonly decimal _min = CommonParams.WhiteValue * GetMaxValue(FieldType.EType);
-		private static readonly int SourceStride = CommonParams.SizeX * SourcePixelSize;
-		private const int SourcePixelSize = 4;
-		private static readonly int Bytes = Math.Abs(SourceStride) * CommonParams.SizeY;
-
-
-		private readonly byte[] _contour = new byte[Bytes];
 		private bool IsContour(int index)
 		{
 			return index + 3 < _contour.Length 
@@ -117,6 +139,7 @@ namespace ElDinamicCalc
 				&& _contour[index + 2] == 0
 				&& _contour[index + 3] == 255;
 		}
+
 		private byte[] GetBytes(int width, int height, ExtArr temp)
 		{
 			var rgbValues = new byte[Bytes];
@@ -137,18 +160,7 @@ namespace ElDinamicCalc
 
 			return rgbValues;
 		}
-
-		public void Execute(WorkMode workMode)
-		{
-			_workMode = workMode;
-			ThreadPool.QueueUserWorkItem(DoWork);
-		}
-
-		public void Stop()
-		{
-			_isWorking = false;
-		}
-
+		
 		private void InitColorArray()
 		{
 			_colors = new Color[256];

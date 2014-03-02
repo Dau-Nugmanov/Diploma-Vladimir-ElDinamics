@@ -1,5 +1,8 @@
 ﻿namespace ElDinamicCalc
 {
+	/// <summary>
+	/// Инкапсулирует базовый алгоритм 
+	/// </summary>
 	public class BaseAlgorithm
 	{
 		private const decimal SigmaX = 2 * ExtMath.Pi * PhisicalConstants.Eps0 / 1000;
@@ -18,14 +21,19 @@
 				SetIntMode();
 		}
 
-		public int Step { get; set; }
-
+		/// <summary>
+		/// Номер шага
+		/// </summary>
+		public int StepNumber { get; set; }
+		/// <summary>
+		/// Выполняет вычисления согласно алгоритма (шаг алгоритма)
+		/// </summary>
 		public void DoStep()
 		{
 			for (var i = 0; i < CommonParams.SizeX; i++)
 				for (var j = 0; j < CommonParams.SizeY; j++)
 				{
-					if (((i + j + 2) % 2 == 0) && ((Step + 2) % 2 == 0))
+					if (((i + j + 2) % 2 == 0) && ((StepNumber + 2) % 2 == 0))
 					{
 						switch (CommonParams.ModeType)
 						{
@@ -37,7 +45,7 @@
 								break;
 						}
 					}
-					if (((i + j + 2) % 2 == 1) && ((Step + 2) % 2 == 1))
+					if (((i + j + 2) % 2 == 1) && ((StepNumber + 2) % 2 == 1))
 					{
 						switch (CommonParams.ModeType)
 						{
@@ -165,7 +173,6 @@
 		//следующие 6 функций возращают значения компонент в точке:
 		//само значение, если точка внутри системы
 		//иначе - сумма значений расщепленных компонент
-
 		private decimal GetEx(int i, int j)
 		{
 			if ((i >= 0) && (i < _sizeX) && (j >= 0) && (j < _sizeY))
@@ -209,8 +216,7 @@
 		}
 
 		//следующие 6 функций возращают значения параметров Sigma в точке
-		//учитывается расстояние до границы ситемы
-
+		//учитывается расстояние до границы системы
 		private decimal GetSigmaX(int i, int j)
 		{
 			if (i < 0)
@@ -390,7 +396,7 @@
 		//перешагивание во времени
 		private void AbsLayersABC()
 		{
-			if ((Step + 2) % 2 == 0)
+			if ((StepNumber + 2) % 2 == 0)
 			{
 				AbsElectr();
 
@@ -454,7 +460,7 @@
 
 			//замена массивов со старыми значениями на массивы с новыми
 			//значениями с учетом перешагивания во времени
-			if ((Step + 2) % 2 == 0)
+			if ((StepNumber + 2) % 2 == 0)
 			{
 				SwapFields(ref CommonParams.Ex, ref CommonParams.ExN);
 				SwapFields(ref CommonParams.Ey, ref CommonParams.EyN);
@@ -485,7 +491,7 @@
 				SwapFields(ref CommonParams.Hzy, ref CommonParams.HzyN);
 			}
 
-			Step++;
+			StepNumber++;
 		}
 
 		private void SetSigmaCoeffs()
