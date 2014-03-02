@@ -854,7 +854,13 @@ begin
   if CheckOnDraw(WaveF.FieldType) or Required then
   begin
 //нарисовать волну
-    TestDraw;
+    for j := 0 to SizeY - 1 do
+    begin
+      Line := WaveBitmap.ScanLine[j];
+      for i := 0 to SizeX - 1 do
+        if (i + j + 2) mod 2 = Tag(WaveF.FieldType) then
+          Line[i] := ColorByValue(WaveF.FieldType, WaveF.Field^[i, j]);
+    end;
 //нарисовать контуры объектов
     RegionList.DrawContour(WaveBitmap.Canvas, WaveBitmap.Height,
       WaveBitmap.Width);

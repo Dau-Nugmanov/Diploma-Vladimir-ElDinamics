@@ -13,23 +13,23 @@ namespace ElDinamicCalc
 		}
 
 		//converts the next 10 bytes of Value starting at StartIndex into a decimal
-		public static double ToDouble(byte[] Value, int StartIndex)
+		public static double ToDouble(byte[] value, int startIndex)
 		{
-			if (Value == null)
-				throw new ArgumentNullException("Value");
+			if (value == null)
+				throw new ArgumentNullException("value");
 
-			if (Value.Length < StartIndex + 10)
+			if (value.Length < startIndex + 10)
 				throw new ArgumentException("Combination of Value length and StartIndex was not large enough.");
 
 			//extract fields
-			var s = (byte) (Value[9] & 0x80);
-			var e = (short) (((Value[9] & 0x7F) << 8) | Value[8]);
-			var j = (byte) (Value[7] & 0x80);
-			long f = Value[7] & 0x7F;
+			var s = (byte) (value[9] & 0x80);
+			var e = (short) (((value[9] & 0x7F) << 8) | value[8]);
+			var j = (byte) (value[7] & 0x80);
+			long f = value[7] & 0x7F;
 			for (sbyte i = 6; i >= 0; i--)
 			{
 				f <<= 8;
-				f |= Value[i];
+				f |= value[i];
 			}
 
 			if (e == 0) //subnormal, pseudo-denormal or zero
@@ -73,9 +73,9 @@ namespace ElDinamicCalc
 		}
 
 		//converts Value into a long decimal byte array of length 10
-		public static byte[] GetBytes(double Value)
+		public static byte[] GetBytes(double value)
 		{
-			byte[] oldBytes = BitConverter.GetBytes(Value);
+			byte[] oldBytes = BitConverter.GetBytes(value);
 
 			//extract fields
 			var s = (byte) (oldBytes[7] & 0x80);

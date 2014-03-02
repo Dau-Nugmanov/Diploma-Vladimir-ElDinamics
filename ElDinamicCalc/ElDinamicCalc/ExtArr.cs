@@ -26,7 +26,7 @@ namespace ElDinamicCalc
 		//Памяти выделяется только на существующие элементы :
 		//(SizeX*SizeY-IdleX*IdleY)*SizeOf(ValueType)}
 
-		private readonly decimal[] FValues;
+		private readonly decimal[] _values;
 		public int IdleX, IdleY;
 		public int ShiftX, ShiftY;
 		public int SizeX, SizeY;
@@ -86,23 +86,23 @@ namespace ElDinamicCalc
 				SizeY = 1;
 			}
 
-			int Length = SizeX*SizeY - IdleX*IdleY;
-			FValues = new decimal[Length];
+			int length = SizeX*SizeY - IdleX*IdleY;
+			_values = new decimal[length];
 		}
 
 		public decimal this[int x, int y]
 		{
 			get
 			{
-				int ind = GetIndex(x, y);
-				return ind >= 0 ? FValues[ind] : 0;
+				var ind = GetIndex(x, y);
+				return ind >= 0 ? _values[ind] : 0;
 			}
 			set
 			{
-				int Ind = GetIndex(x, y);
-				if (Ind >= 0)
+				var ind = GetIndex(x, y);
+				if (ind >= 0)
 				{
-					FValues[Ind] = value;
+					_values[ind] = value;
 				}
 			}
 		}
@@ -110,7 +110,7 @@ namespace ElDinamicCalc
 		public object Clone()
 		{
 			var res = new ExtArr(SizeX, SizeY, ShiftX, ShiftY, IdleX, IdleY, StartX, StartY);
-			FValues.CopyTo(res.FValues, 0);
+			_values.CopyTo(res._values, 0);
 			return res;
 		}
 

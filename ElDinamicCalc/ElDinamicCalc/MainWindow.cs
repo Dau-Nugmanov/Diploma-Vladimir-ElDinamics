@@ -1,214 +1,183 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace ElDinamicCalc
 {
 	public partial class MainWindow : Form
 	{
-		private readonly TThr tr = new TThr();
-		private Color[] ColorArray;
-		private Bitmap WaveBitmap;
-		private Graphics graph;
-		private readonly decimal Max = Common6.BlackValue * GetMaxValue(TFieldType.ftEType);
-		private readonly decimal Min = Common6.WhiteValue * GetMaxValue(TFieldType.ftEType);
+		private MainThread _mainThread;
+		private Bitmap _waveBitmap;
+		private Graphics _graph;
+		private string _filePath;
 
-			
 
 		public MainWindow()
 		{
 			InitializeComponent();
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				DoWork(null);
-				//ThreadPool.QueueUserWorkItem(DoWork);
-			}
-			catch (Exception ex)
-			{
-				//throw;
-			}
-		}
-
-		private void DoWork(object state)
-		{
-			RegionList.LoadFromFile(
-				@"F:\Users\Nugmanov\Dropbox\Дипломки\Diploma-Vladimir-ElDinamics\ElDinamicCalc\ElDinamicCalc\Manenkov.mdm");
-
-
-			SetInitialWave();
-			Common6.SizeX = RegionList.SizeOfX;
-			Common6.SizeY = RegionList.SizeOfY;
-			Common6.DelX = RegionList.DelX;
-			Common6.DelY = RegionList.DelY;
-			Common6.DelT = RegionList.DelT;
-			Common6.DtDivDx = Common6.DelT/Common6.DelX;
-			Common6.DtDivDy = Common6.DelT/Common6.DelY;
-
-			Common6.BoundWidth = RegionList.BoundsWidth;
-			Common6.SigmaX = RegionList.Sigma;
-			Common6.SigmaY = RegionList.Sigma;
-
-			Common6.CoefG = RegionList.CoefG;
-
-			if (Common6.InitialX2 >= Common6.SizeX)
-				Common6.InitialX2 = Common6.SizeX - 1;
-			if (Common6.InitialY2 >= Common6.SizeY)
-				Common6.InitialY2 = Common6.SizeY - 1;
-
-			drawPanel.Size = new Size(Common6.SizeX, Common6.SizeY);
-			graph = drawPanel.CreateGraphics();
-			WaveBitmap = new Bitmap(Common6.SizeX, Common6.SizeY, graph);
-
-			var br = new LinearGradientBrush(new Point(0, 0),
-				new Point(0, 256), Color.White, Color.Black);
-			var p = new Pen(br);
-
-
-			using (var bitmap = new Bitmap(256, 1)) // 100x100 pixels
-			using (Graphics graphics = Graphics.FromImage(bitmap))
-			using (var brush = new LinearGradientBrush(
-				new Rectangle(0, 0, 256, 1),
-				Color.White,
-				Color.Black,
-				LinearGradientMode.ForwardDiagonal))
-			{
-				brush.SetSigmaBellShape(0.5f);
-				graphics.FillRectangle(brush, new Rectangle(0, 0, 256, 1));
-				ColorArray = new Color[256];
-
-				for (int i = 0; i < 256; i++)
-					ColorArray[i] = bitmap.GetPixel(i, 0);
-			}
-
-			tr.Execute(rbMultiThread.Checked);
-		}
-
-		
-
-		private Color ColorByValue(decimal value)
-		{
-			var abs = Math.Abs(value);
-			if (abs >= Max)
-			{
-				return Color.Black;
-			}
-			if (abs <= Min)
-			{
-				return Color.White;
-			}
-			return ColorArray[(int)Math.Round(255 * (abs - Min) / (Max - Min))];
-		}
-
-		private static decimal GetMaxValue(TFieldType fieldType)
-		{
-			switch (fieldType)
-			{
-				case TFieldType.ftEType:
-					return PhisCnst.Ez0;
-				case TFieldType.ftDType:
-					return PhisCnst.Ez0*PhisCnst.Eps0*RegionList.Eps;
-				case TFieldType.ftHType:
-					return PhisCnst.Hz0;
-				case TFieldType.ftBType:
-					return PhisCnst.Hz0*PhisCnst.Mu0;
-			}
-			return 0.1m;
-		}
-
-		private void SetInitialWave()
-		{
-			if (Common6.InitialStyleSet.Any(s => s == TInitialStyle.isManual))
-			{
-				switch (Common6.ModeType)
-				{
-					case TModeType.mtTE:
-						switch (Common6.InitialWave)
-						{
-							case TInitialWave.iwSin:
-								Initial.PlaneWaveTE();
-								break;
-							case TInitialWave.iwGauss:
-								Initial.GaussTE();
-								break;
-						}
-						break;
-
-					case TModeType.mtTM:
-						switch (Common6.InitialWave)
-						{
-							case TInitialWave.iwSin:
-								Initial.PlaneWaveTM();
-								break;
-							case TInitialWave.iwGauss:
-								Initial.GaussTM();
-								break;
-						}
-						break;
-				}
-			}
-			if (Common6.InitialStyleSet.Any(s => s == TInitialStyle.isFromMedium))
-			{
-				Initial.WaveFromRegionList();
-			}
+			toolStripComboBox.Items.Add(new ComboBoxItem { WorkMode = WorkMode.SingleThread });
+			toolStripComboBox.Items.Add(new ComboBoxItem { WorkMode = WorkMode.MultiThread });
+			toolStripComboBox.SelectedIndex = 0;
 		}
 
 		private void Draw()
 		{
-			if (WaveBitmap == null) return;
+			if (_waveBitmap == null) return;
 
-			var width = WaveBitmap.Width;
-			var height = WaveBitmap.Height;
-			if (Common6.DrawQueue.Count == 0) return;
-			var temp = Common6.DrawQueue.Dequeue();
+			if (CommonParams.DrawQueue.Count == 0) return;
+			var temp = CommonParams.DrawQueue.Dequeue();
 			if (temp == null) return;
 
-			var sourceData = WaveBitmap.LockBits(new Rectangle(new Point(0, 0), WaveBitmap.Size),
+			var sourceData = _waveBitmap.LockBits(new Rectangle(new Point(0, 0), _waveBitmap.Size),
 							 ImageLockMode.ReadWrite,
-							 WaveBitmap.PixelFormat);
+							 _waveBitmap.PixelFormat);
 
-			var sourceStride = sourceData.Stride;
 			var sourceScan0 = sourceData.Scan0;
-			var sourcePixelSize = sourceStride / width;
-			var bytes = Math.Abs(sourceStride) * height;
-			var rgbValues = new byte[bytes];
-
-			// Copy the RGB values into the array.
-			System.Runtime.InteropServices.Marshal.Copy(sourceScan0, rgbValues, 0, bytes);
-
-			for (var y = 0; y < height; y++)
-			{
-				for (var x = 0; x < width; x++)
-				{
-					var c = ColorByValue(temp[x, y]);
-					rgbValues[y * sourceStride + x * sourcePixelSize] = c.B;
-					rgbValues[y * sourceStride + x * sourcePixelSize + 1] = c.G;
-					rgbValues[y * sourceStride + x * sourcePixelSize + 2] = c.R;
-					rgbValues[y * sourceStride + x * sourcePixelSize + 3] = 255;
-				}
-			}
 
 			// Copy the RGB values back to the bitmap
-			System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, sourceScan0, bytes);
+			Marshal.Copy(temp.Value, 0, sourceScan0, temp.Value.Length);
 
 			// Unlock the bits.
-			WaveBitmap.UnlockBits(sourceData);
+			_waveBitmap.UnlockBits(sourceData);
 
-			graph.DrawImage(WaveBitmap, new Point(0, 0));
+			//_graph.DrawImage(ImageUtilities.ResizeImage(_waveBitmap, _waveBitmap.Width*4, _waveBitmap.Height*4), 0, 0);
+			_graph.DrawImage(_waveBitmap, 0, 0, _waveBitmap.Width * 4, _waveBitmap.Height * 4);
 
-			tbStep.Text = Common6.Tn.ToString();
-			tbQueueCount.Text = Common6.DrawQueue.Count.ToString();
+			if (LastDrawTime.HasValue)
+				WorkTime += DateTime.Now.Ticks - LastDrawTime.Value;
+
+			toolStripStatusLabelStepNum.Text = temp.Step.ToString();
+			toolStripStatusLabelQueueCount.Text = CommonParams.DrawQueue.Count.ToString();
+			toolStripStatusLabelTime.Text = new TimeSpan(WorkTime).ToString("G");
+
+			if (CommonParams.PauseStepNum != 0 && temp.Step % CommonParams.PauseStepNum == 0)
+				buttonStart_Click(null, null);
 		}
-
 		private void timerDraw_Tick(object sender, EventArgs e)
 		{
 			Draw();
+		}
+
+		private void fileOpenToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var result = openFileDialog.ShowDialog();
+			if (result != DialogResult.OK) return;
+
+			_filePath = openFileDialog.FileName;
+
+			if (string.IsNullOrEmpty(_filePath) || !File.Exists(_filePath))
+			{
+				MessageBox.Show("Не задан файл");
+				return;
+			}
+
+			if (_mainThread != null)
+				_mainThread.Stop();
+
+			drawPanel.Size = new Size(CommonParams.SizeX * 4, CommonParams.SizeY * 4);
+			_graph = drawPanel.CreateGraphics();
+			_graph.Clear(Color.White);
+			_waveBitmap = new Bitmap(CommonParams.SizeX, CommonParams.SizeY, _graph);
+
+			_mainThread = new MainThread(_filePath);
+			LastDrawTime = null;
+			WorkTime = 0;
+		}
+
+		private bool _isWorking;
+
+		private long WorkTime { get; set; }
+		private long? LastDrawTime { get; set; }
+		private void buttonStart_Click(object sender, EventArgs e)
+		{
+			if (_mainThread == null)
+			{
+				MessageBox.Show("Не задан файл");
+				return;
+			}
+			if (_isWorking)
+			{
+				_mainThread.Stop();
+				buttonStart.Text = "Start";
+			}
+			else
+			{
+				if (!LastDrawTime.HasValue)
+					LastDrawTime = DateTime.Now.Ticks;
+				var comboBoxItem = toolStripComboBox.SelectedItem as ComboBoxItem;
+				_mainThread.Execute(comboBoxItem.WorkMode);
+				buttonStart.Text = "Stop";
+			}
+			_isWorking = !_isWorking;
+		}
+
+		private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var settings = new MainSettings
+				{
+					DelT = CommonParams.DelT,
+					DelX = CommonParams.DelX,
+					DelY = CommonParams.DelY,
+					PauseStepNum = CommonParams.PauseStepNum
+				};
+			var settingsForm = new SettingsForm(settings);
+			if (settingsForm.ShowDialog() != DialogResult.OK) return;
+			CommonParams.DelT = settingsForm.Settings.DelT;
+			CommonParams.DelX = settingsForm.Settings.DelX;
+			CommonParams.DelY = settingsForm.Settings.DelY;
+			CommonParams.PauseStepNum = settings.PauseStepNum;
+			CommonParams.DtDivDx = CommonParams.DelT / CommonParams.DelX;
+			CommonParams.DtDivDy = CommonParams.DelT / CommonParams.DelY;
+		}
+
+		private void MainWindow_ResizeEnd(object sender, EventArgs e)
+		{
+			if (_waveBitmap == null) return;
+			_graph.DrawImage(_waveBitmap, 0, 0, _waveBitmap.Width * 4, _waveBitmap.Height * 4);
+		}
+
+		private void editorStartToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var start = new ProcessStartInfo
+			{
+				FileName = "Editor.exe",
+				WindowStyle = ProcessWindowStyle.Hidden,
+				CreateNoWindow = true
+			};
+			using (var proc = Process.Start(start))
+			{
+				proc.WaitForExit();
+
+				// Retrieve the app's exit code
+				var exitCode = proc.ExitCode;
+			}
+		}
+	}
+
+	class ComboBoxItem
+	{
+		public WorkMode WorkMode { get; set; }
+		public override string ToString()
+		{
+			switch (WorkMode)
+			{
+				case WorkMode.SingleThread:
+					return "Однопоточный режим";
+				case WorkMode.MultiThread:
+					return "Многопоточный режим";
+			}
+			return string.Empty;
 		}
 	}
 }

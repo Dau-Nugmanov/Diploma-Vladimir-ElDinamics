@@ -1,23 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace ElDinamicCalc
 {
-	/// <summary>
-	///     {Модуль с математическими функциями
-	///     TParser - переводит строку в функцию
-	///     Degree - возводит число X в степень A
-	///     Log - десятичный логарифм
-	///     GetPeriod - период итерационной функции Funct с начальным условием
-	///     X0, переходным процессом Idle; возвращает период или: -1 при
-	///     расходимости, 0 при хаосе или периоде > MaxPeriod
-	///     (не опробовано)
-	///     GetPeriod2D и GetPeriod3D - тоже для двумерного и трехмерного
-	///     случаев (не опробовано)
-	///     RangeKut4 - метод Ранге-Кута 4-го порядка (не опробовано)
-	///     Newton - нахождение корня уравнения методом Ньютона
-	///     FindRoot - нахождение корня уравнения методом секущих}
-	/// </summary>
 	public class ExtMath
 	{
 		public const decimal LeftLimit = 0.0m;
@@ -26,9 +10,9 @@ namespace ElDinamicCalc
 
 		public const decimal Pi = (decimal) Math.PI;
 
-		public Func<decimal, decimal> TCustomFunction;
-		public Func<decimal, decimal, decimal> TCustomFunction2D;
-		public Func<decimal, decimal, decimal, decimal> TCustomFunction3D;
+		public Func<decimal, decimal> CustomFunction;
+		public Func<decimal, decimal, decimal> CustomFunction2D;
+		public Func<decimal, decimal, decimal, decimal> CustomFunction3D;
 
 		public static decimal Degree(decimal x, decimal a)
 		{
@@ -39,83 +23,6 @@ namespace ElDinamicCalc
 		public static decimal Log(decimal x)
 		{
 			return (decimal) Math.Log10((double) x);
-		}
-
-		public static int GetPeriod(Func<decimal, decimal> Funct, decimal X0,
-			decimal Eps, int Idle, int MaxPeriod)
-		{
-			decimal X;
-			decimal XSt;
-
-			if (Idle < 0 || MaxPeriod < 1)
-			{
-				throw new Exception("Неправильный параметр");
-			}
-
-			X = X0;
-			for (int i = 0; i < Idle; i++)
-			{
-				X = Funct(X);
-				if (Math.Abs(X) >= Big)
-				{
-					return -1;
-				}
-			}
-			XSt = X;
-			for (int i = 0; i < MaxPeriod; i++)
-			{
-				if (Math.Abs(X) >= Big)
-				{
-					return 0;
-				}
-				if (Math.Abs(X - XSt) <= Eps)
-				{
-					return i;
-				}
-			}
-			return 0;
-		}
-
-		public static int GetPeriod2D(Func<decimal, decimal, decimal> FunctX, Func<decimal, decimal, decimal> FunctY,
-			decimal X0, decimal Y0, decimal Eps, int Idle, int MaxPeriod)
-		{
-			decimal X, Y, XSt, YSt, XT;
-
-			if (Idle < 0 || MaxPeriod < 1)
-			{
-				throw new Exception("Неправильный параметр");
-			}
-
-			X = X0;
-			Y = Y0;
-			for (int i = 0; i < Idle; i++)
-			{
-				XT = FunctX(X, Y);
-				Y = FunctY(X, Y);
-				X = XT;
-				if (Math.Abs(X) >= Big || Math.Abs(Y) >= Big)
-				{
-					return -1;
-				}
-			}
-
-			XSt = X;
-			YSt = Y;
-			for (int i = 0; i < MaxPeriod; i++)
-			{
-				XT = FunctX(X, Y);
-				Y = FunctY(X, Y);
-				X = XT;
-				if (Math.Abs(X) >= Big || Math.Abs(Y) >= Big)
-				{
-					return 0;
-				}
-				if (Sqrt(Pow(X - XSt, 2) + Pow(Y - YSt, 2)) <= Eps)
-				{
-					return i;
-				}
-			}
-			return 0;
 		}
 
 		public static decimal Pow(decimal x, decimal y)

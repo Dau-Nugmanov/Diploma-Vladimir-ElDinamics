@@ -1,238 +1,302 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ElDinamicCalc
 {
-	public abstract class TFigure
+	public abstract class Figure
 	{
-		public int CoordX, CoordY;
-		protected TContourShape FShape;
-		public int HorSize, VertSize;
+		public int X { get; set; }
+		public int Y { get; set; }
 		public TContourShape Shape { get; set; }
-		public int Param1 { get; set; }
-		public int Param2 { get; set; }
-		protected abstract int GetParam1();
-		protected abstract int GetParam2();
-		protected abstract void SetParam1(int Value);
-		protected abstract void SetParam2(int Value);
-		public abstract Point Point1();
-		public abstract Point Point2();
-		public abstract bool Belong(int X, int Y);
-		public abstract bool BelongContour(int X, int Y);
-		public abstract void Align(THorAlign HorAlign, TVertAlign VertAlign, int SizeX, int SizeY);
+		public abstract int Param1 { get; set; }
+		public abstract int Param2 { get; set; }
+		public abstract bool Belong(int x, int y);
+		public abstract bool BelongContour(int x, int y);
+		public abstract void Align(THorAlign horAlign, TVertAlign vertAlign,
+			int sizeX, int sizeY);
+		public abstract void DrawContour(Graphics graph, int height, int width);
 	}
 
-	public class TRect : TFigure
+	public class Rect : Figure
 	{
-		protected override int GetParam1()
+		public int Width { get; set; }
+		public int Height { get; set; }
+
+		public override int Param1
 		{
-			return HorSize;
+			get { return Width; }
+			set
+			{
+				Width = value;
+			}
+		}
+		public override int Param2
+		{
+			get { return Height; }
+			set
+			{
+				Height = value;
+			}
 		}
 
-		protected override int GetParam2()
+		public override bool Belong(int x, int y)
 		{
-			return VertSize;
+			return (x >= X) && (x < X + Width) &&
+				   (y >= Y) && (y < Y + Height);
 		}
 
-		protected override void SetParam1(int Value)
+		public override bool BelongContour(int x, int y)
 		{
-			if (HorSize == Value)
-				return;
-			HorSize = Value;
+			return (x == X) || (x == X + Width) ||
+				   (y == Y) || (y == Y + Height);
 		}
 
-		protected override void SetParam2(int Value)
+		public override void Align(THorAlign horAlign, TVertAlign vertAlign, int sizeX, int sizeY)
 		{
-			if (VertSize == Value)
-				return;
-			VertSize = Value;
-		}
-
-		public override Point Point1()
-		{
-			return new Point(CoordX, CoordY);
-		}
-
-		public override Point Point2()
-		{
-			return new Point(CoordX + HorSize, CoordY + VertSize);
-		}
-
-		public override bool Belong(int X, int Y)
-		{
-			return (X >= CoordX) && (X < CoordX + HorSize) &&
-			       (Y >= CoordY) && (Y < CoordY + VertSize);
-		}
-
-		public override bool BelongContour(int X, int Y)
-		{
-			return (X == CoordX) || (X == CoordX + HorSize) ||
-			       (Y == CoordY) || (Y == CoordY + VertSize);
-		}
-
-		public override void Align(THorAlign HorAlign, TVertAlign VertAlign, int SizeX, int SizeY)
-		{
-			switch (HorAlign)
+			switch (horAlign)
 			{
 				case THorAlign.haLeft:
-					CoordX = 0;
+					X = 0;
 					break;
 				case THorAlign.haRight:
-					CoordX = SizeX - HorSize;
+					X = sizeX - Width;
 					break;
 				case THorAlign.haCenter:
-					CoordX = SizeX%2 - HorSize%2;
+					X = sizeX % 2 - Width % 2;
 					break;
 			}
-			switch (VertAlign)
+			switch (vertAlign)
 			{
 				case TVertAlign.vaBottom:
-					CoordY = SizeY - VertSize;
+					Y = sizeY - Height;
 					break;
 				case TVertAlign.vaTop:
-					CoordY = 0;
+					Y = 0;
 					break;
 				case TVertAlign.vaCenter:
-					CoordY = SizeY%2 - VertSize%2;
+					Y = sizeY % 2 - Height % 2;
 					break;
 			}
 		}
+
+		public override void DrawContour(Graphics graph, int height, int width)
+		{
+			graph.DrawRectangle(new Pen(Color.Black, 1), X, Y, Width, Height);
+			graph.Flush();
+			graph.Save();
+		}
 	}
 
-	//    {TRegion :
-	//методы :
-	//  CreateFigure - придает объекту форму, определяемую AShape
-	//  Assign - присвоить данному объекту все свойства объета Source
-	//свойства :
-	//  Eps - диэлектрическая проницаемость
-	//  Figure - определяет геометрию объекта
-	//  CoordX и CoordY - положение объекта
-	//  MatterType - вещество (вакуум, диэлектрик или металл)}
-	public class TRegion
+	public class Circle : Figure
 	{
-		private decimal FEps;
-		private decimal FEps2;
-
-		public TFigure Figure;
-		public TMatterType MatterType;
-
-
-		public decimal Eps { get; set; }
-
-		public decimal Eps2 { get; set; }
-
-		public TFigure CreateFigure(TContourShape AShape)
+		public override int Param1
 		{
-			switch (AShape)
+			get { return Radius; }
+			set { Radius = value; }
+		}
+
+		public override int Param2
+		{
+			get { return Radius; }
+			set { Radius = value; }
+		}
+		public int Radius { get; set; }
+		public override bool Belong(int x, int y)
+		{
+			return Math.Pow(x - X, 2) + Math.Pow(y - Y, 2)
+					<= Math.Pow(Radius, 2);
+		}
+
+		public override bool BelongContour(int x, int y)
+		{
+			return Math.Abs(Math.Pow(x - X, 2)
+					+ Math.Pow(y - Y, 2)
+					- Math.Pow(Radius, 2)) < 0.5;
+		}
+
+		public override void Align(THorAlign horAlign, TVertAlign vertAlign, int sizeX, int sizeY)
+		{
+
+			switch (horAlign)
 			{
-				case TContourShape.shRect:
-					return new TRect();
-				case TContourShape.shCircle:
-					throw new NotImplementedException();
-				case TContourShape.shEllipse:
-					throw new NotImplementedException();
-				case TContourShape.shHalfSpace:
-					throw new NotImplementedException();
-				default:
-					throw new NotImplementedException();
+				case THorAlign.haLeft:
+					X = Radius;
+					break;
+				case THorAlign.haRight:
+					X = sizeX - Radius;
+					break;
+				case THorAlign.haCenter:
+					X = sizeX % 2;
+					break;
+			}
+
+			switch (vertAlign)
+			{
+				case TVertAlign.vaBottom:
+					Y = sizeY - Radius;
+					break;
+				case TVertAlign.vaTop:
+					Y = Radius;
+					break;
+				case TVertAlign.vaCenter:
+					Y = sizeY % 2;
+					break;
 			}
 		}
 
-		public bool LoadFromStream(BinaryReader reader)
+		public override void DrawContour(Graphics graph, int height, int width)
 		{
-			try
-			{
-				MatterType = (TMatterType) reader.ReadByte();
-				Eps = reader.ReadExtended();
-				Eps2 = reader.ReadExtended();
-				var Shape = (TContourShape) reader.ReadByte();
-				Figure = CreateFigure(Shape);
-				Figure.CoordX = reader.ReadInt32();
-				Figure.CoordY = reader.ReadInt32();
-				int Param = reader.ReadInt32();
-				Figure.Param1 = Param;
-				Param = reader.ReadInt32();
-				Figure.Param2 = Param;
-			}
-			catch (Exception e)
-			{
-				return false;
-			}
-
-			return true;
+			graph.DrawEllipse(new Pen(Color.Black, 1),
+				X - Radius, Y - Radius, Radius * 2, Radius * 2);
+			graph.Flush();
+			graph.Save();
 		}
 	}
 
-	//    {TField
-	//методы:
-	//  CreateArrays - выделить память под массивы
-	//  CreateTempArrays - выделить память под временные массивы
-	//  FreeArrays - очистить память, выделенную под массивы
-	//  FreeTempArrays - очистить память, выделенную под
-	//    временные массивы
-	//  StoreArrays - сохранить значения массивов во временные
-	//  UnStoreArrays - вернуть значения массивов
-	//  Realloc - изменить размеры поля (а значит перераспределить
-	//    память)
-	//свойства:
-	//  SizeOfX и SizeOfY - размеры поля
-	//  StartX и StartY - координаты начала области, в которой
-	//    задается поле (верхняя левая точка)
-	//  Ex, Ey, Ez, Dx, Dy, Dz, Hx, Hy, Hz, Bx, By, Bz - массивы
-	//    значений компонент
-	//  ExT, EyT, EzT, DxT, DyT, DzT, HxT, HyT, HzT, BxT, ByT, BzT -
-	//    временные массивы (используются для сохранения значений
-	//    основных при перераспределении памяти (Realloc))}
-	public class TField
+	public class Ellipse : Figure
 	{
-		private bool ArraysExist;
-		private ExtArr FBx, FBy, FBz;
-		private ExtArr FDx, FDy, FDz;
-		private ExtArr FEx, FEy, FEz;
-		private ExtArr FHx, FHy, FHz;
-		private int FSizeOfX, FSizeOfY, FStartX, FStartY;
-
-
-		public int SizeOfX
+		public override int Param1
 		{
-			get { return FSizeOfX; }
+			get { return HorAxel; }
+			set { HorAxel = value; }
 		}
 
-		public int SizeOfY
+		public override int Param2
 		{
-			get { return FSizeOfY; }
+			get { return VertAxel; }
+			set { VertAxel = value; }
+		}
+		public int HorAxel { get; set; }
+		public int VertAxel { get; set; }
+
+		public override bool Belong(int x, int y)
+		{
+			return Math.Pow(x - X, 2) / Math.Pow(HorAxel, 2)
+				+ Math.Pow(y - Y, 2) / Math.Pow(VertAxel, 2)
+				<= 1;
 		}
 
-		public int StartX
+		public override bool BelongContour(int x, int y)
 		{
-			get { return FStartX; }
+			return Math.Abs(Math.Pow(x - X, 2) / Math.Pow(HorAxel, 2)
+					+ Math.Pow(y - Y, 2) / Math.Pow(VertAxel, 2)
+					- 1) < 0.5;
 		}
 
-		public int StartY
+		public override void Align(THorAlign horAlign, TVertAlign vertAlign, int sizeX, int sizeY)
 		{
-			get { return FStartY; }
+
+			switch (horAlign)
+			{
+				case THorAlign.haLeft:
+					X = HorAxel;
+					break;
+				case THorAlign.haRight:
+					X = sizeX - HorAxel;
+					break;
+				case THorAlign.haCenter:
+					X = sizeX % 2;
+					break;
+			}
+
+			switch (vertAlign)
+			{
+				case TVertAlign.vaBottom:
+					Y = sizeY - VertAxel;
+					break;
+				case TVertAlign.vaTop:
+					Y = VertAxel;
+					break;
+				case TVertAlign.vaCenter:
+					Y = sizeY % 2;
+					break;
+			}
 		}
 
-		private void CreateArrays()
+		public override void DrawContour(Graphics graph, int height, int width)
 		{
-		}
-
-		private void CreateTempArrays()
-		{
-		}
-
-		private void StoreArrays()
-		{
-		}
-
-		private void UnStoreArrays()
-		{
+			graph.DrawEllipse(new Pen(Color.Black, 1),
+				X - HorAxel, Y - VertAxel, HorAxel * 2, VertAxel * 2);
+			graph.Flush();
+			graph.Save();
 		}
 	}
 
-	public abstract class TField2
+	public class HalfSpace : Figure
+	{
+		public override int Param1 { get; set; }
+		public override int Param2 { get; set; }
+		public TOrientation Orientation { get; set; }
+
+		public override bool Belong(int x, int y)
+		{
+			switch (Orientation)
+			{
+				case TOrientation.orLeft:
+					return x <= X;
+				case TOrientation.orRight:
+					return x >= X;
+				case TOrientation.orTop:
+					return y <= Y;
+				case TOrientation.orBottom:
+					return y >= Y;
+			}
+			return false;
+		}
+
+		public override bool BelongContour(int x, int y)
+		{
+			switch (Orientation)
+			{
+				case TOrientation.orLeft:
+					return x == X;
+				case TOrientation.orRight:
+					return x == X;
+				case TOrientation.orTop:
+					return y == Y;
+				case TOrientation.orBottom:
+					return y == Y;
+			}
+			return false;
+		}
+
+		public override void Align(THorAlign horAlign, TVertAlign vertAlign, int sizeX, int sizeY)
+		{
+
+		}
+
+		public override void DrawContour(Graphics graph, int height, int width)
+		{
+			switch (Orientation)
+			{
+				case TOrientation.orLeft:
+					graph.DrawRectangle(new Pen(Color.Black, 1),
+				0, 0, X, height);
+					break;
+				case TOrientation.orRight:
+					graph.DrawRectangle(new Pen(Color.Black, 1),
+				X, 0, width, height);
+					break;
+				case TOrientation.orTop:
+					graph.DrawRectangle(new Pen(Color.Black, 1),
+				0, 0, width, Y);
+					break;
+				case TOrientation.orBottom:
+					graph.DrawRectangle(new Pen(Color.Black, 1),
+				0, X, width, height);
+					break;
+			}
+
+			graph.Flush();
+			graph.Save();
+		}
+	}
+
+	public abstract class Field
 	{
 		public TInitialFieldType FieldType { get; set; }
 
@@ -249,34 +313,35 @@ namespace ElDinamicCalc
 		{
 		}
 
-		public void SetField(int ASizeX, int ASizeY, int AStartX, int AStartY, int AHalfX, int AHalfY)
+		public void SetField(int sizeX, int sizeY, int startX, int startY,
+			int halfX, int halfY)
 		{
-			SizeOfX = ASizeX;
-			SizeOfY = ASizeY;
-			StartX = AStartX;
-			StartY = AStartY;
-			HalfX = AHalfX;
-			HalfY = AHalfY;
-			BettaX = ExtMath.Pi/SizeOfX*HalfX/RegionList.DelX;
-			BettaY = ExtMath.Pi/SizeOfY*HalfY/RegionList.DelY;
+			SizeOfX = sizeX;
+			SizeOfY = sizeY;
+			StartX = startX;
+			StartY = startY;
+			HalfX = halfX;
+			HalfY = halfY;
+			BettaX = ExtMath.Pi / SizeOfX * HalfX / RegionList.DelX;
+			BettaY = ExtMath.Pi / SizeOfY * HalfY / RegionList.DelY;
 		}
 
-		public abstract void FillEx(ExtArr Ex);
-		public abstract void FillEy(ExtArr Ey);
-		public abstract void FillEz(ExtArr Ez);
-		public abstract void FillDx(ExtArr Dx);
-		public abstract void FillDy(ExtArr Dy);
-		public abstract void FillDz(ExtArr Dz);
-		public abstract void FillBx(ExtArr Bx);
-		public abstract void FillBy(ExtArr By);
-		public abstract void FillBz(ExtArr Bz);
-		public abstract void FillHx(ExtArr Hx);
-		public abstract void FillHy(ExtArr Hy);
-		public abstract void FillHz(ExtArr Hz);
-		public abstract void FillEzMax(ExtArr Ez);
-		public abstract void FillHyMax(ExtArr Hy);
+		public abstract void FillEx(ExtArr eX);
+		public abstract void FillEy(ExtArr eY);
+		public abstract void FillEz(ExtArr eZ);
+		public abstract void FillDx(ExtArr dX);
+		public abstract void FillDy(ExtArr dY);
+		public abstract void FillDz(ExtArr dZ);
+		public abstract void FillBx(ExtArr bX);
+		public abstract void FillBy(ExtArr bY);
+		public abstract void FillBz(ExtArr bZ);
+		public abstract void FillHx(ExtArr hX);
+		public abstract void FillHy(ExtArr hY);
+		public abstract void FillHz(ExtArr hZ);
+		public abstract void FillEzMax(ExtArr eZ);
+		public abstract void FillHyMax(ExtArr hY);
 
-		public void SaveToStream(MemoryStream Stream)
+		public void SaveToStream(MemoryStream stream)
 		{
 			//Stream.WriteBuffer(FFieldType, SizeOf(FieldType));
 			//Stream.WriteBuffer(FSizeOfX, SizeOf(Integer));
@@ -302,31 +367,31 @@ namespace ElDinamicCalc
 				BettaX = reader.ReadExtended();
 				BettaY = reader.ReadExtended();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return false;
 			}
 			return true;
 		}
 
-		public void Assign(TField2 Source)
+		public void Assign(Field source)
 		{
-			SizeOfX = Source.SizeOfX;
-			SizeOfY = Source.SizeOfY;
-			StartX = Source.StartX;
-			StartY = Source.StartY;
-			HalfX = Source.HalfX;
-			HalfY = Source.HalfY;
-			BettaX = Source.BettaX;
-			BettaY = Source.BettaY;
+			SizeOfX = source.SizeOfX;
+			SizeOfY = source.SizeOfY;
+			StartX = source.StartX;
+			StartY = source.StartY;
+			HalfX = source.HalfX;
+			HalfY = source.HalfY;
+			BettaX = source.BettaX;
+			BettaY = source.BettaY;
 		}
 
-		public void Realloc(ref ExtArr FieldComp)
+		public void Realloc(ref ExtArr fieldComp)
 		{
-			if ((FieldComp.SizeX < SizeOfX) || (FieldComp.SizeY < SizeOfY)
-			    || (FieldComp.StartX > StartX) || (FieldComp.StartY > StartY))
+			if ((fieldComp.SizeX < SizeOfX) || (fieldComp.SizeY < SizeOfY)
+				|| (fieldComp.StartX > StartX) || (fieldComp.StartY > StartY))
 			{
-				FieldComp = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, StartX, StartY);
+				fieldComp = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, StartX, StartY);
 			}
 		}
 	}
@@ -341,19 +406,19 @@ namespace ElDinamicCalc
 		public static decimal CoefG;
 		public static string Describ;
 
-		public static List<TRegion> Regions = new List<TRegion>();
-		public static List<TField2> Fields2 = new List<TField2>();
+		public static List<Region> Regions = new List<Region>();
+		public static List<Field> Fields2 = new List<Field>();
 
 		public static int FileCode = 13031979;
 
 		static RegionList()
 		{
-			FieldList = new List<TField2>();
+			FieldList = new List<Field>();
 			SizeOfX = 201;
 			SizeOfY = 101;
 			DelX = 1e-6m;
 			DelY = 1e-6m;
-			DelT = DelX/PhisCnst.C*0.2m;
+			DelT = DelX / PhisCnst.C * 0.2m;
 			Eps = 1;
 			SetEpsField();
 		}
@@ -361,18 +426,40 @@ namespace ElDinamicCalc
 		public static ExtArr EpsField { get; set; }
 		public static ExtArr Eps2Field { get; set; }
 		public static TBoundsType BoundsType { get; set; }
-		public static List<TField2> FieldList { get; set; }
+		public static List<Field> FieldList { get; set; }
 
-		public static bool LoadFromFile(string FileName)
+		public static byte[] Contour { get; private set; }
+
+		private static byte[] GetRgbValues(Bitmap bmp)
 		{
-			try
-			{
-				using (var reader = new BinaryReader(File.OpenRead(FileName)))
+			// Lock the bitmap's bits. 
+			var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+			var bmpData = bmp.LockBits(rect, ImageLockMode.ReadOnly, bmp.PixelFormat);
+
+			// Get the address of the first line.
+			var ptr = bmpData.Scan0;
+
+			// Declare an array to hold the bytes of the bitmap.
+			var bytes = bmpData.Stride * bmp.Height;
+			var rgbValues = new byte[bytes];
+
+			// Copy the RGB values into the array.
+			Marshal.Copy(ptr, rgbValues, 0, bytes);
+			bmp.UnlockBits(bmpData);
+
+			return rgbValues;
+		}
+
+		public static bool LoadFromFile(string fileName)
+		{
+			using (var reader = new BinaryReader(File.OpenRead(fileName)))
 				{
-					int code = reader.ReadInt32();
+					Regions.Clear();
+					Fields2.Clear();
+					var code = reader.ReadInt32();
 					if (code != FileCode)
 					{
-						throw new Exception(FileName + " is not correct medium file");
+						throw new Exception(fileName + " is not correct medium file");
 					}
 
 					SizeOfX = reader.ReadUInt16();
@@ -381,75 +468,70 @@ namespace ElDinamicCalc
 					DelY = reader.ReadExtended();
 					DelT = reader.ReadExtended();
 					Eps = reader.ReadExtended();
-					BoundsType = (TBoundsType) reader.ReadByte();
+					BoundsType = (TBoundsType)reader.ReadByte();
 					BoundsWidth = reader.ReadInt32();
 					Sigma = reader.ReadExtended();
 					CoefG = reader.ReadExtended();
 
-					byte newCount = reader.ReadByte();
+					int newCount = reader.ReadByte();
+					var bitmap = new Bitmap(SizeOfX, SizeOfY);
+					var gr = Graphics.FromImage(bitmap);
+					gr.FillRectangle(new SolidBrush(Color.White), 0, 0, SizeOfX, SizeOfY);
 					if (newCount != 0)
 					{
-						for (int i = 0; i < newCount; i++)
+						for (var i = 0; i < newCount; i++)
 						{
-							var region = new TRegion();
+							var region = new Region();
 							if (!region.LoadFromStream(reader))
 								return false;
 
 							Regions.Add(region);
+							region.DrawContour(gr, SizeOfX, SizeOfY);
 						}
 					}
+					gr.Flush();
+					gr.Save();
+
+					Contour = GetRgbValues(bitmap);
+
 					SetEpsField();
 
-
-					newCount = reader.ReadByte();
+					newCount = reader.ReadInt32();
 					if (newCount != 0)
 					{
-						for (int i = 0; i < newCount; i++)
+						for (var i = 0; i < newCount; i++)
 						{
-							var FieldType = (TInitialFieldType) reader.ReadByte();
+							var t = reader.ReadByte();
+							var fieldType = (TInitialFieldType)t;
 
-							TField2 Field;
-							switch (FieldType)
+							Field field;
+							switch (fieldType)
 							{
 								case TInitialFieldType.ftSin:
-									Field = new SinField();
+									field = new SinField();
 									break;
 								case TInitialFieldType.ftGauss:
-									Field = new GaussField();
+									field = new GaussField();
 									break;
 								case TInitialFieldType.ftRectSelf:
-									Field = new RectSelfField();
+									field = new RectSelfField();
 									break;
 								case TInitialFieldType.ftRectSelf2:
-									Field = new RectSelfField2();
+									field = new RectSelfField2();
 									break;
 								default:
 									throw new Exception();
 							}
-							Field.LoadFromStream(reader);
-							Fields2.Add(Field);
+							field.LoadFromStream(reader);
+							Fields2.Add(field);
 						}
 					}
-					try
-					{
-						int Len = reader.ReadInt32();
-						if (Len != 0)
-						{
-							char[] tempDescrib = reader.ReadChars(Len);
-							if (tempDescrib != null)
-								Describ = Convert.ToString(tempDescrib);
-						}
-					}
-					catch (Exception e)
-					{
-						throw;
-					}
+					var len = reader.ReadInt32();
+					if (len == 0) return true;
+					var tempDescrib = reader.ReadChars(len);
+					Describ = Convert.ToString(tempDescrib);
 				}
-			}
-			catch (Exception e)
-			{
-				throw;
-			}
+			
 			return true;
 		}
 
@@ -458,11 +540,11 @@ namespace ElDinamicCalc
 			EpsField = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, 0, 0);
 			Eps2Field = new ExtArr(SizeOfX, SizeOfY, 0, 0, 0, 0, 0, 0);
 
-			for (int i = 0; i < SizeOfX; i++)
-				for (int j = 0; j < SizeOfY; j++)
+			for (var i = 0; i < SizeOfX; i++)
+				for (var j = 0; j < SizeOfY; j++)
 				{
 					EpsField[i, j] = Eps;
-					for (int k = 0; k < Regions.Count; k++)
+					for (var k = 0; k < Regions.Count; k++)
 					{
 						if (Regions[k].Figure.Belong(i, j))
 						{
@@ -471,91 +553,89 @@ namespace ElDinamicCalc
 							break;
 						}
 					}
-					if (BoundsType == TBoundsType.btMetall)
-					{
-						if (i == 0 || i == SizeOfX || j == 0 || j == SizeOfY)
-							EpsField[i, j] = 0;
-					}
+					if (BoundsType != TBoundsType.btMetall) continue;
+					if (i == 0 || i == SizeOfX || j == 0 || j == SizeOfY)
+						EpsField[i, j] = 0;
 				}
 		}
 	}
 
-	public class RectSelfField2 : TField2
+	public class RectSelfField2 : Field
 	{
-		public override void FillEx(ExtArr Ex)
+		public override void FillEx(ExtArr eX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEy(ExtArr Ey)
+		public override void FillEy(ExtArr eY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEz(ExtArr Ez)
+		public override void FillEz(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDx(ExtArr Dx)
+		public override void FillDx(ExtArr dX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDy(ExtArr Dy)
+		public override void FillDy(ExtArr dY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDz(ExtArr Dz)
+		public override void FillDz(ExtArr dZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBx(ExtArr Bx)
+		public override void FillBx(ExtArr bX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBy(ExtArr By)
+		public override void FillBy(ExtArr bY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBz(ExtArr Bz)
+		public override void FillBz(ExtArr bZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHx(ExtArr Hx)
+		public override void FillHx(ExtArr hX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHy(ExtArr Hy)
+		public override void FillHy(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHz(ExtArr Hz)
+		public override void FillHz(ExtArr hZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEzMax(ExtArr Ez)
+		public override void FillEzMax(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHyMax(ExtArr Hy)
+		public override void FillHyMax(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 	}
 
-	public class RectSelfField : TField2
+	public class RectSelfField : Field
 	{
-		public TRegion Rect { get; set; }
+		public Region Rect { get; set; }
 
 		public int RectNum { get; set; }
 
@@ -616,15 +696,15 @@ namespace ElDinamicCalc
 					Rect = RegionList.Regions[RectNum];
 					DelY = RegionList.DelY;
 					Eps = Rect.Eps;
-					EpsA = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
-						Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
+					EpsA = RegionList.EpsField[Rect.Figure.X + Rect.Figure.Param1 % 2,
+						Rect.Figure.Y + Rect.Figure.Param2 + 2];
 
 					Sym = (EpsA == EpsB);
-					Size = Rect.Figure.Param2*DelY/2;
-					Betta = ExtMath.Sqrt(Eps*ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
-					ZeroPoint = Rect.Figure.CoordY + Rect.Figure.Param2/2;
-					Odd = (ModeNum + 2)%2 == 1;
-					One = Convert.ToInt32(Odd)*2 - 1; //+-1
+					Size = Rect.Figure.Param2 * DelY / 2;
+					Betta = ExtMath.Sqrt(Eps * ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
+					ZeroPoint = Rect.Figure.Y + Rect.Figure.Param2 / 2;
+					Odd = (ModeNum + 2) % 2 == 1;
+					One = Convert.ToInt32(Odd) * 2 - 1; //+-1
 				}
 			}
 			catch (Exception)
@@ -637,22 +717,21 @@ namespace ElDinamicCalc
 
 		public decimal Bell(int i)
 		{
-			return ExtMath.Sqrt(ExtMath.Sin(ExtMath.Pi*(i - StartX)/SizeOfX));
+			return ExtMath.Sqrt(ExtMath.Sin(ExtMath.Pi * (i - StartX) / SizeOfX));
 		}
 
 		public void CalculateParams()
 		{
-			decimal LeftRoot, RightRoot, Root;
-			Func<decimal, decimal> Funct = null;
-			LeftRoot = RightRoot = Root = 0;
+			decimal leftRoot, rightRoot, root;
+			Func<decimal, decimal> funct;
+			
+			Odd = (ModeNum + 2) % 2 == 1;
+			One = Convert.ToInt32(Odd) * 2 - 1; //+-1
 
-			Odd = (ModeNum + 2)%2 == 1;
-			One = Convert.ToInt32(Odd)*2 - 1; //+-1
-
-			EpsA = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
-				Rect.Figure.CoordY - 1];
-			EpsB = RegionList.EpsField[Rect.Figure.CoordX + Rect.Figure.Param1%2,
-				Rect.Figure.CoordY + Rect.Figure.Param2 + 2];
+			EpsA = RegionList.EpsField[Rect.Figure.X + Rect.Figure.Param1 % 2,
+				Rect.Figure.Y - 1];
+			EpsB = RegionList.EpsField[Rect.Figure.X + Rect.Figure.Param1 % 2,
+				Rect.Figure.Y + Rect.Figure.Param2 + 2];
 
 			Sym = EpsA == EpsB;
 
@@ -669,32 +748,32 @@ namespace ElDinamicCalc
 			{
 				if (Odd)
 				{
-					Funct = Regions.FTan;
+					funct = Regions.FTan;
 				}
 				else
 				{
-					Funct = Regions.FCotan;
+					funct = Regions.FCotan;
 				}
 
-				LeftRoot = (ModeNum - 1.5m)*ExtMath.Pi/Size + 0.1m;
-				if (LeftRoot < 0)
+				leftRoot = (ModeNum - 1.5m) * ExtMath.Pi / Size + 0.1m;
+				if (leftRoot < 0)
 				{
-					LeftRoot = 0.1m;
+					leftRoot = 0.1m;
 				}
 
-				RightRoot = (ModeNum - 0.5m)*ExtMath.Pi/Size - 0.1m;
-				Root = (LeftRoot + RightRoot)/2;
+				rightRoot = (ModeNum - 0.5m) * ExtMath.Pi / Size - 0.1m;
+				root = (leftRoot + rightRoot) / 2;
 			}
 			else
 			{
-				Funct = Regions.FSelfMode;
-				FindLeftRight(ref LeftRoot, ref RightRoot, ref Root);
+				funct = Regions.FSelfMode;
+				FindLeftRight(out leftRoot, out rightRoot, out root);
 			}
 
-			if (!ExtMath.FindRoot(Funct, LeftRoot, RightRoot, Q, 0.1m, 30000)
-			    || Math.Abs(Q) < 10)
+			if (!ExtMath.FindRoot(funct, leftRoot, rightRoot, Q, 0.1m, 30000)
+				|| Math.Abs(Q) < 10)
 			{
-				if (!ExtMath.Newton(Funct, Root, Q, 0.0001m, 30000) || Math.Abs(Q) < 10)
+				if (!ExtMath.Newton(funct, root, Q, 0.0001m, 30000) || Math.Abs(Q) < 10)
 				{
 					throw new Exception("Невозможно задать моду с такими параметрами");
 				}
@@ -704,13 +783,13 @@ namespace ElDinamicCalc
 			{
 				if (Odd)
 				{
-					P = -Q*ExtMath.Tan(Q*Size);
+					P = -Q * ExtMath.Tan(Q * Size);
 					A = PhisCnst.Ez0;
 					B = 0;
 				}
 				else
 				{
-					P = -Q*(1/ExtMath.Tan(Q*Size));
+					P = -Q * (1 / ExtMath.Tan(Q * Size));
 					A = 0;
 					B = PhisCnst.Ez0;
 				}
@@ -721,10 +800,10 @@ namespace ElDinamicCalc
 				P = Regions.SelfModeP(Q);
 				R = Regions.SelfModeR(Q);
 
-				if (Q + P*ExtMath.Tan(Q*Size) != 0)
+				if (Q + P * ExtMath.Tan(Q * Size) != 0)
 				{
-					A = PhisCnst.Ez0/((P - Q*ExtMath.Tan(Q*Size))
-					                  /(Q + P*ExtMath.Tan(Q*Size)) + 1);
+					A = PhisCnst.Ez0 / ((P - Q * ExtMath.Tan(Q * Size))
+									  / (Q + P * ExtMath.Tan(Q * Size)) + 1);
 				}
 				else
 				{
@@ -732,25 +811,25 @@ namespace ElDinamicCalc
 				}
 				B = PhisCnst.Eps0 - A;
 			}
-			Betta = ExtMath.Sqrt(Eps*ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
-			SizeOfX = (int) Math.Round(HalfX/Betta*ExtMath.Pi/RegionList.DelX);
+			Betta = ExtMath.Sqrt(Eps * ExtMath.Pow(K, 2) - ExtMath.Pow(Q, 2));
+			SizeOfX = (int)Math.Round(HalfX / Betta * ExtMath.Pi / RegionList.DelX);
 		}
 
-		public void FindLeftRight(ref decimal leftRoot, ref decimal rightRoot,
-			ref decimal root)
+		public void FindLeftRight(out decimal leftRoot, out decimal rightRoot,
+			out decimal root)
 		{
-			leftRoot = (ModeNum - 1.5m)*ExtMath.Pi/2/Size + 0.1m;
+			leftRoot = (ModeNum - 1.5m) * ExtMath.Pi / 2 / Size + 0.1m;
 			if (leftRoot < 0)
 			{
 				leftRoot = 0.1m;
 			}
-			rightRoot = (ModeNum - 0.5m)*ExtMath.Pi/2/Size - 0.1m;
+			rightRoot = (ModeNum - 0.5m) * ExtMath.Pi / 2 / Size - 0.1m;
 
-			decimal assim = K*ExtMath.Sqrt((Eps - EpsA)*(Eps - EpsB)/(2*Eps - EpsA - EpsB));
+			decimal assim = K * ExtMath.Sqrt((Eps - EpsA) * (Eps - EpsB) / (2 * Eps - EpsA - EpsB));
 
 			if (assim > leftRoot && assim < rightRoot)
 			{
-				if (ExtMath.Tan(2*Size*assim) < 0)
+				if (ExtMath.Tan(2 * Size * assim) < 0)
 				{
 					rightRoot = assim - 0.1m;
 				}
@@ -759,90 +838,90 @@ namespace ElDinamicCalc
 					leftRoot = assim + 0.1m;
 				}
 			}
-			if (rightRoot > ExtMath.Sqrt(Eps - EpsA)*K)
+			if (rightRoot > ExtMath.Sqrt(Eps - EpsA) * K)
 			{
-				rightRoot = ExtMath.Sqrt(Eps - EpsA)*K - 0.1m;
+				rightRoot = ExtMath.Sqrt(Eps - EpsA) * K - 0.1m;
 			}
-			if (rightRoot > ExtMath.Sqrt(Eps - EpsB)*K)
+			if (rightRoot > ExtMath.Sqrt(Eps - EpsB) * K)
 			{
-				rightRoot = ExtMath.Sqrt(Eps - EpsB)*K - 0.1m;
+				rightRoot = ExtMath.Sqrt(Eps - EpsB) * K - 0.1m;
 			}
 
-			root = (leftRoot + rightRoot)/2;
+			root = (leftRoot + rightRoot) / 2;
 		}
 
-		public override void FillEx(ExtArr Ex)
+		public override void FillEx(ExtArr eX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEy(ExtArr Ey)
+		public override void FillEy(ExtArr eY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEz(ExtArr Ez)
+		public override void FillEz(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDx(ExtArr Dx)
+		public override void FillDx(ExtArr dX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDy(ExtArr Dy)
+		public override void FillDy(ExtArr dY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDz(ExtArr Dz)
+		public override void FillDz(ExtArr dZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBx(ExtArr Bx)
+		public override void FillBx(ExtArr bX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBy(ExtArr By)
+		public override void FillBy(ExtArr bY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBz(ExtArr Bz)
+		public override void FillBz(ExtArr bZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHx(ExtArr Hx)
+		public override void FillHx(ExtArr hX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHy(ExtArr Hy)
+		public override void FillHy(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHz(ExtArr Hz)
+		public override void FillHz(ExtArr hZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEzMax(ExtArr Ez)
+		public override void FillEzMax(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHyMax(ExtArr Hy)
+		public override void FillHyMax(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 	}
 
-	public class GaussField : TField2
+	public class GaussField : Field
 	{
 		public decimal ExpY { get; set; }
 
@@ -859,145 +938,145 @@ namespace ElDinamicCalc
 			return res;
 		}
 
-		public override void FillEx(ExtArr Ex)
+		public override void FillEx(ExtArr eX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEy(ExtArr Ey)
+		public override void FillEy(ExtArr eY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEz(ExtArr Ez)
+		public override void FillEz(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDx(ExtArr Dx)
+		public override void FillDx(ExtArr dX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDy(ExtArr Dy)
+		public override void FillDy(ExtArr dY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDz(ExtArr Dz)
+		public override void FillDz(ExtArr dZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBx(ExtArr Bx)
+		public override void FillBx(ExtArr bX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBy(ExtArr By)
+		public override void FillBy(ExtArr bY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBz(ExtArr Bz)
+		public override void FillBz(ExtArr bZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHx(ExtArr Hx)
+		public override void FillHx(ExtArr hX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHy(ExtArr Hy)
+		public override void FillHy(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHz(ExtArr Hz)
+		public override void FillHz(ExtArr hZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEzMax(ExtArr Ez)
+		public override void FillEzMax(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHyMax(ExtArr Hy)
+		public override void FillHyMax(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 	}
 
-	public class SinField : TField2
+	public class SinField : Field
 	{
-		public override void FillEx(ExtArr Ex)
+		public override void FillEx(ExtArr eX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEy(ExtArr Ey)
+		public override void FillEy(ExtArr eY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEz(ExtArr Ez)
+		public override void FillEz(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDx(ExtArr Dx)
+		public override void FillDx(ExtArr dX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDy(ExtArr Dy)
+		public override void FillDy(ExtArr dY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillDz(ExtArr Dz)
+		public override void FillDz(ExtArr dZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBx(ExtArr Bx)
+		public override void FillBx(ExtArr bX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBy(ExtArr By)
+		public override void FillBy(ExtArr bY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillBz(ExtArr Bz)
+		public override void FillBz(ExtArr bZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHx(ExtArr Hx)
+		public override void FillHx(ExtArr hX)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHy(ExtArr Hy)
+		public override void FillHy(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHz(ExtArr Hz)
+		public override void FillHz(ExtArr hZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillEzMax(ExtArr Ez)
+		public override void FillEzMax(ExtArr eZ)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void FillHyMax(ExtArr Hy)
+		public override void FillHyMax(ExtArr hY)
 		{
 			throw new NotImplementedException();
 		}
@@ -1082,28 +1161,28 @@ namespace ElDinamicCalc
 
 		public static decimal FTan(decimal X)
 		{
-			return X*ExtMath.Tan(CoefA*X) - ExtMath.Sqrt(Coef1 - Coef2*ExtMath.Pow(X, 2));
+			return X * ExtMath.Tan(CoefA * X) - ExtMath.Sqrt(Coef1 - Coef2 * ExtMath.Pow(X, 2));
 		}
 
 		public static decimal FCotan(decimal X)
 		{
-			return -X*(1/ExtMath.Tan(CoefA*X)) - ExtMath.Sqrt(Coef1 - Coef2*ExtMath.Pow(X, 2));
+			return -X * (1 / ExtMath.Tan(CoefA * X)) - ExtMath.Sqrt(Coef1 - Coef2 * ExtMath.Pow(X, 2));
 		}
 
 		public static decimal SelfModeR(decimal Q)
 		{
-			return ExtMath.Sqrt(CoefR1 - CoefR2*ExtMath.Pow(Q, 2));
+			return ExtMath.Sqrt(CoefR1 - CoefR2 * ExtMath.Pow(Q, 2));
 		}
 
 		public static decimal SelfModeP(decimal Q)
 		{
-			return ExtMath.Sqrt(CoefP1 - CoefP2*ExtMath.Pow(Q, 2));
+			return ExtMath.Sqrt(CoefP1 - CoefP2 * ExtMath.Pow(Q, 2));
 		}
 
 		public static decimal FSelfMode(decimal X)
 		{
-			return ExtMath.Tan(2*X*CoefA) - X*(SelfModeP(X) + SelfModeR(X))
-			       /(ExtMath.Pow(X, 2) - SelfModeP(X)*SelfModeR(X));
+			return ExtMath.Tan(2 * X * CoefA) - X * (SelfModeP(X) + SelfModeR(X))
+				   / (ExtMath.Pow(X, 2) - SelfModeP(X) * SelfModeR(X));
 		}
 	}
 }
