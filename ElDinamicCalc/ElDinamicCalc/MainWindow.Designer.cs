@@ -207,7 +207,7 @@
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainWindow";
-			this.Text = "MainWindowcs";
+			this.Text = "ElDinamicCalc";
 			this.ResizeEnd += new System.EventHandler(this.MainWindow_ResizeEnd);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();

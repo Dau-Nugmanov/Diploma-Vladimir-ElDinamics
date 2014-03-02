@@ -10,9 +10,9 @@ namespace ElDinamicCalc
 		public static readonly decimal DelY0 = DelX0;
 		public static readonly decimal Lx0 = DelX0*SizeX0;
 		public static readonly decimal Ly0 = DelY0*SizeY0;
-		public static readonly decimal DelT0 = DelX0/9/PhisCnst.C;
+		public static readonly decimal DelT0 = DelX0/9/PhisicalConstants.C;
 		public static readonly decimal Ez0 = 100;
-		public static readonly decimal Hz0 = 100/PhisCnst.Z0;
+		public static readonly decimal Hz0 = 100/PhisicalConstants.Z0;
 		public static readonly int BoundWidth0 = 30;
 		public static readonly decimal G = 2;
 		public static readonly int IntX = 100;
@@ -39,11 +39,11 @@ namespace ElDinamicCalc
 		static CommonParams()
 		{
 			BoundWidth = BoundWidth0;
-			SigmaX = 2*ExtMath.Pi*PhisCnst.Eps0/1000;
-			SigmaY = 2*ExtMath.Pi*PhisCnst.Eps0/1000;
+			SigmaX = 2*ExtMath.Pi*PhisicalConstants.Eps0/1000;
+			SigmaY = 2*ExtMath.Pi*PhisicalConstants.Eps0/1000;
 			SigmaZ = 0;
-			SigmaXS = SigmaX*PhisCnst.Mu0/PhisCnst.Eps0;
-			SigmaYS = SigmaY*PhisCnst.Mu0/PhisCnst.Eps0;
+			SigmaXS = SigmaX*PhisicalConstants.Mu0/PhisicalConstants.Eps0;
+			SigmaYS = SigmaY*PhisicalConstants.Mu0/PhisicalConstants.Eps0;
 			SigmaZS = 0;
 			CoefG = G;
 			SizeX = SizeX0;
@@ -55,8 +55,8 @@ namespace ElDinamicCalc
 			DelY = DelY0;
 			DtDivDx = DelT/DelX;
 			DtDivDy = DelT/DelY;
-			ModeType = ModeType.mtTE;
-			InitialWave = InitialWave.iwSin;
+			ModeType = ModeType.TE;
+			InitialWave = InitialWave.Sin;
 			InitialX1 = 50;
 			InitialX2 = 150;
 			InitialY1 = 0;
@@ -108,43 +108,5 @@ namespace ElDinamicCalc
 
 		public static decimal SigmaX { get; set; }
 		public static bool IntEnable { get; set; }
-	}
-
-	public enum WorkMode
-	{
-		SingleThread,
-		MultiThread
-	}
-
-	public class DrawInfo
-	{
-		public DrawInfo(byte[] value, int step)
-		{
-			Value = value;
-			Step = step;
-		}
-
-		public byte[] Value { get; private set; }
-		public int Step { get; private set; }
-	}
-
-	public enum ModeType
-	{
-		mtTE,
-		mtTM
-	}
-
-	public enum FieldType
-	{
-		ftEType,
-		ftDType,
-		ftHType,
-		ftBType
-	}
-
-	public enum InitialWave
-	{
-		iwSin,
-		iwGauss
 	}
 }

@@ -6,9 +6,9 @@ namespace ElDinamicCalc
 {
 	public class Region
 	{
-		public Figure Figure;
-		public TMatterType MatterType;
+		public Figure Figure { get; set; }
 
+		public MatterType MatterType { get; set; }
 
 		public decimal Eps { get; set; }
 
@@ -18,31 +18,15 @@ namespace ElDinamicCalc
 		{
 			Figure.DrawContour(graph, height, width);
 		}
-		public Figure CreateFigure(TContourShape shape)
-		{
-			switch (shape)
-			{
-				case TContourShape.shRect:
-					return new Rect();
-				case TContourShape.shCircle:
-					return new Circle();
-				case TContourShape.shEllipse:
-					return new Ellipse();
-				case TContourShape.shHalfSpace:
-					return new HalfSpace();
-				default:
-					throw new NotImplementedException();
-			}
-		}
-
+		
 		public bool LoadFromStream(BinaryReader reader)
 		{
 			try
 			{
-				MatterType = (TMatterType)reader.ReadByte();
+				MatterType = (MatterType)reader.ReadByte();
 				Eps = reader.ReadExtended();
 				Eps2 = reader.ReadExtended();
-				var shape = (TContourShape)reader.ReadByte();
+				var shape = (ContourShape)reader.ReadByte();
 				Figure = CreateFigure(shape);
 				Figure.X = reader.ReadInt32();
 				Figure.Y = reader.ReadInt32();
@@ -57,6 +41,23 @@ namespace ElDinamicCalc
 			}
 
 			return true;
+		}
+
+		private Figure CreateFigure(ContourShape shape)
+		{
+			switch (shape)
+			{
+				case ContourShape.Rect:
+					return new Rect();
+				case ContourShape.Circle:
+					return new Circle();
+				case ContourShape.Ellipse:
+					return new Ellipse();
+				case ContourShape.HalfSpace:
+					return new HalfSpace();
+				default:
+					throw new NotImplementedException();
+			}
 		}
 	}
 }

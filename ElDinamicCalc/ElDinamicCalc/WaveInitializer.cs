@@ -1,6 +1,6 @@
 ﻿namespace ElDinamicCalc
 {
-	public class Initial
+	public class WaveInitializer
 	{
 		public static void PlaneWaveTE()
 		{
@@ -9,25 +9,25 @@
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						CommonParams.Ez[i, j] = PhisCnst.Ez0*
+						CommonParams.Ez[i, j] = PhisicalConstants.Ez0*
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
 						CommonParams.Dz[i, j] =
-							CommonParams.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+							CommonParams.Ez[i, j]*PhisicalConstants.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						CommonParams.Hy[i, j] = PhisCnst.Hz0
+						CommonParams.Hy[i, j] = PhisicalConstants.Hz0
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
-						CommonParams.By[i, j] = CommonParams.Hy[i, j]*PhisCnst.Mu0;
+						CommonParams.By[i, j] = CommonParams.Hy[i, j]*PhisicalConstants.Mu0;
 					}
 				}
 		}
@@ -39,25 +39,25 @@
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						CommonParams.Ey[i, j] = PhisCnst.Ez0
+						CommonParams.Ey[i, j] = PhisicalConstants.Ez0
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
 						                   *
 						                   ExtMath.Cos(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
-						CommonParams.Dy[i, j] = CommonParams.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+						CommonParams.Dy[i, j] = CommonParams.Ez[i, j]*PhisicalConstants.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						CommonParams.Hz[i, j] = PhisCnst.Hz0
+						CommonParams.Hz[i, j] = PhisicalConstants.Hz0
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
 						                   *
 						                   ExtMath.Cos(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
-						CommonParams.Bz[i, j] = CommonParams.Hy[i, j]*PhisCnst.Mu0;
+						CommonParams.Bz[i, j] = CommonParams.Hy[i, j]*PhisicalConstants.Mu0;
 					}
 				}
 		}
@@ -69,7 +69,7 @@
 				{
 					if ((i + j + 2)%2 == 0)
 					{
-						CommonParams.Ez[i, j] = PhisCnst.Ez0
+						CommonParams.Ez[i, j] = PhisicalConstants.Ez0
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
@@ -78,11 +78,11 @@
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1))
 						                   *ExtMath.Exp(-ExtMath.Pow(CommonParams.ExpX*(i - (CommonParams.InitialX1 + CommonParams.InitialX2)/2), 2)
 						                                - ExtMath.Pow(CommonParams.ExpY*(j - (CommonParams.InitialY1 + CommonParams.InitialY2)/2), 2));
-						CommonParams.Dz[i, j] = CommonParams.Ez[i, j]*PhisCnst.Eps0*RegionList.Eps;
+						CommonParams.Dz[i, j] = CommonParams.Ez[i, j]*PhisicalConstants.Eps0*RegionList.Eps;
 					}
 					else
 					{
-						CommonParams.Hy[i, j] = PhisCnst.Hz0
+						CommonParams.Hy[i, j] = PhisicalConstants.Hz0
 						                   *
 						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
 						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
@@ -91,7 +91,7 @@
 						                               (CommonParams.InitialY2 - CommonParams.InitialY1))
 						                   *ExtMath.Exp(-ExtMath.Pow(CommonParams.ExpX*(i - (CommonParams.InitialX1 + CommonParams.InitialX2)/2), 2)
 						                                - ExtMath.Pow(CommonParams.ExpY*(j - (CommonParams.InitialY1 + CommonParams.InitialY2)/2), 2));
-						CommonParams.By[i, j] = CommonParams.Hy[i, j]*PhisCnst.Mu0;
+						CommonParams.By[i, j] = CommonParams.Hy[i, j]*PhisicalConstants.Mu0;
 					}
 				}
 		}

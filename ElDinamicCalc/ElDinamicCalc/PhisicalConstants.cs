@@ -3,7 +3,7 @@
 	/// <summary>
 	///     {Модуль, содержащий основные физические константы}
 	/// </summary>
-	public class PhisCnst
+	public class PhisicalConstants
 	{
 		public const decimal Pi = ExtMath.Pi;
 		public const decimal Eps0 = 8.85e-12m;

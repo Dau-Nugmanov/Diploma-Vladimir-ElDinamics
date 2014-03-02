@@ -44,18 +44,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\BoundsType.cs" />
+    <Compile Include="Figures\Circle.cs" />
     <Compile Include="CommonParams.cs" />
+    <Compile Include="Enums\ContourShape.cs" />
+    <Compile Include="DrawInfo.cs" />
+    <Compile Include="Figures\Ellipse.cs" />
     <Compile Include="ExtArr.cs" />
     <Compile Include="ExtendedConverter.cs" />
     <Compile Include="ExtMath.cs" />
-    <Compile Include="Initial.cs" />
+    <Compile Include="Fields\Field.cs" />
+    <Compile Include="Enums\FieldType.cs" />
+    <Compile Include="Figures\Figure.cs" />
+    <Compile Include="Fields\GaussField.cs" />
+    <Compile Include="Figures\HalfSpace.cs" />
+    <Compile Include="Enums\HorAlign.cs" />
+    <Compile Include="Enums\InitialFieldType.cs" />
+    <Compile Include="MainSettings.cs" />
+    <Compile Include="Enums\MatterType.cs" />
+    <Compile Include="Figures\Rect.cs" />
+    <Compile Include="Fields\RectSelfField.cs" />
+    <Compile Include="Fields\RectSelfField2.cs" />
+    <Compile Include="RegionList.cs" />
+    <Compile Include="Fields\SinField.cs" />
+    <Compile Include="Enums\VertAlign.cs" />
+    <Compile Include="WaveInitializer.cs" />
+    <Compile Include="Enums\InitialWave.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="PhisCnst.cs" />
+    <Compile Include="Enums\ModeType.cs" />
+    <Compile Include="Enums\Orientation.cs" />
+    <Compile Include="PhisicalConstants.cs" />
     <Compile Include="BaseAlgorithm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +91,7 @@
     </Compile>
     <Compile Include="Region.cs" />
     <Compile Include="MainThread.cs" />
+    <Compile Include="Enums\WorkMode.cs" />
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

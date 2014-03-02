@@ -6,14 +6,6 @@ using System.Threading;
 
 namespace ElDinamicCalc
 {
-	public class MainSettings
-	{
-		public decimal DelX = CommonParams.DelX0;
-		public decimal DelY = CommonParams.DelY0;
-		public decimal DelT = CommonParams.DelT0;
-		public int PauseStepNum = 0;
-	}
-
 	public class MainThread
 	{
 		public MainThread(string filePath)
@@ -52,26 +44,26 @@ namespace ElDinamicCalc
 			{
 				switch (CommonParams.ModeType)
 				{
-					case ModeType.mtTE:
+					case ModeType.TE:
 						switch (CommonParams.InitialWave)
 						{
-							case InitialWave.iwSin:
-								Initial.PlaneWaveTE();
+							case InitialWave.Sin:
+								WaveInitializer.PlaneWaveTE();
 								break;
-							case InitialWave.iwGauss:
-								Initial.GaussTE();
+							case InitialWave.Gauss:
+								WaveInitializer.GaussTE();
 								break;
 						}
 						break;
 
-					case ModeType.mtTM:
+					case ModeType.TM:
 						switch (CommonParams.InitialWave)
 						{
-							case InitialWave.iwSin:
-								Initial.PlaneWaveTM();
+							case InitialWave.Sin:
+								WaveInitializer.PlaneWaveTM();
 								break;
-							case InitialWave.iwGauss:
-								Initial.GaussTM();
+							case InitialWave.Gauss:
+								WaveInitializer.GaussTM();
 								break;
 						}
 						break;
@@ -79,7 +71,7 @@ namespace ElDinamicCalc
 			}
 			else
 			{
-				Initial.WaveFromRegionList();
+				WaveInitializer.WaveFromRegionList();
 			}
 		}
 		private readonly BaseAlgorithm _algorithm = new BaseAlgorithm();
@@ -98,35 +90,7 @@ namespace ElDinamicCalc
 
 		private void MakeCalc()
 		{
-			for (var i = 0; i < CommonParams.SizeX; i++)
-				for (var j = 0; j < CommonParams.SizeY; j++)
-				{
-					if (((i + j + 2) % 2 == 0) && ((_algorithm.Step + 2) % 2 == 0))
-					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.mtTE:
-								_algorithm.ElectrTE(i, j);
-								break;
-							case ModeType.mtTM:
-								_algorithm.ElectrTM(i, j);
-								break;
-						}
-					}
-					if (((i + j + 2) % 2 == 1) && ((_algorithm.Step + 2) % 2 == 1))
-					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.mtTE:
-								_algorithm.MagnTE(i, j);
-								break;
-							case ModeType.mtTM:
-								_algorithm.MagnTM(i, j);
-								break;
-						}
-					}
-				}
-			_algorithm.Next();
+			_algorithm.DoStep();
 			CommonParams.DrawQueue.Enqueue(
 				new DrawInfo(GetBytes(CommonParams.SizeX, CommonParams.SizeY, CommonParams.Ez),
 				_algorithm.Step));
@@ -137,8 +101,8 @@ namespace ElDinamicCalc
 		}
 
 		private Color[] _colors;
-		private readonly decimal _max = CommonParams.BlackValue * GetMaxValue(FieldType.ftEType);
-		private readonly decimal _min = CommonParams.WhiteValue * GetMaxValue(FieldType.ftEType);
+		private readonly decimal _max = CommonParams.BlackValue * GetMaxValue(FieldType.EType);
+		private readonly decimal _min = CommonParams.WhiteValue * GetMaxValue(FieldType.EType);
 		private static readonly int SourceStride = CommonParams.SizeX * SourcePixelSize;
 		private const int SourcePixelSize = 4;
 		private static readonly int Bytes = Math.Abs(SourceStride) * CommonParams.SizeY;
@@ -236,14 +200,14 @@ namespace ElDinamicCalc
 		{
 			switch (fieldType)
 			{
-				case FieldType.ftEType:
-					return PhisCnst.Ez0;
-				case FieldType.ftDType:
-					return PhisCnst.Ez0 * PhisCnst.Eps0 * RegionList.Eps;
-				case FieldType.ftHType:
-					return PhisCnst.Hz0;
-				case FieldType.ftBType:
-					return PhisCnst.Hz0 * PhisCnst.Mu0;
+				case FieldType.EType:
+					return PhisicalConstants.Ez0;
+				case FieldType.DType:
+					return PhisicalConstants.Ez0 * PhisicalConstants.Eps0 * RegionList.Eps;
+				case FieldType.HType:
+					return PhisicalConstants.Hz0;
+				case FieldType.BType:
+					return PhisicalConstants.Hz0 * PhisicalConstants.Mu0;
 			}
 			return 0.1m;
 		}
