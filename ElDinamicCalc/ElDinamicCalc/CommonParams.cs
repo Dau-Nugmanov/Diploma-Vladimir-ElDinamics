@@ -19,8 +19,7 @@ namespace ElDinamicCalc
 
 		public static decimal DelX, DelY, DelT, DtDivDx, DtDivDy;
 		public static int SizeX, SizeY, Tn, BoundWidth, PauseStepNum;
-		public static ModeType ModeType;
-
+		
 		public static ExtArr Ex,Ey,Ez,Dx,Dy,Dz,Hx,Hy,Hz,Bx,By,Bz,ExN,EyN,EzN,DxN,DyN,DzN,HxN,HyN,HzN,BxN,ByN,BzN;
 
 		public static ExtArr Exy,Exz,Eyx,Eyz,Ezx,Ezy,Hxy,Hxz,Hyx,Hyz,Hzx,Hzy,ExyN,ExzN,
@@ -55,7 +54,6 @@ namespace ElDinamicCalc
 			DelY = DelY0;
 			DtDivDx = DelT/DelX;
 			DtDivDy = DelT/DelY;
-			ModeType = ModeType.TE;
 			InitialWave = InitialWave.Sin;
 			InitialX1 = 50;
 			InitialX2 = 150;

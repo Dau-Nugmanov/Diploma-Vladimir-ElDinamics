@@ -35,27 +35,11 @@
 				{
 					if (((i + j + 2) % 2 == 0) && ((StepNumber + 2) % 2 == 0))
 					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.TE:
-								ElectrTE(i, j);
-								break;
-							case ModeType.TM:
-								ElectrTM(i, j);
-								break;
-						}
+						ElectrTE(i, j);
 					}
 					if (((i + j + 2) % 2 == 1) && ((StepNumber + 2) % 2 == 1))
 					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.TE:
-								MagnTE(i, j);
-								break;
-							case ModeType.TM:
-								MagnTM(i, j);
-								break;
-						}
+						MagnTE(i, j);
 					}
 				}
 			Next();
@@ -255,7 +239,11 @@
 			return GetSigmaZ(i, j)*PhisicalConstants.MuDivEps;
 		}
 
-
+		/// <summary>
+		/// Вычисляет электрическую составляющую в точке (i;j)
+		/// </summary>
+		/// <param name="i"></param>
+		/// <param name="j"></param>
 		private void ElectrTE(int i, int j)
 		{
 			var eps = RegionList.EpsField[i, j]*PhisicalConstants.Eps0 + RegionList.Eps2Field[i, j]
@@ -267,11 +255,11 @@
 			else
 				CommonParams.EzN[i, j] = 0;
 		}
-
-		private void ElectrTM(int i, int j)
-		{
-		}
-
+		/// <summary>
+		/// Вычисляет магнитную составляющую в точке (i;j)
+		/// </summary>
+		/// <param name="i"></param>
+		/// <param name="j"></param>
 		private void MagnTE(int i, int j)
 		{
 			CommonParams.BxN[i, j] = CommonParams.Bx[i, j] - CommonParams.DtDivDy*(CommonParams.Ez[i, j + 1] - CommonParams.Ez[i, j - 1]);
@@ -280,10 +268,9 @@
 			CommonParams.HyN[i, j] = CommonParams.ByN[i, j]/PhisicalConstants.Mu0;
 		}
 
-		private void MagnTM(int i, int j)
-		{
-		}
-
+		/// <summary>
+		/// Граничное условие - металл
+		/// </summary>
 		private void MetallABC()
 		{
 			for (int i = 0; i < _sizeX; i++)
@@ -324,32 +311,11 @@
 				{
 					if ((i < 0) || (i >= _sizeX) || (j < 0) || (j >= _sizeY))
 					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.TE:
-								CommonParams.EzxN[i, j] = CommonParams.Ezx[i, j]*CommonParams.SigmaXCoeffs[i, j]
-								                     + CommonParams.OneDivSigmaX[i, j]*(GetHy(i + 1, j) - GetHy(i - 1, j))
-								                     *(1 - CommonParams.SigmaXCoeffs[i, j]);
-								CommonParams.EzyN[i, j] = CommonParams.Ezy[i, j]*CommonParams.SigmaXCoeffs[i, j] - CommonParams.OneDivSigmaY[i, j]
-								                     *(GetHx(i, j + 1) - GetHx(i, j - 1))*(1 - CommonParams.SigmaYCoeffs[i, j]);
-								break;
-
-							case ModeType.TM:
-								CommonParams.ExyN[i, j] = CommonParams.Exy[i, j]*ExtMath.Log(-GetSigmaY(i, j)
-								                                                   *CommonParams.DelT/PhisicalConstants.Eps0)
-								                     + 1/CommonParams.DelY/GetSigmaY(i, j)*(GetHz(i, j + 1)
-								                                                       - GetHz(i, j - 1))*(1 - ExtMath.Log(-GetSigmaY(i, j)
-								                                                                                           *CommonParams.DelT/
-								                                                                                           PhisicalConstants.Eps0));
-								CommonParams.ExzN[i, j] = CommonParams.Exz[i, j]*ExtMath.Log(-GetSigmaZ(0, 0)
-								                                                   *CommonParams.DelT/PhisicalConstants.Eps0);
-								CommonParams.EyxN[i, j] = CommonParams.Eyx[i, j]*ExtMath.Log(-GetSigmaX(i, j)
-								                                                   *CommonParams.DelT/PhisicalConstants.Eps0) - 1/CommonParams.DelX
-								                     /GetSigmaX(i, j)*(GetHz(i + 1, j) - GetHz(i - 1, j))
-								                     *(1 - ExtMath.Log(-GetSigmaX(i, j)*CommonParams.DelT/PhisicalConstants.Eps0));
-								CommonParams.EyzN[i, j] = CommonParams.Eyz[i, j]*ExtMath.Log(-GetSigmaZ(0, 0)*CommonParams.DelT/PhisicalConstants.Eps0);
-								break;
-						}
+						CommonParams.EzxN[i, j] = CommonParams.Ezx[i, j] * CommonParams.SigmaXCoeffs[i, j]
+													 + CommonParams.OneDivSigmaX[i, j] * (GetHy(i + 1, j) - GetHy(i - 1, j))
+													 * (1 - CommonParams.SigmaXCoeffs[i, j]);
+						CommonParams.EzyN[i, j] = CommonParams.Ezy[i, j] * CommonParams.SigmaXCoeffs[i, j] - CommonParams.OneDivSigmaY[i, j]
+											 * (GetHx(i, j + 1) - GetHx(i, j - 1)) * (1 - CommonParams.SigmaYCoeffs[i, j]);
 					}
 				}
 		}
@@ -362,32 +328,16 @@
 				{
 					if ((i < 0) || (i >= _sizeX) || (j < 0) || (j >= _sizeY))
 					{
-						switch (CommonParams.ModeType)
-						{
-							case ModeType.TE:
-								CommonParams.HxyN[i, j] = CommonParams.Hxy[i, j]*CommonParams.SigmaYSCoeffs[i, j]
-								                     - CommonParams.OneDivSigmaYS[i, j]
-								                     *(GetEz(i, j + 1) - GetEz(i, j - 1))
-								                     *(1 - CommonParams.SigmaYSCoeffs[i, j]);
-								CommonParams.HxzN[i, j] = CommonParams.Hxz[i, j]*CommonParams.SigmaZSCoeffs[i, j];
-								CommonParams.HyxN[i, j] = CommonParams.Hyx[i, j]*CommonParams.SigmaXSCoeffs[i, j]
-								                     + CommonParams.OneDivSigmaXS[i, j]
-								                     *(GetEz(i + 1, j) - GetEz(i - 1, j))
-								                     *(1 - CommonParams.SigmaXSCoeffs[i, j]);
-								CommonParams.HyzN[i, j] = CommonParams.Hyz[i, j]*CommonParams.SigmaZSCoeffs[i, j];
-								break;
-
-							case ModeType.TM:
-								CommonParams.HzxN[i, j] = CommonParams.Hzx[i, j]*ExtMath.Log(-GetSigmaXS(i, j)
-								                                                   *CommonParams.DelT/PhisicalConstants.Mu0) - 1/CommonParams.DelX/GetSigmaXS(i, j)
-								                     *(GetEy(i + 1, j) - GetEy(i - 1, j))
-								                     *(1 - ExtMath.Log(-GetSigmaXS(i, j)*CommonParams.DelT/PhisicalConstants.Mu0));
-								CommonParams.HzyN[i, j] = CommonParams.Hzy[i, j]*ExtMath.Log(-GetSigmaYS(i, j)*CommonParams.DelT
-								                                                   /PhisicalConstants.Mu0) + 1/CommonParams.DelY/GetSigmaYS(i, j)
-								                     *(GetEx(i, j + 1) - GetEx(i, j - 1))
-								                     *(1 - ExtMath.Log(-GetSigmaYS(i, j)*CommonParams.DelT/PhisicalConstants.Mu0));
-								break;
-						}
+						CommonParams.HxyN[i, j] = CommonParams.Hxy[i, j] * CommonParams.SigmaYSCoeffs[i, j]
+													 - CommonParams.OneDivSigmaYS[i, j]
+													 * (GetEz(i, j + 1) - GetEz(i, j - 1))
+													 * (1 - CommonParams.SigmaYSCoeffs[i, j]);
+						CommonParams.HxzN[i, j] = CommonParams.Hxz[i, j] * CommonParams.SigmaZSCoeffs[i, j];
+						CommonParams.HyxN[i, j] = CommonParams.Hyx[i, j] * CommonParams.SigmaXSCoeffs[i, j]
+											 + CommonParams.OneDivSigmaXS[i, j]
+											 * (GetEz(i + 1, j) - GetEz(i - 1, j))
+											 * (1 - CommonParams.SigmaXSCoeffs[i, j]);
+						CommonParams.HyzN[i, j] = CommonParams.Hyz[i, j] * CommonParams.SigmaZSCoeffs[i, j];
 					}
 				}
 		}
@@ -550,21 +500,7 @@
 					}
 				}
 		}
-
-		private void FreeSigmaCoeffs()
-		{
-			CommonParams.SigmaXCoeffs = null;
-			CommonParams.SigmaYCoeffs = null;
-			CommonParams.SigmaZCoeffs = null;
-			CommonParams.SigmaXSCoeffs = null;
-			CommonParams.SigmaYSCoeffs = null;
-			CommonParams.SigmaZSCoeffs = null;
-			CommonParams.OneDivSigmaX = null;
-			CommonParams.OneDivSigmaY = null;
-			CommonParams.OneDivSigmaXS = null;
-			CommonParams.OneDivSigmaYS = null;
-		}
-
+		
 		private void SetIntMode()
 		{
 			CommonParams.IntFModeEz = new ExtArr(1, _sizeY, 0, 0, 0, 0, 0, 0);

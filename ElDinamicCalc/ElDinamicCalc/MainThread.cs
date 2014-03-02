@@ -30,7 +30,6 @@ namespace ElDinamicCalc
 		{
 			RegionList.LoadFromFile(filePath);
 
-			SetInitialWave();
 			CommonParams.SizeX = RegionList.SizeOfX;
 			CommonParams.SizeY = RegionList.SizeOfY;
 			CommonParams.DelX = RegionList.DelX;
@@ -70,43 +69,6 @@ namespace ElDinamicCalc
 		public void Stop()
 		{
 			_isWorking = false;
-		}
-
-		private void SetInitialWave()
-		{
-			if (RegionList.FieldList.Count == 0)
-			{
-				switch (CommonParams.ModeType)
-				{
-					case ModeType.TE:
-						switch (CommonParams.InitialWave)
-						{
-							case InitialWave.Sin:
-								WaveInitializer.PlaneWaveTE();
-								break;
-							case InitialWave.Gauss:
-								WaveInitializer.GaussTE();
-								break;
-						}
-						break;
-
-					case ModeType.TM:
-						switch (CommonParams.InitialWave)
-						{
-							case InitialWave.Sin:
-								WaveInitializer.PlaneWaveTM();
-								break;
-							case InitialWave.Gauss:
-								WaveInitializer.GaussTM();
-								break;
-						}
-						break;
-				}
-			}
-			else
-			{
-				WaveInitializer.WaveFromRegionList();
-			}
 		}
 
 		private void DoWork(object state)

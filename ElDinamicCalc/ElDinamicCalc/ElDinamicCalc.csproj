@@ -77,7 +77,6 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Enums\ModeType.cs" />
     <Compile Include="Enums\Orientation.cs" />
     <Compile Include="PhisicalConstants.cs" />
     <Compile Include="BaseAlgorithm.cs" />

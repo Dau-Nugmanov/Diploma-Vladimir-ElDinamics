@@ -138,9 +138,11 @@ namespace ElDinamicCalc
 					}
 				}
 				var len = reader.ReadInt32();
-				if (len == 0) return true;
-				var tempDescrib = reader.ReadChars(len);
-				Describ = Convert.ToString(tempDescrib);
+				if (len != 0)
+				{
+					var tempDescrib = reader.ReadChars(len);
+					Describ = Convert.ToString(tempDescrib);
+				}
 			}
 			SetInitialWave();
 			return true;
@@ -150,30 +152,13 @@ namespace ElDinamicCalc
 		{
 			if (FieldList.Count == 0)
 			{
-				switch (CommonParams.ModeType)
+				switch (CommonParams.InitialWave)
 				{
-					case ModeType.TE:
-						switch (CommonParams.InitialWave)
-						{
-							case InitialWave.Sin:
-								WaveInitializer.PlaneWaveTE();
-								break;
-							case InitialWave.Gauss:
-								WaveInitializer.GaussTE();
-								break;
-						}
+					case InitialWave.Sin:
+						WaveInitializer.PlaneWaveTE();
 						break;
-
-					case ModeType.TM:
-						switch (CommonParams.InitialWave)
-						{
-							case InitialWave.Sin:
-								WaveInitializer.PlaneWaveTM();
-								break;
-							case InitialWave.Gauss:
-								WaveInitializer.GaussTM();
-								break;
-						}
+					case InitialWave.Gauss:
+						WaveInitializer.GaussTE();
 						break;
 				}
 			}

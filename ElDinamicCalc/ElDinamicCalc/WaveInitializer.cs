@@ -32,36 +32,6 @@
 				}
 		}
 
-		public static void PlaneWaveTM()
-		{
-			for (int i = CommonParams.InitialX1; i < CommonParams.InitialX2; i++)
-				for (int j = CommonParams.InitialY1; j < CommonParams.InitialY2; j++)
-				{
-					if ((i + j + 2)%2 == 0)
-					{
-						CommonParams.Ey[i, j] = PhisicalConstants.Ez0
-						                   *
-						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
-						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
-						                   *
-						                   ExtMath.Cos(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
-						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
-						CommonParams.Dy[i, j] = CommonParams.Ez[i, j]*PhisicalConstants.Eps0*RegionList.Eps;
-					}
-					else
-					{
-						CommonParams.Hz[i, j] = PhisicalConstants.Hz0
-						                   *
-						                   ExtMath.Sin(ExtMath.Pi*CommonParams.HalfPX*(i - CommonParams.InitialX1)/
-						                               (CommonParams.InitialX2 - CommonParams.InitialX1))
-						                   *
-						                   ExtMath.Cos(ExtMath.Pi*CommonParams.HalfPY*(j - CommonParams.InitialY1)/
-						                               (CommonParams.InitialY2 - CommonParams.InitialY1));
-						CommonParams.Bz[i, j] = CommonParams.Hy[i, j]*PhisicalConstants.Mu0;
-					}
-				}
-		}
-
 		public static void GaussTE()
 		{
 			for (int i = CommonParams.InitialX1; i < CommonParams.InitialX2; i++)
@@ -94,10 +64,6 @@
 						CommonParams.By[i, j] = CommonParams.Hy[i, j]*PhisicalConstants.Mu0;
 					}
 				}
-		}
-
-		public static void GaussTM()
-		{
 		}
 
 		public static void WaveFromRegionList()
