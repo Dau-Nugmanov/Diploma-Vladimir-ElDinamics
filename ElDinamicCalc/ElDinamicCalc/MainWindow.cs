@@ -19,14 +19,14 @@ namespace ElDinamicCalc
 		private Bitmap _waveBitmap;
 		private Graphics _graph;
 		private string _filePath;
+		private bool _isWorking;
 
+		private Stopwatch _stopwatch = new Stopwatch();
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			toolStripComboBox.Items.Add(new ComboBoxItem { WorkMode = WorkMode.SingleThread });
-			toolStripComboBox.Items.Add(new ComboBoxItem { WorkMode = WorkMode.MultiThread });
-			toolStripComboBox.SelectedIndex = 0;
+			_stopwatch.Reset();
 		}
 
 		private void Draw()
@@ -52,16 +52,14 @@ namespace ElDinamicCalc
 			//_graph.DrawImage(ImageUtilities.ResizeImage(_waveBitmap, _waveBitmap.Width*4, _waveBitmap.Height*4), 0, 0);
 			_graph.DrawImage(_waveBitmap, 0, 0, _waveBitmap.Width * 4, _waveBitmap.Height * 4);
 
-			if (LastDrawTime.HasValue)
-				WorkTime += DateTime.Now.Ticks - LastDrawTime.Value;
-
 			toolStripStatusLabelStepNum.Text = temp.Step.ToString();
 			toolStripStatusLabelQueueCount.Text = CommonParams.DrawQueue.Count.ToString();
-			toolStripStatusLabelTime.Text = new TimeSpan(WorkTime).ToString("G");
+			toolStripStatusLabelTime.Text = _stopwatch.Elapsed.ToString("g");
 
 			if (CommonParams.PauseStepNum != 0 && temp.Step % CommonParams.PauseStepNum == 0)
 				buttonStart_Click(null, null);
 		}
+
 		private void timerDraw_Tick(object sender, EventArgs e)
 		{
 			Draw();
@@ -89,14 +87,9 @@ namespace ElDinamicCalc
 			_waveBitmap = new Bitmap(CommonParams.SizeX, CommonParams.SizeY, _graph);
 
 			_mainThread = new MainThread(_filePath);
-			LastDrawTime = null;
-			WorkTime = 0;
+			toolStripStatusLabelSize.Text = string.Format("{0}x{1}", CommonParams.SizeX, CommonParams.SizeY);
 		}
-
-		private bool _isWorking;
-
-		private long WorkTime { get; set; }
-		private long? LastDrawTime { get; set; }
+		
 		private void buttonStart_Click(object sender, EventArgs e)
 		{
 			if (_mainThread == null)
@@ -108,13 +101,12 @@ namespace ElDinamicCalc
 			{
 				_mainThread.Stop();
 				buttonStart.Text = "Start";
+				_stopwatch.Stop();
 			}
 			else
 			{
-				if (!LastDrawTime.HasValue)
-					LastDrawTime = DateTime.Now.Ticks;
-				var comboBoxItem = toolStripComboBox.SelectedItem as ComboBoxItem;
-				_mainThread.Start(comboBoxItem.WorkMode);
+				_stopwatch.Start();
+				_mainThread.Start(CommonParams.WorkMode);
 				buttonStart.Text = "Stop";
 			}
 			_isWorking = !_isWorking;
@@ -132,7 +124,10 @@ namespace ElDinamicCalc
 					DelT = CommonParams.DelT,
 					DelX = CommonParams.DelX,
 					DelY = CommonParams.DelY,
-					PauseStepNum = CommonParams.PauseStepNum
+					PauseStepNum = CommonParams.PauseStepNum,
+					DrawStepNum = CommonParams.DrawStepNum,
+					CellSize = CommonParams.CellSize,
+					WorkMode = CommonParams.WorkMode
 				};
 			var settingsForm = new SettingsForm(settings);
 			if (settingsForm.ShowDialog() != DialogResult.OK) return;
@@ -140,6 +135,9 @@ namespace ElDinamicCalc
 			CommonParams.DelX = settingsForm.Settings.DelX;
 			CommonParams.DelY = settingsForm.Settings.DelY;
 			CommonParams.PauseStepNum = settings.PauseStepNum;
+			CommonParams.DrawStepNum = settings.DrawStepNum;
+			CommonParams.CellSize = settings.CellSize;
+			CommonParams.WorkMode = settings.WorkMode;
 			CommonParams.DtDivDx = CommonParams.DelT / CommonParams.DelX;
 			CommonParams.DtDivDy = CommonParams.DelT / CommonParams.DelY;
 		}

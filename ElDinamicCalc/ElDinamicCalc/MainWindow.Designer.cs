@@ -38,7 +38,6 @@
 			this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
 			this.editorStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -48,6 +47,8 @@
 			this.toolStripStatusLabelQueueCount = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabelTime = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -115,7 +116,6 @@
 			// 
 			this.настройкиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SettingsToolStripMenuItem,
-            this.toolStripComboBox,
             this.editorStartToolStripMenuItem});
 			this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
 			this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
@@ -124,20 +124,14 @@
 			// SettingsToolStripMenuItem
 			// 
 			this.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem";
-			this.SettingsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+			this.SettingsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
 			this.SettingsToolStripMenuItem.Text = "Показать";
 			this.SettingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
-			// 
-			// toolStripComboBox
-			// 
-			this.toolStripComboBox.DropDownWidth = 200;
-			this.toolStripComboBox.Name = "toolStripComboBox";
-			this.toolStripComboBox.Size = new System.Drawing.Size(200, 23);
 			// 
 			// editorStartToolStripMenuItem
 			// 
 			this.editorStartToolStripMenuItem.Name = "editorStartToolStripMenuItem";
-			this.editorStartToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+			this.editorStartToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
 			this.editorStartToolStripMenuItem.Text = " Запуск редактора";
 			this.editorStartToolStripMenuItem.Click += new System.EventHandler(this.editorStartToolStripMenuItem_Click);
 			// 
@@ -149,6 +143,8 @@
 			// statusStrip
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel5,
+            this.toolStripStatusLabelSize,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabelStepNum,
             this.toolStripStatusLabel2,
@@ -196,6 +192,18 @@
 			this.toolStripStatusLabelTime.Name = "toolStripStatusLabelTime";
 			this.toolStripStatusLabelTime.Size = new System.Drawing.Size(0, 17);
 			// 
+			// toolStripStatusLabel5
+			// 
+			this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+			this.toolStripStatusLabel5.Size = new System.Drawing.Size(98, 17);
+			this.toolStripStatusLabel5.Text = "Размер системы";
+			// 
+			// toolStripStatusLabelSize
+			// 
+			this.toolStripStatusLabelSize.Name = "toolStripStatusLabelSize";
+			this.toolStripStatusLabelSize.Size = new System.Drawing.Size(24, 17);
+			this.toolStripStatusLabelSize.Text = "0х0";
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,9 +243,10 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelQueueCount;
 		private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem SettingsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTime;
 		private System.Windows.Forms.ToolStripMenuItem editorStartToolStripMenuItem;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSize;
 	}
 }

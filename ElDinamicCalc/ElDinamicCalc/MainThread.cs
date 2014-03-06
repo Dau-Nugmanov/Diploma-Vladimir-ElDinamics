@@ -60,7 +60,7 @@ namespace ElDinamicCalc
 		/// <param name="workMode">Режим работы (многопоточный/однопоточный)</param>
 		public void Start(WorkMode workMode)
 		{
-			_workMode = workMode;
+			_workMode = workMode;			
 			ThreadPool.QueueUserWorkItem(DoWork);
 		}
 		/// <summary>
@@ -74,7 +74,7 @@ namespace ElDinamicCalc
 		private void DoWork(object state)
 		{
 			_isWorking = true;
-			if (_workMode == WorkMode.MultiThread) ThreadPool.QueueUserWorkItem(Init);
+			_algorithm.InitCells(CommonParams.CellSize);
 			while (_isWorking)
 			{
 				MakeCalc();
@@ -83,10 +83,13 @@ namespace ElDinamicCalc
 
 		private void MakeCalc()
 		{
-			_algorithm.DoStep();
-			CommonParams.DrawQueue.Enqueue(
-				new DrawInfo(GetBytes(CommonParams.SizeX, CommonParams.SizeY, CommonParams.Ez),
-				_algorithm.StepNumber));
+			_algorithm.DoStep(_workMode);
+			if (_algorithm.StepNumber%CommonParams.DrawStepNum == 0)
+			{
+				CommonParams.DrawQueue.Enqueue(
+					new DrawInfo(GetBytes(CommonParams.SizeX, CommonParams.SizeY, CommonParams.Ez),
+						_algorithm.StepNumber));
+			}
 			if (CommonParams.PauseStepNum != 0 && _algorithm.StepNumber % CommonParams.PauseStepNum == 0)
 			{
 				Stop();
@@ -142,20 +145,6 @@ namespace ElDinamicCalc
 			}
 		}
 
-		private void Init(object state)
-		{
-			while (_isWorking)
-			{
-				var source = Enumerable.Range(1, 10000)
-				.Select(n => n * n * n);
-
-				source
-					.AsParallel()
-					.Select(n => Math.Pow(Math.Log10(Math.Pow(n, 2) / Math.PI), 5) / (Math.PI * Math.PI))
-					.ToArray();
-			}
-		}
-		
 		private Color ColorByValue(decimal value)
 		{
 			var abs = Math.Abs(value);
@@ -185,5 +174,13 @@ namespace ElDinamicCalc
 			}
 			return 0.1m;
 		}
+	}
+
+	class Cell
+	{
+		public int StartX { get; set; }
+		public int EndX { get; set; }
+		public int StartY { get; set; }
+		public int EndY { get; set; }
 	}
 }

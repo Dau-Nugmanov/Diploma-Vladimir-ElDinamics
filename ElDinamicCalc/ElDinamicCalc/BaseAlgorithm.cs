@@ -1,4 +1,13 @@
-﻿namespace ElDinamicCalc
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+
+namespace ElDinamicCalc
 {
 	/// <summary>
 	/// Инкапсулирует базовый алгоритм 
@@ -11,6 +20,14 @@
 		private readonly decimal _coefG = CommonParams.G;
 		private readonly int _sizeX = CommonParams.SizeX0;
 		private readonly int _sizeY = CommonParams.SizeY0;
+		private readonly List<Cell> _cells = new List<Cell>();
+		private readonly Cell _singleThreadCell = new Cell
+		{
+			StartX = 0,
+			EndX = CommonParams.SizeX,
+			StartY = 0,
+			EndY = CommonParams.SizeY
+		};
 		
 		public BaseAlgorithm()
 		{
@@ -21,6 +38,35 @@
 				SetIntMode();
 		}
 
+		public void InitCells(int cellSize)
+		{
+			_cells.Clear();
+			int countX = _sizeX / cellSize;
+			int countY = _sizeY / cellSize;
+
+			for (int i= 0; i < countX; i++)
+				for (int j = 0; j < countY; j++)
+				{
+					_cells.Add(new Cell
+					{
+						StartX = i * cellSize,
+						EndX = ((i + 1) * cellSize),
+						StartY = j * cellSize,
+						EndY = ((j + 1) * cellSize)
+					});
+				}
+
+			_cells
+				.Where(c => c.EndX == countX * cellSize)
+				.ToList()
+				.ForEach(c => c.EndX += _sizeX - countX * cellSize);
+
+			_cells
+				.Where(c => c.EndY == countY * cellSize)
+				.ToList()
+				.ForEach(c => c.EndY += _sizeY - countY * cellSize);
+		}
+
 		/// <summary>
 		/// Номер шага
 		/// </summary>
@@ -28,21 +74,38 @@
 		/// <summary>
 		/// Выполняет вычисления согласно алгоритма (шаг алгоритма)
 		/// </summary>
-		public void DoStep()
+		public void DoStep(WorkMode mode)
 		{
-			for (var i = 0; i < CommonParams.SizeX; i++)
-				for (var j = 0; j < CommonParams.SizeY; j++)
+			if (mode == WorkMode.MultiThread)
+			{
+				_cells
+					.AsParallel()
+					.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+					.OrderBy(c => c.StartX)
+					.ThenBy(c => c.StartY)
+					.ForAll(c => MakeCalc(c, StepNumber));
+				foreach (var cell in _cells) { }
+			}
+			else
+				MakeCalc(_singleThreadCell, StepNumber);
+			Next();
+		}
+
+		private bool MakeCalc(Cell cell, int step)
+		{
+			for (var i = cell.StartX; i < cell.EndX; i++)
+				for (var j = cell.StartY; j < cell.EndY; j++)
 				{
-					if (((i + j + 2) % 2 == 0) && ((StepNumber + 2) % 2 == 0))
+					if (((i + j + 2) % 2 == 0) && ((step + 2) % 2 == 0))
 					{
 						ElectrTE(i, j);
 					}
-					if (((i + j + 2) % 2 == 1) && ((StepNumber + 2) % 2 == 1))
+					if (((i + j + 2) % 2 == 1) && ((step + 2) % 2 == 1))
 					{
 						MagnTE(i, j);
 					}
 				}
-			Next();
+			return true;
 		}
 
 		private void CreateFields()

@@ -19,6 +19,9 @@ namespace ElDinamicCalc
 
 		public static decimal DelX, DelY, DelT, DtDivDx, DtDivDy;
 		public static int SizeX, SizeY, Tn, BoundWidth, PauseStepNum;
+		public static int DrawStepNum = 1;
+		public static int CellSize = 10;
+		public static WorkMode WorkMode = WorkMode.SingleThread;
 		
 		public static ExtArr Ex,Ey,Ez,Dx,Dy,Dz,Hx,Hy,Hz,Bx,By,Bz,ExN,EyN,EzN,DxN,DyN,DzN,HxN,HyN,HzN,BxN,ByN,BzN;
 
